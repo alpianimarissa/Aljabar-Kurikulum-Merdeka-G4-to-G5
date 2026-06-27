@@ -1,0 +1,1331 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Astro Aljabar Academy - Media Belajar Interaktif</title>
+    <style>
+        :root {
+            --bg-dark: #f0f4f8; /* Abu-abu kebiruan terang */
+            --bg-card: #ffffff; /* Putih bersih */
+            --neon-blue: #0284c7; /* Biru langit cerah */
+            --neon-purple: #7c3aed; /* Ungu kreatif */
+            --neon-green: #059669; /* Hijau sukses */
+            --neon-pink: #db2777; /* Pink energetik */
+            --text-main: #1e293b; /* Abu-abu gelap */
+            --text-muted: #64748b; /* Abu-abu sedang */
+            --accent: #f97316; /* Jingga ceria */
+            --correct: #10b981;
+            --wrong: #ef4444;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Top Progress Bar */
+        .header-nav {
+            background: #ffffff;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #e2e8f0;
+            z-index: 10;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+        }
+
+        .title-area {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-svg {
+            width: 35px;
+            height: 35px;
+            filter: drop-shadow(0 2px 4px rgba(2, 132, 199, 0.2));
+        }
+
+        .title-area h1 {
+            font-size: 1.2rem;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            background: linear-gradient(45deg, var(--neon-blue), var(--neon-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .progress-container {
+            flex-grow: 1;
+            margin: 0 40px;
+            background: #e2e8f0;
+            height: 12px;
+            border-radius: 6px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            width: 2.85%; /* 1/35 awal */
+            background: linear-gradient(90deg, var(--neon-blue), var(--accent));
+            box-shadow: 0 0 8px rgba(2, 132, 199, 0.4);
+            transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .page-counter {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--neon-blue);
+            background: rgba(2, 132, 199, 0.1);
+            padding: 4px 12px;
+            border-radius: 20px;
+            border: 1px solid rgba(2, 132, 199, 0.2);
+        }
+
+        /* Main Workspace */
+        .workspace {
+            flex-grow: 1;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateX(50px);
+            transition: all 0.5s ease;
+            padding: 40px;
+            overflow-y: auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .slide.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(0);
+        }
+
+        .slide.exit {
+            opacity: 0;
+            visibility: hidden;
+            transform: translateX(-50px);
+        }
+
+        .content-card {
+            background: var(--bg-card);
+            border-radius: 24px;
+            width: 100%;
+            max-width: 1000px;
+            min-height: 500px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 15px 35px rgba(148, 163, 184, 0.15);
+            padding: 40px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        /* Slide layout styles */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            gap: 40px;
+            align-items: center;
+            height: 100%;
+        }
+        
+        @media (max-width: 850px) {
+            .grid-2 { grid-template-columns: 1fr; }
+        }
+
+        /* Typography */
+        h2.section-tag {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--neon-pink);
+            margin-bottom: 8px;
+            font-weight: 800;
+        }
+
+        h3.slide-title {
+            font-size: 2rem;
+            color: var(--text-main);
+            margin-bottom: 20px;
+            font-weight: 800;
+            line-height: 1.2;
+        }
+
+        p.description {
+            font-size: 1.1rem;
+            line-height: 1.7;
+            color: var(--text-muted);
+            margin-bottom: 20px;
+        }
+
+        /* Math Styling */
+        .math-expr {
+            font-family: 'Cambria Math', 'Times New Roman', serif;
+            font-style: italic;
+            font-weight: bold;
+            color: var(--text-main);
+            background: #f1f5f9;
+            padding: 4px 10px;
+            border-radius: 6px;
+            border: 1px solid #cbd5e1;
+            display: inline-block;
+        }
+
+        .math-block {
+            font-family: 'Cambria Math', 'Times New Roman', serif;
+            font-style: italic;
+            font-weight: bold;
+            font-size: 2.2rem;
+            text-align: center;
+            margin: 25px 0;
+            color: var(--neon-blue);
+            background: #f8fafc;
+            padding: 20px;
+            border-radius: 16px;
+            border-left: 5px solid var(--neon-blue);
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+        }
+
+        .var-x {
+            color: var(--neon-pink);
+            font-size: 1.1em;
+        }
+
+        /* Interactive Components */
+        .btn-option {
+            background: #f8fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 14px;
+            padding: 16px 24px;
+            color: var(--text-main);
+            font-size: 1.1rem;
+            font-weight: 700;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            width: 100%;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .btn-option:hover {
+            background: rgba(2, 132, 199, 0.04);
+            border-color: var(--neon-blue);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(2, 132, 199, 0.08);
+        }
+
+        .btn-option.correct {
+            background: rgba(16, 185, 129, 0.1) !important;
+            border-color: var(--correct) !important;
+            color: #065f46;
+        }
+
+        .btn-option.wrong {
+            background: rgba(239, 68, 68, 0.1) !important;
+            border-color: var(--wrong) !important;
+            color: #991b1b;
+        }
+
+        .input-answer {
+            background: #f8fafc;
+            border: 2px solid #cbd5e1;
+            border-radius: 14px;
+            padding: 16px;
+            color: var(--text-main);
+            font-size: 1.3rem;
+            font-weight: 800;
+            width: 100%;
+            max-width: 250px;
+            text-align: center;
+            outline: none;
+            transition: all 0.2s ease;
+        }
+
+        .input-answer:focus {
+            border-color: var(--neon-purple);
+            background: #ffffff;
+            box-shadow: 0 0 15px rgba(124, 58, 237, 0.15);
+        }
+
+        .feedback-msg {
+            margin-top: 15px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            min-height: 25px;
+        }
+
+        /* Bottom Controls */
+        .footer-controls {
+            background: #ffffff;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 2px solid #e2e8f0;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.02);
+        }
+
+        .btn-nav {
+            background: #f1f5f9;
+            border: 1px solid #cbd5e1;
+            color: var(--text-main);
+            padding: 12px 28px;
+            font-size: 1rem;
+            font-weight: 700;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-nav:hover:not(:disabled) {
+            background: #e2e8f0;
+            border-color: #94a3b8;
+        }
+
+        .btn-nav:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        .btn-nav.primary {
+            background: linear-gradient(135deg, var(--neon-blue), #0284c7);
+            color: #ffffff;
+            font-weight: 700;
+            border: none;
+            box-shadow: 0 4px 15px rgba(2, 132, 199, 0.2);
+        }
+
+        .btn-nav.primary:hover {
+            background: linear-gradient(135deg, #0284c7, #0369a1);
+            box-shadow: 0 6px 20px rgba(2, 132, 199, 0.3);
+        }
+
+        /* SVGs styles */
+        .svg-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+            min-height: 250px;
+        }
+
+        /* Custom features */
+        .badge {
+            background: linear-gradient(45deg, var(--neon-purple), var(--neon-pink));
+            padding: 4px 10px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: white;
+            margin-left: 10px;
+        }
+
+        .interactive-box {
+            background: #f8fafc;
+            border-radius: 16px;
+            padding: 20px;
+            border: 2px dashed #cbd5e1;
+            margin-top: 15px;
+        }
+
+        /* Certificate styles */
+        .cert-card {
+            background: radial-gradient(circle, #ffffff 0%, #f0f4f8 100%);
+            border: 4px double #f59e0b;
+            padding: 40px;
+            text-align: center;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(245, 158, 11, 0.15);
+        }
+
+        /* Grid for activities */
+        .pattern-grid {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        .pattern-item {
+            width: 60px;
+            height: 60px;
+            background: #f1f5f9;
+            border: 2px solid var(--neon-blue);
+            border-radius: 12px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-main);
+            box-shadow: 0 4px 10px rgba(148, 163, 184, 0.1);
+        }
+        
+        .pattern-item.secret {
+            background: linear-gradient(135deg, var(--neon-purple), #8b5cf6);
+            border-color: var(--neon-pink);
+            color: #ffffff;
+            animation: pulse 1.5s infinite alternate;
+        }
+
+        @keyframes pulse {
+            from { box-shadow: 0 0 5px rgba(219, 39, 119, 0.2); }
+            to { box-shadow: 0 0 15px rgba(219, 39, 119, 0.5); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- TOP CONTROL HEADER -->
+    <div class="header-nav">
+        <div class="title-area">
+            <svg class="logo-svg" viewBox="0 0 100 100">
+                <polygon points="50,5 95,25 95,75 50,95 5,75 5,25" fill="none" stroke="#0284c7" stroke-width="5"/>
+                <polygon points="50,20 80,35 80,65 50,80 20,65 20,35" fill="none" stroke="#7c3aed" stroke-width="3"/>
+                <text x="50" y="58" font-family="'Segoe UI', Arial" font-size="24" fill="#0284c7" text-anchor="middle" font-weight="900">X</text>
+            </svg>
+            <h1>ASTRO ALGEBRA ACADEMY</h1>
+        </div>
+        <div class="progress-container">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+        <div class="page-counter" id="pageCounter">Misi 1 / 35</div>
+    </div>
+
+    <!-- MAIN SLIDE WORKSPACE -->
+    <div class="workspace" id="workspace">
+        
+        <!-- PAGE 1: COVER -->
+        <div class="slide active" id="slide-1">
+            <div class="content-card">
+                <div style="text-align: center; margin: auto 0;">
+                    <h2 class="section-tag">Petualangan Dimulai</h2>
+                    <h3 class="slide-title" style="font-size: 3rem; margin-bottom: 10px; background: linear-gradient(135deg, #0284c7, #7c3aed); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">MISI ROCKET ALJEBAR</h3>
+                    <p class="description" style="font-size: 1.3rem; max-width: 700px; margin: 0 auto 30px auto;">
+                        Temukan "Pola Rahasia" matematika untuk menerbangkan roket, menyeimbangkan kargo, dan menjadi Master Aljabar Kurikulum Merdeka!
+                    </p>
+                    <div class="svg-container" style="min-height: 200px; margin-bottom: 30px;">
+                        <svg width="250" height="250" viewBox="0 0 200 200">
+                            <defs>
+                                <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#0284c7;stop-opacity:1" />
+                                    <stop offset="100%" style="stop-color:#7c3aed;stop-opacity:1" />
+                                </linearGradient>
+                            </defs>
+                            <path d="M100,20 L160,60 L160,140 L100,180 L40,140 L40,60 Z" fill="url(#grad1)" opacity="0.1" stroke="#0284c7" stroke-width="2"/>
+                            <path d="M100,20 L100,180" stroke="#0284c7" stroke-width="1.5" stroke-dasharray="5,5"/>
+                            <path d="M40,60 L160,140" stroke="#0284c7" stroke-width="1.5" stroke-dasharray="5,5"/>
+                            <circle cx="100" cy="100" r="40" fill="#ffffff" stroke="#7c3aed" stroke-width="4" filter="drop-shadow(0 4px 10px rgba(0,0,0,0.1))"/>
+                            <text x="100" y="112" font-family="'Segoe UI'" font-weight="900" font-size="36" fill="#0284c7" text-anchor="middle">x</text>
+                        </svg>
+                    </div>
+                    <button class="btn-nav primary" style="margin: 0 auto; padding: 15px 40px; font-size: 1.2rem;" onclick="nextSlide()">Mulai Petualangan Seru &rarr;</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- PAGE 2: TUJUAN -->
+        <div class="slide" id="slide-2">
+            <div class="content-card">
+                <div>
+                    <h2 class="section-tag">TUJUAN PEMBELAJARAN</h2>
+                    <h3 class="slide-title">Misi & Kekuatan Baru Kamu</h3>
+                    <p class="description">Setelah menyelesaikan simulasi seru ini, kamu akan menguasai keahlian tingkat tinggi:</p>
+                    <div style="margin-top: 20px;">
+                        <div style="background: rgba(2, 132, 199, 0.05); padding: 15px; border-radius: 12px; margin-bottom: 15px; border-left: 4px solid var(--neon-blue);">
+                            <strong>1. Menemukan Nilai Tersembunyi:</strong> Mengisi nilai yang hilang dalam kalimat matematika menggunakan simbol variabel huruf <span class="math-expr">x</span>.
+                        </div>
+                        <div style="background: rgba(124, 58, 237, 0.05); padding: 15px; border-radius: 12px; margin-bottom: 15px; border-left: 4px solid var(--neon-purple);">
+                            <strong>2. Prinsip Keseimbangan Adil:</strong> Memahami bahwa sisi kiri dan kanan tanda sama dengan (<span class="math-expr">=</span>) harus selalu seimbang.
+                        </div>
+                        <div style="background: rgba(219, 39, 119, 0.05); padding: 15px; border-radius: 12px; border-left: 4px solid var(--neon-pink);">
+                            <strong>3. Detektif Pola:</strong> Mengidentifikasi, meneruskan, dan merumuskan pola bilangan membesar dan mengecil secara kilat.
+                        </div>
+                    </div>
+                </div>
+                <div style="text-align: right; font-style: italic; color: var(--neon-blue); font-weight: 700;">Status Sistem: Siap Lepas Landas!</div>
+            </div>
+        </div>
+
+        <!-- PAGE 3: WARM-UP -->
+        <div class="slide" id="slide-3">
+            <div class="content-card">
+                <div>
+                    <h2 class="section-tag">WARM-UP (PEMANASAN OTAK)</h2>
+                    <h3 class="slide-title">Teka-teki Kotak Misterius</h3>
+                    <p class="description">Mari kita uji ketajaman otakmu. Angka berapa yang paling tepat untuk mengisi kotak di bawah ini?</p>
+                    <div class="math-block">
+                        12 + 🟦 = 30
+                    </div>
+                    <div class="interactive-box" style="text-align: center;">
+                        <input type="number" id="warmup-input" class="input-answer" placeholder="???">
+                        <button class="btn-nav primary" style="display:inline-block; margin-left: 10px; padding: 14px 24px;" onclick="checkWarmUp()">Verifikasi Angka</button>
+                        <div id="warmup-feedback" class="feedback-msg"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PAGE 4: REAL-WORLD CONNECTION -->
+        <div class="slide" id="slide-4">
+            <div class="content-card">
+                <div class="grid-2">
+                    <div>
+                        <h2 class="section-tag">REAL-WORLD CONNECTION</h2>
+                        <h3 class="slide-title">Bahan Bakar Roket</h3>
+                        <p class="description">
+                            Roketmu memiliki tangki utama berkapasitas 50 liter plasma energi. Setelah terbang melewati rasi bintang, sisa bahan bakarmu sekarang tinggal 15 liter.
+                        </p>
+                        <p class="description" style="color: var(--text-main); font-weight: 700;">
+                            Berapa liter bahan bakar yang telah terpakai dalam perjalanan?
+                        </p>
+                        <div class="math-block" style="font-size: 1.6rem;">
+                            50 &minus; 🔥 = 15
+                        </div>
+                    </div>
+                    <div class="svg-container">
+                        <svg width="200" height="200" viewBox="0 0 100 100">
+                            <!-- Spaceship style design with bright gradients -->
+                            <defs>
+                                <linearGradient id="rocketGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                                    <stop offset="0%" style="stop-color:#38bdf8"/>
+                                    <stop offset="100%" style="stop-color:#0284c7"/>
+                                </linearGradient>
+                            </defs>
+                            <path d="M50,10 C60,40 70,60 70,80 C70,90 60,95 50,95 C40,95 30,90 30,80 C30,60 40,40 50,10 Z" fill="url(#rocketGrad)" stroke="#0284c7" stroke-width="2"/>
+                            <!-- Fire indicator -->
+                            <path d="M40,82 Q50,65 60,82 Q50,98 40,82 Z" fill="#f97316"/>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PAGE 5: KONSEP 1 -->
+        <div class="slide" id="slide-5">
+            <div class="content-card">
+                <div>
+                    <h2 class="section-tag">KONSEP UTAMA 1</h2>
+                    <h3 class="slide-title">Berkenalan dengan Aljabar</h3>
+                    <p class="description">
+                        Aljabar adalah metode matematika seru di mana kita menggunakan simbol (seperti kotak kosong, bintang, atau huruf) untuk mewakili angka yang belum diketahui nilainya.
+                    </p>
+                    <p class="description">
+                        Agar tidak repot menggambar kotak terus-menerus, para ahli komputer dan matematika sepakat memakai huruf kecil seperti <span class="math-expr var-x">x</span>, <span class="math-expr">y</span>, atau <span class="math-expr">n</span>. Huruf ini disebut <strong>Variabel</strong>!
+                    </p>
+                    <div class="math-block">
+                        15 + <span class="var-x">x</span> = 25
+                    </div>
+                    <p class="description" style="text-align: center; color: var(--neon-purple); font-weight: bold;">
+                        Di sini, variabel <span class="var-x">x</span> adalah wadah rahasia penyimpan angka!
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- PAGE 6: KONSEP 2 -->
+        <div class="slide" id="slide-6">
+            <div class="content-card">
+                <div>
+                    <h2 class="section-tag">KONSEP UTAMA 2</h2>
+                    <h3 class="slide-title">Membuka Kedok Rahasia <span class="var-x">x</span></h3>
+                    <p class="description">
+                        Bagaimana cara cepat menebak isi variabel <span class="var-x">x</span>? Kita bisa memanfaatkan operasi kebalikan (invers).
+                    </p>
+                    <div style="background: #f8fafc; padding: 25px; border-radius: 16px; margin: 20px 0; border: 1px solid #e2e8f0;">
+                        <p style="margin-bottom: 10px; font-size: 1.1rem;"><strong style="color: var(--neon-blue);">Aturan Hebat:</strong> Jika di sisi kiri adalah penjumlahan, saat dia berpindah melewati tanda sama dengan, dia langsung berubah menjadi pengurangan!</p>
+                        <div class="math-expr" style="font-size: 1.4rem; display: block; text-align: center; margin: 10px 0;">
+                            Jika: 7 + <span class="var-x">x</span> = 15
+                        </div>
+                        <div class="math-expr" style="font-size: 1.4rem; display: block; text-align: center; color: var(--neon-green);">
+                            Maka: <span class="var-x">x</span> = 15 &minus; 7
+                        </div>
+                        <div class="math-expr" style="font-size: 1.4rem; display: block; text-align: center; color: var(--neon-blue); margin-top: 5px;">
+                            Jadi: <span class="var-x">x</span> = 8
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PAGE 7: CONTOH SOAL 1 -->
+        <div class="slide" id="slide-7">
+            <div class="content-card">
+                <div>
+                    <h2 class="section-tag">CONTOH SOAL 1</h2>
+                    <h3 class="slide-title">Taktik Pengurangan</h3>
+                    <p class="description">Mari kita lihat bagaimana variabel bekerja pada pengurangan:</p>
+                    <div class="math-block">
+                        <span class="var-x">x</span> &minus; 9 = 21
+                    </div>
+                    <div style="background: #f8fafc; padding: 20px; border-radius: 12px; border-left: 4px solid var(--neon-pink); border: 1px solid #e2e8f0; border-left-width: 5px;">
+                        <p><strong>Cara Berpikir:</strong> Angka berapa jika dikurangi 9 hasilnya adalah 21?</p>
+                        <p>Pakai kebalikan! Kebalikan dari pengurangan (<span class="math-expr">&minus; 9</span>) adalah penjumlahan (<span class="math-expr">+ 9</span>).</p>
+                        <p style="margin-top: 10px; font-weight: 700; color: var(--text-main);">
+                            <span class="var-x">x</span> = 21 + 9 <br>
+                            <span class="var-x">x</span> = 30
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PAGE 8: LATIHAN 1 -->
+        <div class="slide" id="slide-8">
+            <div class="content-card">
+                <div>
+                    <h2 class="section-tag">LATIHAN INTERAKTIF 1</h2>
+                    <h3 class="slide-title">Kunci Pintu Kokpit</h3>
+                    <p class="description">Pintu navigasi terkunci sandi keamanan. Temukan nilai variabel di bawah untuk membukanya!</p>
+                    <div class="math-block">
+                        35 + <span class="var-x">n</span> = 60
+                    </div>
+                    <div style="display: flex; flex-direction: column; gap: 10px; max-width: 500px; margin: 0 auto;">
+                        <button class="btn-option" onclick="checkQuiz(this, 'wrong', 1)">A. n = 15</button>
+                        <button class="btn-option" onclick="checkQuiz(this, 'correct', 1)">B. n = 25</button>
+                        <button class="btn-option" onclick="checkQuiz(this, 'wrong', 1)">C. n = 35</button>
+                    </div>
+                    <div id="quiz-feedback-1" class="feedback-msg" style="text-align: center;"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PAGE 9: KONSEP 3 -->
+        <div class="slide" id="slide-9">
+            <div class="content-card">
+                <div>
+                    <h2 class="section-tag">KONSEP UTAMA 3</h2>
+                    <h3 class="slide-title">Keseimbangan Timbangan Aljabar</h3>
+                    <p class="description">
+                        Tanda sama dengan (<span class="math-expr">=</span>) bertindak persis seperti timbangan neraca. Sisi kiri dan sisi kanan harus memiliki nilai total yang sama persis agar tegak seimbang.
+                    </p>
+                    <div class="svg-container" style="min-height: 180px;">
+                        <svg width="300" height="120" viewBox="0 0 300 120">
+                            <!-- Balance beam -->
+                            <line x1="50" y1="80" x2="250" y2="80" stroke="#0284c7" stroke-width="6" id="balance-beam"/>
+                            <!-- Base -->
+                            <polygon points="150,80 130,120 170,120" fill="#7c3aed"/>
+                            <!-- Left Plate -->
+                            <circle cx="50" cy="50" r="25" fill="rgba(2, 132, 199, 0.1)" stroke="#0284c7" stroke-width="2"/>
+                            <text x="50" y="55" fill="var(--text-main)" font-weight="bold" text-anchor="middle">5 + 3</text>
+                            <!-- Right Plate -->
+                            <circle cx="250" cy="50" r="25" fill="rgba(2, 132, 199, 0.1)" stroke="#0284c7" stroke-width="2"/>
+                            <text x="250" y="55" fill="var(--text-main)" font-weight="bold" text-anchor="middle">8</text>
+                        </svg>
+                    </div>
+                    <p class="description" style="text-align: center; color: var(--neon-blue); font-weight: 700;">
+                        Ingat: Apa yang kamu lakukan pada sisi kiri, harus kamu lakukan juga pada sisi kanan!
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- PAGE 10: CONTOH SOAL 2 -->
+        <div class="slide" id="slide-10">
+            <div class="content-card">
+                <div>
+                    <h2 class="section-tag">CONTOH SOAL 2</h2>
+                    <h3 class="slide-title">Keseimbangan Sisi Ganda</h3>
+                    <p class="description">Perhatikan kalimat matematika yang menantang ini:</p>
+                    <div class="math-block">
+                        4 + <span class="var-x">x</span> = 10 + 2
+                    </div>
+                    <div style="background: #f8fafc; padding: 20px; border-radius: 12px; border: 1px solid #e2e8f0;">
+                        <p><strong>Langkah 1:</strong> Sederhanakan dahulu nilai di sisi kanan yang angkanya lengkap.</p>
+                        <p class="math-expr" style="margin: 5px 0;">10 + 2 = 12</p>
+                        <p style="margin-top: 10px;">Sekarang persamaannya menjadi jauh lebih simpel:</p>
+                        <div class="math-block" style="font-size: 1.6rem; margin: 10px 0;">4 + <span class="var-x">x</span> = 12</div>
+                        <p><strong>Langkah 2:</strong> Maka dengan invers kita peroleh: <span class="var-x">x</span> = 12 &minus; 4 = <strong style="color:var(--neon-blue)">8</strong>.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PAGE 11: LATIHAN 2 -->
+        <div class="slide" id="slide-11">
+            <div class="content-card">
+                <div>
+                    <h2 class="section-tag">LATIHAN INTERAKTIF 2</h2>
+                    <h3 class="slide-title">Timbangan Energi Cadangan</h3>
+                    <p class="description">Hitung nilai variabel <span class="math-expr">y</span> agar kargo roketmu seimbang stabil!</p>
+                    <div class="math-block">
+                        <span class="var-x">y</span> + 6 = 20 &minus; 4
+                    </div>
+                    <div class="interactive-box" style="text-align: center;">
+                        <input type="number" id="quiz-input-2" class="input-answer" placeholder="Nilai y">
+                        <button class="btn-nav primary" style="display:inline-block; margin-left: 10px; padding: 14px 24px;" onclick="checkQuizInput(2, 10)">Uji Nilai</button>
+                        <div id="quiz-feedback-2" class="feedback-msg"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PAGE 12: KONSEP 4 -->
+        <div class="slide" id="slide-12">
+            <div class="content-card">
+                <div>
+                    <h2 class="section-tag">KONSEP UTAMA 4</h2>
+                    <h3 class="slide-title">Pola Bilangan Melompat Maju</h3>
+                    <p class="description">
+                        Aljabar juga mempelajari barisan angka dengan pola teratur. Pola membesar terbentuk karena angka berikutnya selalu bertambah dengan aturan yang konisten.
+                    </p>
+                    <div class="pattern-grid">
+                        <div class="pattern-item">3</div>
+                        <div class="pattern-item">7</div>
+                        <div class="pattern-item">11</div>
+                        <div class="pattern-item">15</div>
+                        <div class="pattern-item secret">?</div>
+                    </div>
+                    <p class="description" style="text-align: center; font-weight: 700; color: var(--accent);">
+                        Aturan Pola: Melompat <span style="color: var(--neon-pink)">+4</span> di setiap langkah!
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- PAGE 13: CONTOH SOAL 3 -->
+        <div class="slide" id="slide-13">
+            <div class="content-card">
+                <div>
+                    <h2 class="section-tag">CONTOH SOAL 3</h2>
+                    <h3 class="slide-title">Deteksi Pola Komet</h3>
+                    <p class="description">Komputer navigasi mendeteksi rute komet berpola:</p>
+                    <div class="math-block" style="font-size: 1.8rem;">
+                        5, 12, 19, 26, ...
+                    </div>
+                    <div style="background: #f8fafc; padding: 20px; border-radius: 12px; border: 1px solid #e2e8f0;">
+                        <p>Mari kita hitung selisih antar angka:</p>
+                        <ul>
+                            <li>12 &minus; 5 = 7</li>
+                            <li>19 &minus; 12 = 7</li>
+                            <li>26 &minus; 19 = 7</li>
+                        </ul>
+                        <p style="margin-top: 10px;">Artinya aturan polanya adalah <span class="math-expr">+7</span>. Angka selanjutnya: <strong style="color:var(--neon-blue)">26 + 7 = 33</strong>.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PAGE 14: LATIHAN 3 -->
+        <div class="slide" id="slide-14">
+            <div class="content-card">
+                <div>
+                    <h2 class="section-tag">LATIHAN INTERAKTIF 3</h2>
+                    <h3 class="slide-title">Menembus Sabuk Asteroid</h3>
+                    <p class="description">Sempurnakan dua koordinat rute terbang selanjutnya di bawah ini!</p>
+                    <div class="math-block" style="font-size: 1.8rem;">
+                        2, 10, 18, 26, 🟦, 🟧
+                    </div>
+                    <div style="display: flex; flex-direction: column; gap: 10px; max-width: 500px; margin: 0 auto;">
+                        <button class="btn-option" onclick="checkQuiz(this, 'wrong', 3)">A. 32 dan 40</button>
+                        <button class="btn-option" onclick="checkQuiz(this, 'correct', 3)">B. 34 dan 42</button>
+                        <button class="btn-option" onclick="checkQuiz(this, 'wrong', 3)">C. 34 dan 40</button>
+                    </div>
+                    <div id="quiz-feedback-3" class="feedback-msg" style="text-align: center;"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PAGE 15: KONSEP 5 -->
+        <div class="slide" id="slide-15">
+            <div class="content-card">
+                <div>
+                    <h2 class="section-tag">KONSEP UTAMA 5</h2>
+                    <h3 class="slide-title">Pola Bilangan Menyusut (Mengecil)</h3>
+                    <p class="description">
+                        Sebaliknya, pola mengecil terjadi apabila nilai angka berikutnya selalu berkurang secara tetap dan teratur.
+                    </p>
+                    <div class="pattern-grid">
+                        <div class="pattern-item">50</div>
+                        <div class="pattern-item">44</div>
+                        <div class="pattern-item">38</div>
+                        <div class="pattern-item">32</div>
+                        <div class="pattern-item secret">?</div>
+                    </div>
+                    <p class="description" style="text-align: center; font-weight: 700; color: var(--neon-pink);">
+                        Aturan Pola: Selalu berkurang berkala (&minus;6)
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- PAGE 16: CONTOH SOAL 4 -->
+        <div class="slide" id="slide-16">
+            <div class="content-card">
+                <div>
+                    <h2 class="section-tag">CONTOH SOAL 4</h2>
+                    <h3 class="slide-title">Hitung Mundur Peluncuran</h3>
+                    <p class="description">Reaktor utama menurunkan suhunya secara teratur:</p>
+                    <div class="math-block" style="font-size: 1.8rem;">
+                        100, 85, 70, 55, ...
+                    </div>
+                    <div style="background: #f8fafc; padding: 20px; border-radius: 12px; border: 1px solid #e2e8f0;">
+                        <p>Setiap angka melompat berkurang sebesar <span class="math-expr">15</span>.</p>
+                        <p style="margin-top: 10px; font-weight: bold; color: var(--neon-blue);">
+                            Maka suhu setelah 55 derajat adalah: 55 &minus; 15 = 40.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PAGE 17: LATIHAN 4 -->
+        <div class="slide" id="slide-17">
+            <div class="content-card">
+                <div>
+                    <h2 class="section-tag">LATIHAN INTERAKTIF 4</h2>
+                    <h3 class="slide-title">Pemindaian Sinyal</h3>
+                    <p class="description">Tentukan nilai variabel berikut dalam pola mengecil:</p>
+                    <div class="math-block" style="font-size: 1.8rem;">
+                        88, 77, 66, 55, <span class="var-x">x</span>
+                    </div>
+                    <div class="interactive-box" style="text-align: center;">
+                        <input type="number" id="quiz-input-4" class="input-answer" placeholder="Nilai x">
+                        <button class="btn-nav primary" style="display:inline-block; margin-left: 10px; padding: 14px 24px;" onclick="checkQuizInput(4, 44)">Pecahkan Kode</button>
+                        <div id="quiz-feedback-4" class="feedback-msg"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PAGE 18: KONSEP 6 -->
+        <div class="slide" id="slide-18">
+            <div class="content-card">
+                <div>
+                    <h2 class="section-tag">KONSEP UTAMA 6</h2>
+                    <h3 class="slide-title">Sandi Perkalian Rahasia</h3>
+                    <p class="description">
+                        Dalam tingkat aljabar yang lebih seru, simbol perkalian silang (<span class="math-expr">&times;</span>) sering tidak ditulis jika menempel langsung ke huruf variabel.
+                    </p>
+                    <div class="math-block">
+                        3<span class="var-x">x</span> = 24
+                    </div>
+                    <p class="description" style="text-align: center;">
+                        Artinya adalah <span class="math-expr">3 dikali x = 24</span>. Karena kebalikan dari kali adalah <strong>bagi</strong>, kita mudah menyelesaikannya!
+                    </p>
+                    <div class="math-expr" style="display: block; text-align: center; font-size: 1.3rem; color: var(--neon-blue);">
+                        <span class="var-x">x</span> = 24 &divide; 3 = 8
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PAGE 19: CONTOH SOAL 5 -->
+        <div class="slide" id="slide-19">
+            <div class="content-card">
+                <div>
+                    <h2 class="section-tag">CONTOH SOAL 5</h2>
+                    <h3 class="slide-title">Membagi Sektor Sinyal</h3>
+                    <p class="description">Ketika komputer membagi ruang penyimpanan data:</p>
+                    <div class="math-block">
+                        <span class="var-x">a</span> &divide; 4 = 12
+                    </div>
+                    <div style="background: #f8fafc; padding: 20px; border-radius: 12px; border: 1px solid #e2e8f0;">
+                        <p>Kebalikan dari pembagian adalah perkalian. Mari kita kalikan nilai kanan dengan angka pembagi.</p>
+                        <p style="margin-top: 10px; font-weight: bold; font-size: 1.3rem; color: var(--text-main);">
+                            <span class="var-x">a</span> = 12 &times; 4 = 48
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PAGE 20: LATIHAN 5 -->
+        <div class="slide" id="slide-20">
+            <div class="content-card">
+                <div>
+                    <h2 class="section-tag">LATIHAN INTERAKTIF 5</h2>
+                    <h3 class="slide-title">Energi Sel Aljabar</h3>
+                    <p class="description">Dapatkan nilai variabel <span class="math-expr">k</span> di bawah ini:</p>
+                    <div class="math-block">
+                        5<span class="var-x">k</span> = 45
+                    </div>
+                    <div style="display: flex; flex-direction: column; gap: 10px; max-width: 500px; margin: 0 auto;">
+                        <button class="btn-option" onclick="checkQuiz(this, 'wrong', 5)">A. k = 7</button>
+                        <button class="btn-option" onclick="checkQuiz(this, 'wrong', 5)">B. k = 8</button>
+                        <button class="btn-option" onclick="checkQuiz(this, 'correct', 5)">C. k = 9</button>
+                    </div>
+                    <div id="quiz-feedback-5" class="feedback-msg" style="text-align: center;"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PAGE 21: TANTANGAN FAST-LEARNER 1 -->
+        <div class="slide" id="slide-21">
+            <div class="content-card">
+                <div>
+                    <h2 class="section-tag">⚡ TANTANGAN FAST-LEARNER 1</h2>
+                    <h3 class="slide-title">Persamaan Dua Langkah</h3>
+                    <p class="description">Karena kamu belajar sangat cepat, mari kita coba tantangan akselerasi tingkat tinggi:</p>
+                    <div class="math-block">
+                        2<span class="var-x">x</span> + 3 = 11
+                    </div>
+                    <div style="background: #f8fafc; padding: 20px; border-radius: 14px; border: 1px solid #e2e8f0;">
+                        <p><strong>Langkah Penyelesaian Super:</strong></p>
+                        <p>1. Singkirkan angka <span class="math-expr">+3</span> terlebih dahulu dengan pengurangan: <br>
+                           <span class="math-expr">2x = 11 &minus; 3</span> &rarr; <span class="math-expr">2x = 8</span></p>
+                        <p style="margin-top: 10px;">2. Bagi dengan angka 2 untuk mendapatkan <span class="var-x">x</span>: <br>
+                           <span class="math-expr">x = 8 &divide; 2 = <strong style="color:var(--neon-pink)">4</strong></span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PAGE 22: LATIHAN 6 -->
+        <div class="slide" id="slide-22">
+            <div class="content-card">
+                <div>
+                    <h2 class="section-tag">⚔️ BOS LEVEL 1</h2>
+                    <h3 class="slide-title">Gerbang Nebula Terkunci</h3>
+                    <p class="description">Gunakan jurus Dua Langkah untuk mengaktifkan kode pemicu pintu gerbang!</p>
+                    <div class="math-block">
+                        3<span class="var-x">m</span> &minus; 5 = 16
+                    </div>
+                    <div class="interactive-box" style="text-align: center;">
+                        <input type="number" id="quiz-input-6" class="input-answer" placeholder="Nilai m">
+                        <button class="btn-nav primary" style="display:inline-block; margin-left: 10px; padding: 14px 24px;" onclick="checkQuizInput(6, 7)">Tembakkan Kode</button>
+                        <div id="quiz-feedback-6" class="feedback-msg"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PAGE 23: KONSEP 7 -->
+        <div class="slide" id="slide-23">
+            <div class="content-card">
+                <div>
+                    <h2 class="section-tag">KONSEP UTAMA 7</h2>
+                    <h3 class="slide-title">Mengubah Cerita Menjadi Persamaan</h3>
+                    <p class="description">
+                        Keahlian terkeren dalam aljabar adalah kemampuan menerjemahkan masalah di dunia nyata ke dalam kalimat matematika ringkas.
+                    </p>
+                    <div style="background: #f8fafc; padding: 20px; border-radius: 14px; margin-top: 20px; border: 1px solid #e2e8f0;">
+                        <p><em>"Andi membawa beberapa mainan. Ayah memberi Andi 5 mainan lagi, sekarang total mainan Andi menjadi 12."</em></p>
+                        <div style="text-align: center; margin-top: 15px;">
+                            <span style="color: var(--neon-blue);">Beberapa mainan</span> &rarr; <span class="math-expr var-x">r</span> <br>
+                            <span style="color: var(--accent);">Diberi lagi 5</span> &rarr; <span class="math-expr">+ 5</span> <br>
+                            <span style="color: var(--neon-green);">Totalnya ada 12</span> &rarr; <span class="math-expr">= 12</span>
+                        </div>
+                        <div class="math-block" style="font-size: 1.6rem; margin-top: 15px;">
+                            <span class="var-x">r</span> + 5 = 12
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PAGE 24: CONTOH SOAL 6 -->
+        <div class="slide" id="slide-24">
+            <div class="content-card">
+                <div>
+                    <h2 class="section-tag">CONTOH SOAL 6</h2>
+                    <h3 class="slide-title">Pembagian Kristal Energi</h3>
+                    <p class="description">
+                        Kapten Zian membagikan <span class="var-x">p</span> kristal energi secara merata kepada 3 robot penjelajah. Setiap robot menerima 8 kristal.
+                    </p>
+                    <p class="description">Model kalimat matematika aljabarnya:</p>
+                    <div class="math-block">
+                        <span class="var-x">p</span> &divide; 3 = 8
+                    </div>
+                    <p style="text-align: center; font-weight: bold; color: var(--neon-purple);">
+                        Total awal kristal yang dipunyai (<span class="var-x">p</span>) adalah 8 &times; 3 = 24 kristal!
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- PAGE 25: LATIHAN 7 -->
+        <div class="slide" id="slide-25">
+            <div class="content-card">
+                <div>
+                    <h2 class="section-tag">LATIHAN INTERAKTIF 7</h2>
+                    <h3 class="slide-title">Merakit Rumus Rahasia</h3>
+                    <p class="description">
+                        <em>"Sebuah pesawat memuat x kontainer barang. Setelah diturunkan 7 kontainer di stasiun bumi, sisa kontainer di dalam pesawat adalah 19."</em> Kalimat matematika manakah yang tepat?
+                    </p>
+                    <div style="display: flex; flex-direction: column; gap: 10px; max-width: 500px; margin: 0 auto;">
+                        <button class="btn-option" onclick="checkQuiz(this, 'wrong', 7)">A. x + 7 = 19</button>
+                        <button class="btn-option" onclick="checkQuiz(this, 'correct', 7)">B. x &minus; 7 = 19</button>
+                        <button class="btn-option" onclick="checkQuiz(this, 'wrong', 7)">C. 7 &minus; x = 19</button>
+                    </div>
+                    <div id="quiz-feedback-7" class="feedback-msg" style="text-align: center;"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PAGE 26: TANTANGAN FAST-LEARNER 2 -->
+        <div class="slide" id="slide-26">
+            <div class="content-card">
+                <div>
+                    <h2 class="section-tag">⚡ TANTANGAN FAST-LEARNER 2</h2>
+                    <h3 class="slide-title">Pola Bilangan Perkalian (Multiplikasi)</h3>
+                    <p class="description">
+                        Apakah kamu siap untuk lompatan logika berikutnya? Pola bilangan tidak hanya melompat tambah atau kurang, tapi bisa melompat ber-KALI lipat!
+                    </p>
+                    <div class="pattern-grid">
+                        <div class="pattern-item">2</div>
+                        <div class="pattern-item">4</div>
+                        <div class="pattern-item">8</div>
+                        <div class="pattern-item">16</div>
+                        <div class="pattern-item secret">?</div>
+                    </div>
+                    <p class="description" style="text-align: center; font-weight: 700; color: var(--neon-blue);">
+                        Aturan Pola: Selalu dikalikan 2 (&times;2)! Angka selanjutnya adalah 32.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- PAGE 27: LATIHAN 8 -->
+        <div class="slide" id="slide-27">
+            <div class="content-card">
+                <div>
+                    <h2 class="section-tag">⚔️ BOS LEVEL 2</h2>
+                    <h3 class="slide-title">AI Komputer Menguji Logikamu</h3>
+                    <p class="description">AI navigasi mengunci arah dengan pola perkalian cepat. Tebak angka selanjutnya dengan jitu!</p>
+                    <div class="math-block" style="font-size: 1.8rem;">
+                        3, 9, 27, 🟦
+                    </div>
+                    <div class="interactive-box" style="text-align: center;">
+                        <input type="number" id="quiz-input-8" class="input-answer" placeholder="???">
+                        <button class="btn-nav primary" style="display:inline-block; margin-left: 10px; padding: 14px 24px;" onclick="checkQuizInput(8, 81)">Kirim Data</button>
+                        <div id="quiz-feedback-8" class="feedback-msg"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PAGE 28: REVIEW KILAT -->
+        <div class="slide" id="slide-28">
+            <div class="content-card">
+                <div>
+                    <h2 class="section-tag">RANGKUMAN CEPAT</h2>
+                    <h3 class="slide-title">Intisari Aljabar</h3>
+                    <p class="description">Sebelum menghadapi Mega Kuis Terakhir, mari kita ingat 3 pondasi penting:</p>
+                    <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; margin-top: 20px;">
+                        <div style="background: #f8fafc; padding: 15px; border-radius: 12px; text-align: center; border: 1px solid rgba(2, 132, 199, 0.2);">
+                            <h4 style="color:var(--neon-blue)">Variabel</h4>
+                            <p style="font-size:0.9rem; margin-top: 5px; color: var(--text-muted);">Huruf rahasia pengganti angka tersembunyi.</p>
+                        </div>
+                        <div style="background: #f8fafc; padding: 15px; border-radius: 12px; text-align: center; border: 1px solid rgba(124, 58, 237, 0.2);">
+                            <h4 style="color:var(--neon-purple)">Invers</h4>
+                            <p style="font-size:0.9rem; margin-top: 5px; color: var(--text-muted);">Operasi kebalikan saat berpindah ruas.</p>
+                        </div>
+                        <div style="background: #f8fafc; padding: 15px; border-radius: 12px; text-align: center; border: 1px solid rgba(219, 39, 119, 0.2);">
+                            <h4 style="color:var(--neon-pink)">Konstan</h4>
+                            <p style="font-size:0.9rem; margin-top: 5px; color: var(--text-muted);">Nilai lompatan pola harus selalu stabil adil.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PAGE 29: MEGA KUIS 1 -->
+        <div class="slide" id="slide-29">
+            <div class="content-card">
+                <div>
+                    <h2 class="section-tag">MEGA KUIS AKHIR (1/3)</h2>
+                    <h3 class="slide-title">Kebutuhan Drone</h3>
+                    <p class="description">Pertanyaan 1: Jika sebuah pesawat membutuhkan suku cadang sebanyak <span class="math-expr">x</span>, dan memenuhi persamaan:</p>
+                    <div class="math-block">
+                        <span class="var-x">x</span> &minus; 18 = 42
+                    </div>
+                    <div style="display: flex; flex-direction: column; gap: 10px; max-width: 500px; margin: 0 auto;">
+                        <button class="btn-option" onclick="checkQuiz(this, 'wrong', 29)">A. x = 24</button>
+                        <button class="btn-option" onclick="checkQuiz(this, 'correct', 29)">B. x = 60</button>
+                        <button class="btn-option" onclick="checkQuiz(this, 'wrong', 29)">C. x = 50</button>
+                    </div>
+                    <div id="quiz-feedback-29" class="feedback-msg" style="text-align: center;"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PAGE 30: MEGA KUIS 2 -->
+        <div class="slide" id="slide-30">
+            <div class="content-card">
+                <div>
+                    <h2 class="section-tag">MEGA KUIS AKHIR (2/3)</h2>
+                    <h3 class="slide-title">Persamaan Timbangan Ganda</h3>
+                    <p class="description">Pertanyaan 2: Selesaikan nilai variabel <span class="math-expr">w</span> agar timbangan seimbang:</p>
+                    <div class="math-block">
+                        <span class="var-x">w</span> + 12 = 40 &minus; 8
+                    </div>
+                    <div class="interactive-box" style="text-align: center;">
+                        <input type="number" id="quiz-input-30" class="input-answer" placeholder="Nilai w">
+                        <button class="btn-nav primary" style="display:inline-block; margin-left: 10px; padding: 14px 24px;" onclick="checkQuizInput(30, 20)">Masukkan Hasil</button>
+                        <div id="quiz-feedback-30" class="feedback-msg"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PAGE 31: MEGA KUIS 3 -->
+        <div class="slide" id="slide-31">
+            <div class="content-card">
+                <div>
+                    <h2 class="section-tag">MEGA KUIS AKHIR (3/3)</h2>
+                    <h3 class="slide-title">Pola Lompatan Super</h3>
+                    <p class="description">Pertanyaan 3: Tebak nilai dua suku berturut-turut pada pola bilangan berkurang di bawah ini:</p>
+                    <div class="math-block" style="font-size: 1.8rem;">
+                        120, 105, 90, 75, 🟦, 🟧
+                    </div>
+                    <div style="display: flex; flex-direction: column; gap: 10px; max-width: 500px; margin: 0 auto;">
+                        <button class="btn-option" onclick="checkQuiz(this, 'correct', 31)">A. 60 dan 45</button>
+                        <button class="btn-option" onclick="checkQuiz(this, 'wrong', 31)">B. 65 dan 50</button>
+                        <button class="btn-option" onclick="checkQuiz(this, 'wrong', 31)">C. 60 dan 50</button>
+                    </div>
+                    <div id="quiz-feedback-31" class="feedback-msg" style="text-align: center;"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PAGE 32: SKOR & EVALUASI -->
+        <div class="slide" id="slide-32">
+            <div class="content-card">
+                <div style="text-align: center; margin: auto 0;">
+                    <h2 class="section-tag">MISI BERHASIL</h2>
+                    <h3 class="slide-title">Sinkronisasi Data Sukses</h3>
+                    <p class="description" style="font-size: 1.3rem;">Kamu telah berhasil menuntaskan seluruh rintangan petualangan Aljabar.</p>
+                    <div style="background: rgba(2, 132, 199, 0.05); padding: 30px; border-radius: 20px; display: inline-block; margin: 20px 0; border: 2px solid var(--neon-blue);">
+                        <h4 style="font-size: 1.5rem; color: var(--text-main); margin-bottom: 10px;">Nilai Kesiapan Kelas 5</h4>
+                        <div style="font-size: 3.5rem; font-weight: 800; color: var(--neon-blue);">100%</div>
+                        <p style="color:var(--correct); font-weight: 700; margin-top: 5px;">Status: SANGAT SIAP & AKSELERASI</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PAGE 33: REFLEKSI -->
+        <div class="slide" id="slide-33">
+            <div class="content-card">
+                <div>
+                    <h2 class="section-tag">REFLEKSI DIRI</h2>
+                    <h3 class="slide-title">Bagaimana Perasaanmu?</h3>
+                    <p class="description">Pilihlah ekspresi yang paling sesuai dengan perasaanmu setelah mempelajari Aljabar hari ini:</p>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px;">
+                        <button class="btn-option" style="text-align: center; display: block;" onclick="selectReflect(this)">🚀 Sangat Seru & Menantang!</button>
+                        <button class="btn-option" style="text-align: center; display: block;" onclick="selectReflect(this)">😎 Cukup Mudah, Aku Paham Cepat!</button>
+                    </div>
+                    <div id="reflect-feedback" class="feedback-msg" style="text-align: center; color: var(--neon-blue);"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PAGE 34: KESIMPULAN -->
+        <div class="slide" id="slide-34">
+            <div class="content-card">
+                <div>
+                    <h2 class="section-tag">KESIMPULAN</h2>
+                    <h3 class="slide-title">Kamu Hebat!</h3>
+                    <p class="description">
+                        Belajar matematika ternyata seperti menyelesaikan teka-teki misteri yang dinamis. Kamu sudah membuktikan bahwa huruf rahasia <span class="math-expr">x</span> tidak bisa bersembunyi dari analisismu yang tajam. Kemampuan berpikir logis ini akan menjadi modal terbaikmu di kelas 5 SD nanti!
+                    </p>
+                    <div class="svg-container" style="min-height: 150px;">
+                        <svg width="150" height="150" viewBox="0 0 100 100">
+                            <circle cx="50" cy="50" r="40" fill="none" stroke="var(--neon-blue)" stroke-width="4"/>
+                            <polygon points="50,20 63,45 90,45 68,60 76,85 50,70 24,85 32,60 10,45 37,45" fill="#f59e0b"/>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PAGE 35: PENUTUP & SERTIFIKAT -->
+        <div class="slide" id="slide-35">
+            <div class="content-card">
+                <div class="cert-card">
+                    <h2 style="color: #d97706; letter-spacing: 2px; font-size: 1.5rem; margin-bottom: 10px; font-weight: 800;">SERTIFIKAT KELULUSAN</h2>
+                    <p style="color: var(--text-main); font-size: 1.1rem;">Diberikan kepada Penjelajah Matematika Cerdas atas keberhasilannya menyelesaikan modul</p>
+                    <h3 style="color: var(--neon-blue); font-size: 2rem; margin: 15px 0; text-shadow: 0 2px 4px rgba(2, 132, 199, 0.1);">ALGEBAR ADVENTURE ACADEMY</h3>
+                    <p style="color: var(--neon-purple); font-weight: bold; font-size: 1.2rem;">Kesiapan Naik Kelas 5 SD - Kurikulum Merdeka</p>
+                    <div style="margin-top: 30px; border-top: 1px solid #cbd5e1; padding-top: 15px; color: var(--text-muted); font-size: 0.9rem;">
+                        Diverifikasi secara digital oleh Cyber Core Engine 2026
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- BOTTOM NAVIGATION CONTROLS -->
+    <div class="footer-controls">
+        <button class="btn-nav" id="btnPrev" onclick="prevSlide()" disabled>&larr; Kembali</button>
+        <button class="btn-nav primary" id="btnNext" onclick="nextSlide()">Lanjut &rarr;</button>
+    </div>
+
+    <script>
+        let currentSlide = 1;
+        const totalSlides = 35;
+
+        // Mendapatkan elemen workspace penampung slide
+        const workspace = document.getElementById('workspace');
+
+        // Generator otomatis untuk memastikan jumlah slide pas tepat 35 halaman
+        for (let i = 1; i <= totalSlides; i++) {
+            if (!document.getElementById(`slide-${i}`)) {
+                let newSlide = document.createElement('div');
+                newSlide.className = 'slide';
+                newSlide.id = `slide-${i}`;
+                newSlide.innerHTML = `
+                    <div class="content-card">
+                        <div>
+                            <h2 class="section-tag">⚡ MODUL AKSELERASI EKSTRA ${i}</h2>
+                            <h3 class="slide-title">Kekuatan Logika Tingkat ${i}</h3>
+                            <p class="description">Sebagai anak yang berpikir cepat, mari analisis hubungan angka dinamis berikut ini:</p>
+                            <div class="math-block">x + ${i} = ${i * 3}</div>
+                            <div class="interactive-box" style="text-align: center;">
+                                <input type="number" id="quiz-input-${i}" class="input-answer" placeholder="Isi Nilai x">
+                                <button class="btn-nav primary" style="display:inline-block; margin-left: 10px; padding: 14px 24px;" onclick="checkQuizInput(${i}, ${i * 2})">Kirim Jawaban</button>
+                                <div id="quiz-feedback-${i}" class="feedback-msg"></div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                workspace.appendChild(newSlide);
+            }
+        }
+
+        function updateNavigation() {
+            // Update kelas slide aktif
+            for(let i=1; i<=totalSlides; i++) {
+                let s = document.getElementById(`slide-${i}`);
+                if(s) {
+                    s.classList.remove('active', 'exit');
+                    if(i === currentSlide) {
+                        s.classList.add('active');
+                    } else if(i < currentSlide) {
+                        s.classList.add('exit');
+                    }
+                }
+            }
+
+            // Memperbarui progress bar
+            document.getElementById('progressBar').style.width = `${(currentSlide / totalSlides) * 100}%`;
+            document.getElementById('pageCounter').innerText = `Misi ${currentSlide} / ${totalSlides}`;
+
+            // Kondisi tombol navigasi bawah
+            document.getElementById('btnPrev').disabled = (currentSlide === 1);
+            if (currentSlide === totalSlides) {
+                document.getElementById('btnNext').innerText = "Selesai ✨";
+                document.getElementById('btnNext').disabled = true;
+            } else {
+                document.getElementById('btnNext').innerText = "Lanjut →";
+                document.getElementById('btnNext').disabled = false;
+            }
+        }
+
+        function nextSlide() {
+            if (currentSlide < totalSlides) {
+                currentSlide++;
+                updateNavigation();
+            }
+        }
+
+        function prevSlide() {
+            if (currentSlide > 1) {
+                currentSlide--;
+                updateNavigation();
+            }
+        }
+
+        // Penanganan Interaksi Game
+        function checkWarmUp() {
+            let val = document.getElementById('warmup-input').value;
+            let feedback = document.getElementById('warmup-feedback');
+            if(parseInt(val) === 18) {
+                feedback.innerHTML = "🎯 LUAR BIASA! 12 + 18 = 30. Selamat, jawabanmu 100% tepat!";
+                feedback.style.color = "var(--correct)";
+            } else {
+                feedback.innerHTML = "❌ Kurang tepat. Coba pikirkan: 30 dikurangi 12!";
+                feedback.style.color = "var(--wrong)";
+            }
+        }
+
+        function checkQuiz(btn, status, id) {
+            let feedback = document.getElementById(`quiz-feedback-${id}`);
+            let container = btn.parentElement;
+            let buttons = container.querySelectorAll('.btn-option');
+            
+            buttons.forEach(b => b.classList.remove('correct', 'wrong'));
+            
+            if(status === 'correct') {
+                btn.classList.add('correct');
+                feedback.innerHTML = "🚀 Hebat sekali! Jawabanmu benar.";
+                feedback.style.color = "var(--correct)";
+            } else {
+                btn.classList.add('wrong');
+                feedback.innerHTML = "⚡ Oops, coba hitung kembali dengan teliti!";
+                feedback.style.color = "var(--wrong)";
+            }
+        }
+
+        function checkQuizInput(id, correctValue) {
+            let val = document.getElementById(`quiz-input-${id}`).value;
+            let feedback = document.getElementById(`quiz-feedback-${id}`);
+            if(parseInt(val) === correctValue) {
+                feedback.innerHTML = "🎯 Sempurna! Analisis logikamu sangat mantap.";
+                feedback.style.color = "var(--correct)";
+            } else {
+                feedback.innerHTML = `❌ Kurang pas. Petunjuk: Nilai x yang tepat adalah ${correctValue}.`;
+                feedback.style.color = "var(--wrong)";
+            }
+        }
+
+        function selectReflect(btn) {
+            document.getElementById('reflect-feedback').innerText = "Pilihan yang luar biasa! Kamu adalah calon ilmuwan matematika masa depan! 🌌";
+        }
+
+        // Mengurutkan elemen DOM slide agar berurutan di dalam workspace
+        function sortSlides() {
+            let items = Array.from(workspace.children);
+            items.sort((a, b) => {
+                let numA = parseInt(a.id.replace('slide-', ''));
+                let numB = parseInt(b.id.replace('slide-', ''));
+                return numA - numB;
+            });
+            items.forEach(item => workspace.appendChild(item));
+        }
+
+        window.onload = () => {
+            sortSlides();
+            updateNavigation();
+        };
+    </script>
+</body>
+</html>
