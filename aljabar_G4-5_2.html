@@ -1,0 +1,1085 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detektif Aljabar: Operasi Berkas Rahasia 🕵️‍♂️</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    <style>
+        :root {
+            --detective-dark: #0f172a; /* Slate 900 */
+            --detective-card: #1e293b; /* Slate 800 */
+            --detective-gold: #f59e0b; /* Amber 500 */
+            --detective-cyan: #38bdf8; /* Sky 400 */
+            --detective-green: #10b981; /* Emerald 500 */
+            --detective-rose: #f43f5e; /* Rose 500 */
+            --text-light: #f8f9fa;
+            --text-muted: #94a3b8;
+            --glow-gold: 0 0 15px rgba(245, 158, 11, 0.4);
+            --glow-cyan: 0 0 15px rgba(56, 189, 248, 0.4);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        body {
+            background-color: var(--detective-dark);
+            color: var(--text-light);
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 0),
+                radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 0);
+            background-size: 40px 40px;
+            background-position: 0 0, 20px 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Top Progress Bar / Navigation Header */
+        .header-nav {
+            background: rgba(30, 41, 59, 0.95);
+            padding: 16px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid rgba(245, 158, 11, 0.2);
+            z-index: 10;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+            backdrop-filter: blur(10px);
+        }
+
+        .title-area {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-svg {
+            width: 38px;
+            height: 38px;
+            filter: drop-shadow(0 0 8px var(--detective-gold));
+        }
+
+        .title-area h1 {
+            font-family: 'Special Elite', cursive;
+            font-size: 1.3rem;
+            font-weight: 900;
+            letter-spacing: 1px;
+            background: linear-gradient(135deg, var(--detective-gold), var(--detective-cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Navigasi Tab */
+        .tabs-nav {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin: 25px 0;
+            overflow-x: auto;
+            padding: 8px;
+        }
+
+        .tab-btn {
+            background: var(--detective-card);
+            border: 1px solid rgba(255,255,255,0.08);
+            color: var(--text-muted);
+            padding: 12px 22px;
+            border-radius: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tab-btn:hover {
+            border-color: var(--detective-cyan);
+            color: var(--text-light);
+            box-shadow: var(--glow-cyan);
+        }
+
+        .tab-btn.active {
+            background: linear-gradient(135deg, var(--detective-gold), rgba(30, 41, 59, 0.9));
+            border-color: var(--detective-gold);
+            color: #0f172a;
+            font-weight: 800;
+            box-shadow: var(--glow-gold);
+        }
+
+        /* Workspace Container */
+        .container {
+            max-width: 950px;
+            margin: 0 auto;
+            padding: 0 20px 40px;
+            width: 100%;
+            flex: 1;
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.45s ease-out forwards;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Card Layout */
+        .card {
+            background: var(--detective-card);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            padding: 28px;
+            margin-bottom: 24px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            backdrop-filter: blur(10px);
+            position: relative;
+        }
+
+        .card-title {
+            font-family: 'Special Elite', cursive;
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 18px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--detective-gold);
+        }
+
+        .objective-box {
+            border-left: 5px solid var(--detective-cyan);
+            background: rgba(56, 189, 248, 0.04);
+        }
+
+        /* Typography */
+        p.description {
+            font-size: 1.1rem;
+            line-height: 1.7;
+            color: var(--text-light);
+            margin-bottom: 15px;
+        }
+
+        /* Math Block Styling (Super Clean KaTeX Display) */
+        .math-block {
+            background: rgba(15, 23, 42, 0.8);
+            border-radius: 16px;
+            padding: 22px;
+            margin: 20px 0;
+            border-left: 5px solid var(--detective-gold);
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+        }
+
+        .math-block * {
+            font-family: inherit !important;
+        }
+
+        /* Timbangan Keseimbangan Interaktif */
+        .scale-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: rgba(15, 23, 42, 0.7);
+            border-radius: 20px;
+            padding: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            margin-top: 20px;
+        }
+
+        .scale-svg-wrapper {
+            width: 100%;
+            max-width: 450px;
+            height: 200px;
+            margin-bottom: 20px;
+        }
+
+        .scale-controls {
+            display: flex;
+            gap: 25px;
+            width: 100%;
+            justify-content: center;
+        }
+
+        .control-panel {
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 14px;
+            padding: 12px 20px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            flex: 1;
+            max-width: 180px;
+        }
+
+        .btn-ctrl {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: white;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1.2rem;
+            transition: all 0.2s;
+            margin: 0 8px;
+        }
+
+        .btn-ctrl:hover {
+            background: var(--detective-gold);
+            color: #0f172a;
+            box-shadow: var(--glow-gold);
+        }
+
+        .status-badge {
+            background: rgba(244, 63, 94, 0.15);
+            border: 1px solid var(--detective-rose);
+            color: var(--detective-rose);
+            padding: 8px 18px;
+            border-radius: 20px;
+            font-weight: 800;
+            font-size: 14px;
+            letter-spacing: 1px;
+            margin-top: 15px;
+            text-transform: uppercase;
+        }
+
+        .status-badge.balanced {
+            background: rgba(16, 185, 129, 0.15);
+            border: 1px solid var(--detective-green);
+            color: var(--detective-green);
+            box-shadow: 0 0 10px rgba(16, 185, 129, 0.2);
+        }
+
+        /* Warm-Up / Soal Layout */
+        .question-block {
+            background: rgba(15, 23, 42, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 20px;
+            transition: all 0.3s;
+        }
+
+        .question-block:hover {
+            border-color: rgba(245, 158, 11, 0.2);
+        }
+
+        .q-header {
+            font-weight: 800;
+            font-size: 1.15rem;
+            margin-bottom: 15px;
+            color: var(--detective-cyan);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .option-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+            margin-top: 15px;
+        }
+
+        @media (max-width: 600px) {
+            .option-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .opt-btn {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1.5px solid rgba(255, 255, 255, 0.08);
+            color: var(--text-light);
+            padding: 14px 18px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 1.05rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: left;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .opt-btn:hover {
+            border-color: var(--detective-cyan);
+            background: rgba(56, 189, 248, 0.03);
+            transform: translateY(-2px);
+        }
+
+        .opt-btn.correct {
+            background: rgba(16, 185, 129, 0.15) !important;
+            border-color: var(--detective-green) !important;
+            color: var(--detective-green) !important;
+        }
+
+        .opt-btn.wrong {
+            background: rgba(244, 63, 94, 0.15) !important;
+            border-color: var(--detective-rose) !important;
+            color: var(--detective-rose) !important;
+        }
+
+        .feedback-msg {
+            margin-top: 12px;
+            font-size: 1rem;
+            font-weight: 700;
+            line-height: 1.6;
+            display: none;
+        }
+
+        .feedback-msg.show {
+            display: block;
+            animation: fadeIn 0.3s;
+        }
+
+        /* Real-World Connections Card Layout */
+        .rw-cards-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .rw-card {
+            display: flex;
+            gap: 20px;
+            background: rgba(15, 23, 42, 0.5);
+            border-radius: 16px;
+            padding: 24px;
+            border-left: 5px solid var(--detective-cyan);
+            align-items: center;
+        }
+
+        @media (max-width: 600px) {
+            .rw-card {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+
+        .rw-icon-box {
+            width: 60px;
+            height: 60px;
+            background: rgba(56, 189, 248, 0.1);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            flex-shrink: 0;
+        }
+
+        .rw-content h3 {
+            font-family: 'Special Elite', cursive;
+            color: var(--detective-gold);
+            margin-bottom: 8px;
+            font-size: 1.15rem;
+        }
+
+        .rw-interactive-btn {
+            background: none;
+            border: 1px dashed var(--detective-cyan);
+            color: var(--detective-cyan);
+            padding: 6px 14px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 800;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: all 0.2s;
+        }
+
+        .rw-interactive-btn:hover {
+            background: var(--detective-cyan);
+            color: #0f172a;
+            box-shadow: var(--glow-cyan);
+        }
+
+        /* Input Manual Styling */
+        .input-wrapper {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin-top: 15px;
+        }
+
+        .text-input {
+            background: rgba(15, 23, 42, 0.8);
+            border: 2px solid rgba(255, 255, 255, 0.12);
+            color: white;
+            border-radius: 12px;
+            padding: 12px;
+            font-size: 1.2rem;
+            font-weight: 800;
+            width: 140px;
+            text-align: center;
+            outline: none;
+            transition: all 0.2s;
+        }
+
+        .text-input:focus {
+            border-color: var(--detective-cyan);
+            box-shadow: var(--glow-cyan);
+        }
+
+        .verify-btn {
+            background: linear-gradient(135deg, var(--detective-gold), #b45309);
+            border: none;
+            color: #0f172a;
+            font-weight: 800;
+            padding: 12px 24px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 1rem;
+        }
+
+        .verify-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--glow-gold);
+        }
+
+        /* Reflection & Rating Buttons */
+        .rating-group {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 25px 0;
+        }
+
+        .rating-btn {
+            background: rgba(255, 255, 255, 0.02);
+            border: 2px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            width: 130px;
+        }
+
+        .rating-btn:hover, .rating-btn.active {
+            border-color: var(--detective-gold);
+            background: rgba(245, 158, 11, 0.05);
+            transform: translateY(-4px);
+            box-shadow: var(--glow-gold);
+        }
+
+        .rating-btn.active .emoji {
+            transform: scale(1.25);
+        }
+
+        /* Certificate / Badge Card */
+        .cert-card {
+            background: radial-gradient(circle, #1e293b 0%, #0f172a 100%);
+            border: 4px double var(--detective-gold);
+            border-radius: 24px;
+            padding: 40px;
+            text-align: center;
+            box-shadow: 0 15px 40px rgba(245, 158, 11, 0.15);
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+            max-width: 500px;
+            margin: 30px auto;
+        }
+
+        .cert-header {
+            font-family: 'Special Elite', cursive;
+            font-size: 0.9rem;
+            color: var(--detective-gold);
+            letter-spacing: 4px;
+            margin-bottom: 12px;
+        }
+
+        .cert-title {
+            font-family: 'Special Elite', cursive;
+            font-size: 1.8rem;
+            color: var(--detective-cyan);
+            margin: 15px 0;
+            text-shadow: var(--glow-cyan);
+        }
+
+        .cert-badge-svg {
+            width: 110px;
+            height: 110px;
+            margin: 15px auto;
+            filter: drop-shadow(0 0 10px var(--detective-gold));
+        }
+
+        /* General Badge for status updates */
+        .badge {
+            background: linear-gradient(45deg, var(--detective-gold), #b45309);
+            padding: 4px 12px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 800;
+            color: #0f172a;
+            text-transform: uppercase;
+        }
+
+        /* SVG Balance Beam Rotate transition */
+        #scale-beam, #scale-pan-left, #scale-pan-right {
+            transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px 20px;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            margin-top: auto;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- TOP CONTROL HEADER -->
+    <div class="header-nav">
+        <div class="title-area">
+            <svg class="logo-svg" viewBox="0 0 100 100">
+                <polygon points="50,5 95,25 95,75 50,95 5,75 5,25" fill="none" stroke="#f59e0b" stroke-width="5"/>
+                <polygon points="50,20 80,35 80,65 50,80 20,65 20,35" fill="none" stroke="#38bdf8" stroke-width="3"/>
+                <circle cx="50" cy="50" r="10" fill="#f59e0b"/>
+            </svg>
+            <h1>ALGEBRA DETECTIVE AGENCY</h1>
+        </div>
+        <div class="page-counter">SD Kelas 4-5</div>
+    </div>
+
+    <!-- TABS NAVIGATION -->
+    <div class="tabs-nav">
+        <button class="tab-btn active" onclick="switchTab('tujuan-warmup')">📋 Misi & Warm-Up</button>
+        <button class="tab-btn" onclick="switchTab('realworld')">🌍 Skenario Kasus</button>
+        <button class="tab-btn" onclick="switchTab('konsep')">⚖️ Timbangan Rahasia</button>
+        <button class="tab-btn" onclick="switchTab('tantangan')">🏆 Uji Berkas Kasus</button>
+        <button class="tab-btn" onclick="switchTab('refleksi')">⭐ Lencana Kelulusan</button>
+    </div>
+
+    <!-- MAIN WORKSPACE -->
+    <div class="container">
+        
+        <!-- TAB 1: TUJUAN & WARM-UP -->
+        <div id="tujuan-warmup" class="tab-content active">
+            <div class="card objective-box">
+                <div class="card-title">🕵️‍♂️ Misi Detektif Aljabar Utama</div>
+                <p class="description">
+                    Selamat bergabung di Divisi Khusus Detektif Aljabar! Kamu dikirim ke sini bukan untuk menghafal, tapi melatih ketajaman deduksi dalam memecahkan persamaan angka rahasia.
+                </p>
+                <div style="margin-top: 10px; display: flex; flex-direction: column; gap: 8px;">
+                    <div>• <strong style="color:var(--detective-cyan)">Deduksi Penjumlahan & Pengurangan:</strong> Menemukan nilai rahasia variabel <span class="math-expr">x</span> di bawah pelindung operasi satu langkah.</div>
+                    <div>• <strong style="color:var(--detective-gold)">Analisis Perkalian & Pembagian:</strong> Melakukan operasi kebalikan (invers) demi menguak sandi ganda.</div>
+                    <div>• <strong style="color:var(--detective-green)">Penguasaan Dua Langkah:</strong> Menyelesaikan persamaan rumit yang memiliki kombinasi dua operasi matematika sekaligus!</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">🔍 Misi Pembuat Energi (Warm-Up 4 Soal)</div>
+                <p class="description" style="color: var(--text-muted)">Gunakan nalar deduksimu untuk menjawab 4 pertanyaan pemanasan awal di bawah ini!</p>
+                
+                <!-- Soal 1 -->
+                <div class="question-block" id="wu1">
+                    <div class="q-header"><span>1.</span> Operasi Penjumlahan Rahasia: Cari nilai variabel di bawah!</div>
+                    <div class="math-block">$$15 + x = 32$$</div>
+                    <div class="option-grid">
+                        <button class="opt-btn" onclick="checkWUAnswer('wu1', 12, false, 'Sedikit lagi! Coba hitung kembali apakah 15 + 12 = 32?')">A. x = 12</button>
+                        <button class="opt-btn" onclick="checkWUAnswer('wu1', 17, true, 'Sempurna! Dengan cara mengurangkan: x = 32 - 15 = 17.')">B. x = 17</button>
+                        <button class="opt-btn" onclick="checkWUAnswer('wu1', 22, false, 'Kelebihan! Gunakan invers penjumlahan yaitu pengurangan.')">C. x = 22</button>
+                    </div>
+                    <div class="feedback-msg"></div>
+                </div>
+
+                <!-- Soal 2 -->
+                <div class="question-block" id="wu2">
+                    <div class="q-header"><span>2.</span> Operasi Pengurangan Rahasia: Berapa isi variabel di bawah?</div>
+                    <div class="math-block">$$y - 12 = 18$$</div>
+                    <div class="option-grid">
+                        <button class="opt-btn" onclick="checkWUAnswer('wu2', 6, false, 'Hampir! Jika y = 6, maka 6 - 12 tidak menghasilkan 18 positif.')">A. y = 6</button>
+                        <button class="opt-btn" onclick="checkWUAnswer('wu2', 20, false, 'Sedikit lagi! Cek lagi 20 - 12.')">B. y = 20</button>
+                        <button class="opt-btn" onclick="checkWUAnswer('wu2', 30, true, 'Hebat! Kebalikan dari pengurangan adalah penjumlahan: y = 18 + 12 = 30.')">C. y = 30</button>
+                    </div>
+                    <div class="feedback-msg"></div>
+                </div>
+
+                <!-- Soal 3 -->
+                <div class="question-block" id="wu3">
+                    <div class="q-header"><span>3.</span> Operasi Perkalian Rahasia: Cari nilai variabel di bawah!</div>
+                    <div class="math-block">$$4a = 36$$</div>
+                    <div class="option-grid">
+                        <button class="opt-btn" onclick="checkWUAnswer('wu3', 8, false, 'Salah! 4 x 8 = 32. Cari yang pas menghasilkan 36.')">A. a = 8</button>
+                        <button class="opt-btn" onclick="checkWUAnswer('wu3', 9, true, 'Tepat! Kebalikan dari perkalian adalah pembagian: a = 36 ÷ 4 = 9.')">B. a = 9</button>
+                        <button class="opt-btn" onclick="checkWUAnswer('wu3', 12, false, 'Kelebihan! 4 x 12 = 48.')">C. a = 12</button>
+                    </div>
+                    <div class="feedback-msg"></div>
+                </div>
+
+                <!-- Soal 4 -->
+                <div class="question-block" id="wu4">
+                    <div class="q-header"><span>4.</span> Operasi Pembagian Rahasia: Tentukan nilai variabel b!</div>
+                    <div class="math-block">$$\frac{b}{5} = 8$$</div>
+                    <div class="option-grid">
+                        <button class="opt-btn" onclick="checkWUAnswer('wu4', 13, false, 'Ops! Kamu malah menjumlahkannya.')">A. b = 13</button>
+                        <button class="opt-btn" onclick="checkWUAnswer('wu4', 40, true, 'Luar Biasa! Kebalikan pembagian adalah perkalian: b = 8 x 5 = 40.')">B. b = 40</button>
+                        <button class="opt-btn" onclick="checkWUAnswer('wu4', 3, false, 'Kurang tepat. Kebalikan dari pembagian adalah perkalian.')">C. b = 3</button>
+                    </div>
+                    <div class="feedback-msg"></div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- TAB 2: SKENARIO NYATA -->
+        <div id="realworld" class="tab-content">
+            <div class="card">
+                <div class="card-title">💼 Kasus Nyata Detektif Aljabar (3 Contoh Kasus)</div>
+                <p class="description" style="color: var(--text-muted)">Aljabar adalah bahasa rahasia dunia kita. Di bawah ini adalah 3 kasus nyata yang dipecahkan dengan aljabar oleh tim detektif!</p>
+                
+                <div class="rw-cards-grid">
+                    <!-- Kasus 1 -->
+                    <div class="rw-card">
+                        <div class="rw-icon-box">🛡️</div>
+                        <div class="rw-content">
+                            <h3>Kasus 1: Menguak Sisa Anggaran Koin</h3>
+                            <p style="font-size: 14px; color: var(--text-muted);">Agen membeli sebuah kacamata detektif infra merah dan masih menyisakan <strong>15 koin emas</strong>. Jika total koin awal agen adalah <strong>65 koin</strong>, berapa harga kacamata tersebut?</p>
+                            <button class="rw-interactive-btn" onclick="toggleRW(1)">Aktifkan Mode Analisis</button>
+                            <div id="rw1-box" style="margin-top: 12px; display: none; padding: 12px; background: rgba(15,23,42,0.6); border-radius: 8px; font-size: 14px; border: 1px solid rgba(255,255,255,0.05);">
+                                <span style="color: var(--detective-cyan); font-weight: bold;">Rumus Deduksi:</span> $$65 - x = 15$$
+                                <p style="margin-top: 8px;">Dengan menukar posisi ruas: $$x = 65 - 15 = 50\text{ koin!}$$</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Kasus 2 -->
+                    <div class="rw-card">
+                        <div class="rw-icon-box">📦</div>
+                        <div class="rw-content">
+                            <h3>Kasus 2: Pembagian Lencana Rahasia</h3>
+                            <p style="font-size: 14px; color: var(--text-muted);">Satu kotak lencana besi rahasia dibagi rata ke dalam <strong>6 tas agen penyamaran</strong>. Setiap tas mendapatkan <strong>7 lencana</strong>. Berapa jumlah total lencana di dalam kotak mula-mula?</p>
+                            <button class="rw-interactive-btn" onclick="toggleRW(2)">Aktifkan Mode Analisis</button>
+                            <div id="rw2-box" style="margin-top: 12px; display: none; padding: 12px; background: rgba(15,23,42,0.6); border-radius: 8px; font-size: 14px; border: 1px solid rgba(255,255,255,0.05);">
+                                <span style="color: var(--detective-cyan); font-weight: bold;">Rumus Deduksi:</span> $$\frac{L}{6} = 7$$
+                                <p style="margin-top: 8px;">Kebalikan pembagian adalah perkalian: $$L = 7 \times 6 = 42\text{ lencana!}$$</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Kasus 3 -->
+                    <div class="rw-card">
+                        <div class="rw-icon-box">🔑</div>
+                        <div class="rw-content">
+                            <h3>Kasus 3: Membuka Brankas Sandi Ganda</h3>
+                            <p style="font-size: 14px; color: var(--text-muted);">Kode ganda sebuah brankas kuningan: Dua kali angka misterius kunci ($k$) ditambahkan 5 menghasilkan nilai <strong>25</strong>. Berapakah angka misterius tersebut?</p>
+                            <button class="rw-interactive-btn" onclick="toggleRW(3)">Aktifkan Mode Analisis</button>
+                            <div id="rw3-box" style="margin-top: 12px; display: none; padding: 12px; background: rgba(15,23,42,0.6); border-radius: 8px; font-size: 14px; border: 1px solid rgba(255,255,255,0.05);">
+                                <span style="color: var(--detective-cyan); font-weight: bold;">Rumus Deduksi (2-Step):</span> $$2k + 5 = 25$$
+                                <p style="margin-top: 8px;">Kurangi 5 terlebih dulu: $2k = 20$. Bagi dengan 2: $$k = 20 \div 2 = 10\text{!}$$</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 3: KONSEP & TIMBANGAN ALJABAR -->
+        <div id="konsep" class="tab-content">
+            <div class="card">
+                <div class="card-title">⚖️ Timbangan Keseimbangan Sandi</div>
+                <p class="description">
+                    Aturan terpenting dalam aljabar adalah menjaga kedua sisi persamaan tetap seimbang. Perubahan apa pun di sebelah kiri, harus dilakukan di sebelah kanan agar lurus.
+                </p>
+
+                <!-- SIMULATOR TIMBANGAN DETEKTIF -->
+                <div class="scale-container">
+                    <h3 style="font-family: 'Special Elite', cursive; font-size: 1.1rem; color: var(--detective-gold); margin-bottom: 12px;">Simulator Neraca Aljabar</h3>
+                    <p style="font-size: 14px; text-align: center; color: var(--text-muted); max-width: 450px; margin-bottom: 15px;">
+                        Tujuan Persamaan: $$y + 3 = 8$$
+                        Atur nilai $y$ menggunakan tombol di bawah agar neraca detektif berada dalam keadaan <strong>SEIMBANG</strong>!
+                    </p>
+
+                    <div class="scale-svg-wrapper">
+                        <svg viewBox="0 0 500 250" width="100%" height="100%">
+                            <!-- Tiang Utama Timbangan Kuningan -->
+                            <rect x="242" y="140" width="16" height="80" fill="#a1a1aa" rx="4"/>
+                            <path d="M 210 220 L 290 220 L 270 200 L 230 200 Z" fill="#71717a"/>
+                            <circle cx="250" cy="140" r="12" fill="#eab308"/>
+                            
+                            <!-- Beam & Pans hanging -->
+                            <g id="scale-beam">
+                                <line x1="110" y1="140" x2="390" y2="140" stroke="#eab308" stroke-width="8" stroke-linecap="round"/>
+                                <circle cx="110" cy="140" r="6" fill="#a1a1aa"/>
+                                <circle cx="390" cy="140" r="6" fill="#a1a1aa"/>
+                                
+                                <path d="M 110 140 L 80 190 L 140 190 Z" fill="none" stroke="#a1a1aa" stroke-width="2"/>
+                                <path d="M 390 140 L 360 190 L 420 190 Z" fill="none" stroke="#a1a1aa" stroke-width="2"/>
+                            </g>
+
+                            <g id="scale-pan-left">
+                                <path d="M 70 190 L 150 190 L 135 205 L 85 205 Z" fill="#38bdf8" opacity="0.85"/>
+                                <text x="110" y="222" fill="#fff" font-size="12" font-weight="bold" text-anchor="middle">Sisi Kiri: y + 3</text>
+                            </g>
+
+                            <g id="scale-pan-right">
+                                <path d="M 350 190 L 430 190 L 415 205 L 365 205 Z" fill="#f43f5e" opacity="0.85"/>
+                                <text x="390" y="222" fill="#fff" font-size="12" font-weight="bold" text-anchor="middle">Sisi Kanan: 8</text>
+                            </g>
+                        </svg>
+                    </div>
+
+                    <div class="scale-controls">
+                        <div class="control-panel">
+                            <div style="font-size: 0.9rem; margin-bottom: 8px; color: var(--detective-cyan); font-weight: 800;">Ubah Nilai y</div>
+                            <button class="btn-ctrl" onclick="adjustScale(-1)">&minus;</button>
+                            <span id="yValText" style="font-size: 1.3rem; font-weight: 800; color: #fff;">1</span>
+                            <button class="btn-ctrl" onclick="adjustScale(1)">+</button>
+                        </div>
+                    </div>
+                    <div class="status-badge" id="scaleStatusText">Belum Seimbang</div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- TAB 4: TANTANGAN 5 SOAL -->
+        <div id="tantangan" class="tab-content">
+            <div class="card">
+                <div class="card-title">🕵️‍♂️ Berkas Kasus Khusus (5 Soal Evaluasi)</div>
+                <p class="description" style="color: var(--text-muted)">Sekarang adalah pembuktian keahlian detektifmu. Kerjakan secara mandiri 5 kasus aljabar bertingkat di bawah ini!</p>
+                
+                <!-- Soal 1 -->
+                <div class="question-block" id="s1">
+                    <div class="q-header"><span>Kasus 1:</span> Keseimbangan Sisi Ganda (Penjumlahan & Pengurangan)</div>
+                    <p class="description">Temukan nilai $x$ agar persamaan sisi ganda di bawah ini lurus!</p>
+                    <div class="math-block">$$x + 7 = 20 - 4$$</div>
+                    <div class="input-wrapper">
+                        <input type="number" id="ans-s1" class="text-input" placeholder="Jawaban">
+                        <button class="verify-btn" onclick="verifyInput('s1', 9)">Verifikasi</button>
+                    </div>
+                    <div class="feedback-msg" id="feed-s1"></div>
+                </div>
+
+                <!-- Soal 2 -->
+                <div class="question-block" id="s2">
+                    <div class="q-header"><span>Kasus 2:</span> Invers Sisi (Perkalian & Pembagian)</div>
+                    <p class="description">Jika tiga kali koin rahasia ($a$) bernilai 45, berapakah nilai satu koin?</p>
+                    <div class="math-block">$$3a = 45$$</div>
+                    <div class="input-wrapper">
+                        <input type="number" id="ans-s2" class="text-input" placeholder="Jawaban">
+                        <button class="verify-btn" onclick="verifyInput('s2', 15)">Verifikasi</button>
+                    </div>
+                    <div class="feedback-msg" id="feed-s2"></div>
+                </div>
+
+                <!-- Soal 3 -->
+                <div class="question-block" id="s3">
+                    <div class="q-header"><span>Kasus 3:</span> Sandi Ganda Dua Langkah (Penjumlahan & Perkalian)</div>
+                    <p class="description">Selesaikan sandi ganda berikut dengan cermat!</p>
+                    <div class="math-block">$$2y + 5 = 17$$</div>
+                    <div class="input-wrapper">
+                        <input type="number" id="ans-s3" class="text-input" placeholder="Jawaban">
+                        <button class="verify-btn" onclick="verifyInput('s3', 6)">Verifikasi</button>
+                    </div>
+                    <div class="feedback-msg" id="feed-s3"></div>
+                </div>
+
+                <!-- Soal 4 -->
+                <div class="question-block" id="s4">
+                    <div class="q-header"><span>Kasus 4:</span> Sandi Ganda Dua Langkah (Pembagian & Pengurangan)</div>
+                    <p class="description">Dua langkah untuk membebaskan variabel $m$. Pecahkan!</p>
+                    <div class="math-block">$$\frac{m}{3} - 2 = 6$$</div>
+                    <div class="input-wrapper">
+                        <input type="number" id="ans-s4" class="text-input" placeholder="Jawaban">
+                        <button class="verify-btn" onclick="verifyInput('s4', 24)">Verifikasi</button>
+                    </div>
+                    <div class="feedback-msg" id="feed-s4"></div>
+                </div>
+
+                <!-- Soal 5 -->
+                <div class="question-block" id="s5">
+                    <div class="q-header"><span>Kasus 5:</span> Sifat Perkalian Kurung (Distributif)</div>
+                    <p class="description">Gunakan sifat distributif kurung, lalu tentukan nilai p!</p>
+                    <div class="math-block">$$3(p - 2) = 15$$</div>
+                    <div class="input-wrapper">
+                        <input type="number" id="ans-s5" class="text-input" placeholder="Jawaban">
+                        <button class="verify-btn" onclick="verifyInput('s5', 7)">Verifikasi</button>
+                    </div>
+                    <div class="feedback-msg" id="feed-s5"></div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- TAB 5: REFLEKSI & SERTIFIKAT -->
+        <div id="refleksi" class="tab-content">
+            <div class="card">
+                <div class="card-title">⭐ Evaluasi & Log Refleksi</div>
+                <p class="description">Bagaimana pendapatmu tentang berkas latihan aljabar kita hari ini?</p>
+                
+                <div class="rating-group">
+                    <div class="rating-btn" onclick="setRating('fast')">
+                        <span class="emoji" style="font-size: 32px;">😎</span>
+                        <span style="font-size: 11px; font-weight: 800; text-align: center;">Sangat Mudah!</span>
+                    </div>
+                    <div class="rating-btn" onclick="setRating('normal')">
+                        <span class="emoji" style="font-size: 32px;">🕵️‍♂️</span>
+                        <span style="font-size: 11px; font-weight: 800; text-align: center;">Cukup Menantang</span>
+                    </div>
+                    <div class="rating-btn" onclick="setRating('slow')">
+                        <span class="emoji" style="font-size: 32px;">🧠</span>
+                        <span style="font-size: 11px; font-weight: 800; text-align: center;">Butuh Latihan Lagi</span>
+                    </div>
+                </div>
+
+                <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 25px;">
+                    <label style="font-size: 14px; font-weight: 800; color: var(--detective-gold);">Tulis namamu untuk memproses Lencana Kelulusan:</label>
+                    <div style="display: flex; gap: 12px; margin-top: 6px;">
+                        <input type="text" id="rangerName" class="text-input" placeholder="Nama Detektif..." style="flex: 1; text-align: left; padding: 12px 18px; width: auto;">
+                        <button class="verify-btn" onclick="generateCertificate()">Cetak Sertifikat 🏆</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- DIGITAL CERTIFICATE CARD -->
+            <div id="certContainer" style="display: none; animation: fadeIn 0.5s;">
+                <div class="cert-card">
+                    <div class="cert-header">Sertifikat Kelulusan Utama</div>
+                    <div class="cert-badge-svg">
+                        <svg viewBox="0 0 100 100" width="100%" height="100%">
+                            <polygon points="50,5 90,25 90,75 50,95 10,75 10,25" fill="none" stroke="#f59e0b" stroke-width="4"/>
+                            <polygon points="50,12 82,28 82,72 50,88 18,72 18,28" fill="none" stroke="#38bdf8" stroke-width="2" stroke-dasharray="4"/>
+                            <circle cx="50" cy="50" r="20" fill="#f59e0b" opacity="0.15"/>
+                            <text x="50" y="58" font-family="'Special Elite'" font-size="24" fill="#f59e0b" text-anchor="middle" font-weight="900">X</text>
+                        </svg>
+                    </div>
+                    <p style="font-size: 13px; color: var(--text-muted);">Diberikan Kepada Agen Detektif:</p>
+                    <div class="cert-title" id="certDisplayName">DETEKTIF HEBAT</div>
+                    <p style="font-size: 14px; line-height: 1.6; margin-top: 10px; color: var(--text-light);">
+                        Telah berhasil memecahkan seluruh koordinat rahasia dan membuktikan ketajaman logika dalam analisis persamaan aljabar
+                        <strong style="color: var(--detective-green)">SD Kelas 4-5 Kurikulum Merdeka</strong>.
+                    </p>
+                    <div style="margin-top: 25px; font-size: 12px; color: var(--text-muted);" id="certDateDisplay">Verifikasi cyber: 2026</div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <footer>
+        <p>&copy; 2026 Detektif Aljabar Agency. Kurikulum Merdeka Matematika SD.</p>
+    </footer>
+
+    <script>
+        // Tab Switching Logic
+        function switchTab(tabId) {
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach(content => content.classList.remove('active'));
+
+            const buttons = document.querySelectorAll('.tab-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+
+            document.getElementById(tabId).classList.add('active');
+            event.currentTarget.classList.add('active');
+
+            // Force KaTeX rendering on new tab elements
+            renderMathInElement(document.getElementById(tabId), {
+                delimiters: [
+                    {left: '$$', right: '$$', display: true},
+                    {left: '$', right: '$', display: false}
+                ],
+                throwOnError: false
+            });
+        }
+
+        // Warm-Up Check
+        function checkWUAnswer(questionId, chosenVal, isCorrect, feedbackMsg) {
+            const qBlock = document.getElementById(questionId);
+            const buttons = qBlock.querySelectorAll('.opt-btn');
+            const fbDiv = qBlock.querySelector('.feedback-msg');
+
+            buttons.forEach(btn => {
+                btn.disabled = true;
+                if (btn.textContent.includes(chosenVal.toString()) || btn.innerHTML.includes(chosenVal.toString())) {
+                    btn.classList.add(isCorrect ? 'correct' : 'wrong');
+                }
+            });
+
+            fbDiv.className = 'feedback-msg show';
+            fbDiv.style.color = isCorrect ? 'var(--detective-green)' : 'var(--detective-rose)';
+            fbDiv.innerHTML = feedbackMsg;
+
+            renderMathInElement(fbDiv, {
+                delimiters: [
+                    {left: '$$', right: '$$', display: true},
+                    {left: '$', right: '$', display: false}
+                ],
+                throwOnError: false
+            });
+        }
+
+        // Scenario Click Toggle
+        function toggleRW(id) {
+            const box = document.getElementById(`rw${id}-box`);
+            box.style.display = box.style.display === 'none' ? 'block' : 'none';
+            if (box.style.display === 'block') {
+                renderMathInElement(box, {
+                    delimiters: [
+                        {left: '$$', right: '$$', display: true},
+                        {left: '$', right: '$', display: false}
+                    ],
+                    throwOnError: false
+                });
+            }
+        }
+
+        // Simulator Logic
+        let scaleY = 1;
+        function adjustScale(amt) {
+            scaleY = Math.max(1, Math.min(15, scaleY + amt));
+            document.getElementById('yValText').textContent = scaleY;
+            updateScaleSimulation();
+        }
+
+        function updateScaleSimulation() {
+            const beam = document.getElementById('scale-beam');
+            const panLeft = document.getElementById('scale-pan-left');
+            const panRight = document.getElementById('scale-pan-right');
+            const status = document.getElementById('scaleStatusText');
+
+            const diff = (scaleY + 3) - 8;
+            let angle = diff * 4.5;
+            if (angle > 18) angle = 18;
+            if (angle < -18) angle = -18;
+
+            // Rotate main balance beam (poros di 250, 140)
+            beam.style.transform = `rotate(${angle}deg)`;
+            beam.style.transformOrigin = '250px 140px';
+
+            // Compensate Left Pan (mula-mula digantung di 110, 140)
+            const leftXOffset = 110 - 250;
+            const leftRad = (angle * Math.PI) / 180;
+            const leftMoveX = 250 + leftXOffset * Math.cos(leftRad) - 110;
+            const leftMoveY = 140 + leftXOffset * Math.sin(leftRad) - 140;
+            panLeft.style.transform = `translate(${leftMoveX}px, ${leftMoveY}px)`;
+
+            // Compensate Right Pan (mula-mula digantung di 390, 140)
+            const rightXOffset = 390 - 250;
+            const rightRad = (angle * Math.PI) / 180;
+            const rightMoveX = 250 + rightXOffset * Math.cos(rightRad) - 390;
+            const rightMoveY = 140 + rightXOffset * Math.sin(rightRad) - 140;
+            panRight.style.transform = `translate(${rightMoveX}px, ${rightMoveY}px)`;
+
+            if (diff === 0) {
+                status.textContent = "SEIMBANG! KOORDINAT y = 5 DIKETEMUKAN";
+                status.className = "status-badge balanced";
+            } else if (diff < 0) {
+                status.textContent = "BELUM SEIMBANG (RUAS KIRI TERLALU RINGAN)";
+                status.className = "status-badge";
+            } else {
+                status.textContent = "BELUM SEIMBANG (RUAS KIRI TERLALU BERAT)";
+                status.className = "status-badge";
+            }
+        }
+
+        // Verify Input on Case Files
+        function verifyInput(id, correctVal) {
+            const userVal = document.getElementById(`ans-${id}`).value;
+            const feedback = document.getElementById(`feed-${id}`);
+
+            if (userVal === "") {
+                feedback.className = "feedback-msg show";
+                feedback.style.color = "var(--detective-rose)";
+                feedback.textContent = "Harap masukkan nilai terlebih dahulu!";
+                return;
+            }
+
+            if (parseInt(userVal) === correctVal) {
+                feedback.className = "feedback-msg show";
+                feedback.style.color = "var(--detective-green)";
+                feedback.innerHTML = "🎯 KASUS TERPECAHKAN! Deduksimu 100% benar.";
+            } else {
+                feedback.className = "feedback-msg show";
+                feedback.style.color = "var(--detective-rose)";
+                
+                let hint = "Coba hitung sekali lagi.";
+                if (id === 's1') hint = "Berapakah hasil dari $20 - 4 - 7$?";
+                if (id === 's2') hint = "Gunakan invers perkalian, yaitu pembagian: $45 \\div 3$.";
+                if (id === 's3') hint = "Kurangi 5 terlebih dahulu dari 17, baru bagi dengan 2!";
+                if (id === 's4') hint = "Tambahkan 2 ke angka 6 terlebih dahulu, kemudian kalikan dengan 3!";
+                if (id === 's5') hint = "Bagi kedua ruas dengan 3 terlebih dahulu, sehingga diperoleh $p - 2 = 5$.";
+
+                feedback.innerHTML = `❌ KURANG TEPAT! Petunjuk Detektif: ${hint}`;
+            }
+
+            renderMathInElement(feedback, {
+                delimiters: [
+                    {left: '$$', right: '$$', display: true},
+                    {left: '$', right: '$', display: false}
+                ],
+                throwOnError: false
+            });
+        }
+
+        // Rating Evaluation
+        let selectedRating = "";
+        function setRating(rating) {
+            selectedRating = rating;
+            const buttons = document.querySelectorAll('.rating-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+        }
+
+        // Generate Certificate
+        function generateCertificate() {
+            const name = document.getElementById('rangerName').value.trim();
+            const displayName = name ? name : "DETEKTIF HEBAT";
+            
+            document.getElementById('certDisplayName').textContent = displayName.toUpperCase();
+            
+            const date = new Date();
+            document.getElementById('certDateDisplay').textContent = `DIVISI DETEKTIF - VERIFIKASI SELESAI PADA: ${date.toLocaleDateString('id-ID', {day: 'numeric', month: 'long', year: 'numeric'})}`;
+            
+            document.getElementById('certContainer').style.display = "block";
+            document.getElementById('certContainer').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        window.onload = function() {
+            updateScaleSimulation();
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: '$$', right: '$$', display: true},
+                    {left: '$', right: '$', display: false}
+                ],
+                throwOnError: false
+            });
+        };
+    </script>
+</body>
+</html>

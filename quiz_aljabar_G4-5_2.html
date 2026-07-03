@@ -1,0 +1,1268 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kuis Detektif Aljabar - Kelas 4-5 SD 🔍</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    <style>
+        :root {
+            --mint-dark: #1e3a34;
+            --mint-bright: #059669;
+            --mint-light: #34d399;
+            --mint-bg: #f0fdf4; /* Latar belakang hijau mint super terang & bersih */
+            --amber-bright: #f59e0b;
+            --amber-pale: #fef3c7;
+            --sky-bright: #0ea5e9;
+            --sky-pale: #e0f2fe;
+            --rose-bright: #f43f5e;
+            --rose-pale: #ffe4e6;
+            --text-dark: #0f172a;
+            --text-soft: #475569;
+            --white: #ffffff;
+            --glow-mint: 0 4px 15px rgba(5, 150, 105, 0.2);
+            --glow-amber: 0 4px 15px rgba(245, 158, 11, 0.3);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Nunito', sans-serif;
+        }
+
+        body {
+            background-color: var(--mint-bg);
+            color: var(--text-dark);
+            min-height: 100vh;
+            min-height: 100dvh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        /* ===== VIEWPORT SYSTEM ===== */
+        .pages-viewport {
+            flex: 1;
+            overflow-y: auto;
+            overflow-x: hidden;
+            width: 100%;
+            position: relative;
+        }
+
+        .page {
+            display: none;
+            width: 100%;
+            min-height: 100%;
+            position: relative;
+        }
+
+        .page.active {
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ===== NAVIGATION ===== */
+        .nav-bar {
+            position: relative;
+            background: var(--white);
+            box-shadow: 0 -4px 30px rgba(15, 23, 42, 0.05);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 24px;
+            z-index: 1000;
+            border-radius: 24px 24px 0 0;
+            flex-shrink: 0;
+            border-top: 1px solid rgba(15, 23, 42, 0.05);
+        }
+
+        .nav-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-family: 'Nunito', sans-serif;
+            font-weight: 800;
+            font-size: 16px;
+            color: var(--text-soft);
+            padding: 10px 24px;
+            border-radius: 20px;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-btn:hover:not(:disabled) {
+            background: var(--sky-pale);
+            color: var(--sky-bright);
+        }
+
+        .nav-btn.primary {
+            background: linear-gradient(135deg, var(--mint-bright), #10b981);
+            color: var(--white);
+            font-size: 16px;
+            padding: 12px 28px;
+            box-shadow: var(--glow-mint);
+        }
+
+        .nav-btn.primary:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(5, 150, 105, 0.4);
+        }
+
+        .nav-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        .page-counter {
+            font-family: 'Fredoka', sans-serif;
+            font-size: 18px;
+            color: var(--text-soft);
+            text-align: center;
+        }
+
+        .progress-bar {
+            height: 6px;
+            background: linear-gradient(90deg, var(--mint-bright), var(--sky-bright), var(--amber-bright));
+            border-radius: 3px;
+            transition: width 0.4s ease;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1001;
+        }
+
+        /* ===== COMMON COMPONENTS ===== */
+        .page-content {
+            flex: 1;
+            padding: 30px 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            min-height: 100%;
+            max-width: 720px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .page-header {
+            background: linear-gradient(135deg, var(--mint-dark), var(--mint-bright));
+            border-radius: 24px;
+            padding: 24px;
+            color: var(--white);
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            box-shadow: var(--glow-mint);
+        }
+
+        .page-header .header-icon {
+            font-size: 44px;
+        }
+
+        .page-header h2 {
+            font-family: 'Fredoka', sans-serif;
+            font-size: 24px;
+            line-height: 1.2;
+        }
+
+        .page-header .subtitle {
+            font-size: 14px;
+            opacity: 0.9;
+            margin-top: 4px;
+        }
+
+        .badge {
+            display: inline-block;
+            font-size: 12px;
+            font-weight: 800;
+            padding: 4px 12px;
+            border-radius: 20px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .badge-amber { background: var(--amber-bright); color: var(--text-dark); }
+        .badge-mint { background: var(--mint-bright); color: var(--white); }
+
+        .card {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 24px;
+            box-shadow: 0 8px 30px rgba(15, 23, 42, 0.04);
+            border: 2px solid transparent;
+        }
+
+        .card-purple { border-color: rgba(155, 93, 229, 0.15); }
+
+        /* Math Display styling */
+        .math-display {
+            background: var(--mint-dark);
+            color: var(--amber-bright);
+            border-radius: 16px;
+            padding: 20px 24px;
+            text-align: center;
+            margin: 16px 0;
+            box-shadow: inset 0 2px 8px rgba(0,0,0,0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 80px;
+            font-size: 26px;
+        }
+
+        .math-display * {
+            font-family: inherit !important;
+        }
+
+        .math-display .katex-display {
+            margin: 0.2em 0 !important;
+        }
+
+        .math-display .katex {
+            font-size: 1.1em;
+        }
+
+        /* ===== COVER PAGE ===== */
+        .cover-bg {
+            background: radial-gradient(circle at top right, var(--sky-pale), var(--mint-bg));
+            min-height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 24px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            flex: 1;
+        }
+
+        .cover-title {
+            font-family: 'Fredoka', sans-serif;
+            font-size: 46px;
+            color: var(--mint-dark);
+            line-height: 1.1;
+            margin: 20px 0;
+        }
+
+        /* ===== QUIZ SELECTION ===== */
+        .quiz-option {
+            background: var(--white);
+            border: 3px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 18px 22px;
+            margin: 12px 0;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-dark);
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            width: 100%;
+            text-align: left;
+        }
+
+        .quiz-option:hover:not(.disabled) {
+            border-color: var(--mint-bright);
+            background: var(--mint-bg);
+            transform: translateX(4px);
+        }
+
+        .quiz-option.correct {
+            border-color: var(--mint-bright) !important;
+            background: #d1fae5 !important;
+            color: #065f46 !important;
+        }
+
+        .quiz-option.wrong {
+            border-color: var(--rose-bright) !important;
+            background: var(--rose-pale) !important;
+            color: #9f1239 !important;
+        }
+
+        .quiz-option.disabled {
+            cursor: not-allowed;
+        }
+
+        .option-letter {
+            width: 38px;
+            height: 38px;
+            flex-shrink: 0;
+            background: #f1f5f9;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 16px;
+            color: var(--text-soft);
+            transition: all 0.2s ease;
+        }
+
+        .quiz-option.correct .option-letter {
+            background: var(--mint-bright) !important;
+            color: var(--white) !important;
+        }
+
+        .quiz-option.wrong .option-letter {
+            background: var(--rose-bright) !important;
+            color: var(--white) !important;
+        }
+
+        .feedback-box {
+            border-radius: 18px;
+            padding: 20px;
+            text-align: center;
+            font-size: 17px;
+            font-weight: 700;
+            margin-top: 16px;
+            display: none;
+            line-height: 1.5;
+        }
+
+        .feedback-box.correct {
+            background: #d1fae5;
+            color: #065f46;
+            border: 2px solid var(--mint-bright);
+        }
+
+        .feedback-box.wrong {
+            background: var(--rose-pale);
+            color: #9f1239;
+            border: 2px solid var(--rose-bright);
+        }
+
+        .feedback-box.show {
+            display: block;
+            animation: pop 0.3s ease;
+        }
+
+        @keyframes pop {
+            0% { transform: scale(0.95); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        /* ===== SCORE CHIP ===== */
+        .score-chip {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, var(--amber-bright), #f59e0b);
+            color: var(--text-dark);
+            border-radius: 20px;
+            padding: 8px 18px;
+            font-weight: 800;
+            font-size: 15px;
+            z-index: 999;
+            box-shadow: var(--glow-amber);
+            font-family: 'Fredoka', sans-serif;
+        }
+
+        /* ===== CERTIFICATE ===== */
+        .certificate {
+            background: linear-gradient(160deg, #fffcf0, #f7fee7);
+            border: 6px double var(--amber-bright);
+            border-radius: 24px;
+            padding: 32px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(15, 23, 42, 0.08);
+            width: 100%;
+        }
+
+        .cert-name {
+            font-family: 'Fredoka', sans-serif;
+            font-size: 32px;
+            color: var(--mint-dark);
+            margin: 14px 0;
+            border-bottom: 2px dashed var(--mint-light);
+            display: inline-block;
+            padding-bottom: 4px;
+            min-width: 250px;
+        }
+
+        .cert-badge {
+            width: 90px;
+            height: 90px;
+            background: linear-gradient(135deg, var(--amber-bright), #f97316);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 44px;
+            margin: 12px auto;
+            box-shadow: var(--glow-amber);
+        }
+
+        .cert-stars {
+            font-size: 32px;
+            letter-spacing: 4px;
+            margin: 12px 0;
+        }
+
+        .h3 {
+            font-family: 'Fredoka', sans-serif;
+            font-size: 22px;
+            color: var(--mint-dark);
+            margin-bottom: 10px;
+        }
+
+        .body-text {
+            font-size: 18px;
+            line-height: 1.6;
+            color: var(--text-soft);
+        }
+
+        .fill-input {
+            border: 2px solid #cbd5e1;
+            border-radius: 16px;
+            padding: 12px 20px;
+            font-family: 'Nunito', sans-serif;
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--text-dark);
+            background: var(--white);
+            outline: none;
+            transition: all 0.2s ease;
+            height: 52px;
+        }
+
+        .fill-input:focus {
+            border-color: var(--mint-bright);
+            box-shadow: 0 0 10px rgba(5, 150, 105, 0.2);
+        }
+
+        .check-btn {
+            background: linear-gradient(135deg, var(--mint-bright), #10b981);
+            color: var(--white);
+            border: none;
+            border-radius: 16px;
+            padding: 12px 24px;
+            font-family: 'Fredoka', sans-serif;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: var(--glow-mint);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            height: 52px;
+        }
+
+        .check-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(5, 150, 105, 0.3);
+        }
+
+        .reset-quiz-btn {
+            background: linear-gradient(135deg, var(--sky-bright), var(--mint-bright));
+            color: var(--white);
+            border: none;
+            border-radius: 20px;
+            padding: 16px 32px;
+            font-family: 'Fredoka', sans-serif;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: var(--glow-mint);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            width: 100%;
+            margin-top: 15px;
+        }
+
+        .reset-quiz-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 24px rgba(14, 165, 233, 0.4);
+        }
+    </style>
+</head>
+<body>
+
+<div class="progress-bar" id="progressBar" style="width: 0%"></div>
+<div class="score-chip" id="scoreChip">⭐ 0 Poin</div>
+
+<div class="pages-viewport" id="pagesViewport">
+
+    <!-- ================= COVER PAGE ================= -->
+    <div class="page active" id="page-0">
+        <div class="cover-bg">
+            <div style="font-size: 72px; animation: float 3s ease-in-out infinite;">🔍</div>
+            <div class="cover-title">Kuis Detektif<br>Aljabar! 🕵️‍♂️</div>
+            <p style="color: var(--text-soft); font-weight: bold; font-size: 18px; margin-bottom: 24px;">Tantangan Akbar 30 Kasus Aljabar Menyenangkan</p>
+            
+            <div class="card" style="max-width: 440px; margin: 0 auto 24px; border: 2px solid var(--mint-light); background: var(--white);">
+                <p class="body-text" style="font-weight: 800; color: var(--mint-dark);">
+                    Bantu agen rahasia menguak nilai variabel tersembunyi lewat penjumlahan, pengurangan, perkalian, pembagian, hingga teka-teki logika tingkat lanjut! 🎓
+                </p>
+            </div>
+
+            <button class="nav-btn primary" onclick="startQuiz()">
+                Mulai Tantangan! 🚀
+            </button>
+        </div>
+    </div>
+
+    <!-- ================= QUIZ PAGES ================= -->
+    <div class="page" id="quizContainer">
+    <div class="page-content">
+      <div class="page-header">
+        <div class="header-icon" id="qIcon">❓</div>
+        <div>
+          <span class="badge badge-yellow" id="qCategory">Kategori</span>
+          <h2 id="qTitle">Kasus Kuis</h2>
+          <div class="subtitle" id="qSubtitle">Mari pecahkan teka-tekinya! 💡</div>
+        </div>
+      </div>
+
+      <div class="card card-purple" style="min-height: 100px;">
+        <div class="h3" id="qNumber">Kasus 1 dari 30</div>
+        <p class="body-text" id="qText">Teks soal akan muncul di sini...</p>
+        <div id="qMath" class="math-display" style="display:none;"></div>
+      </div>
+
+      <div id="optionsContainer">
+        <!-- Opsi jawaban muncul di sini -->
+      </div>
+
+      <div class="feedback-box" id="quizFeedback"></div>
+    </div>
+  </div>
+
+    <!-- ================= FINISH & CERTIFICATE PAGE ================= -->
+    <div class="page" id="page-finish">
+        <div class="page-content" style="align-items: center; justify-content: center; gap: 20px;">
+            <div style="text-align: center; margin-bottom: 12px;">
+                <div style="font-size: 50px; animation: float 2.5s ease-in-out infinite;">🏆</div>
+                <h2 style="font-family: 'Fredoka', sans-serif; font-size: 28px; color: var(--mint-dark);">Luar Biasa, Detektif!</h2>
+                <p class="body-text">Kamu telah menuntaskan seluruh 30 berkas kasus aljabar!</p>
+            </div>
+
+            <div class="certificate">
+                <div class="cert-header">LENCANA KELULUSAN DETEKTIF</div>
+                <div class="cert-badge">🎖️</div>
+                <div style="font-size: 14px; color: var(--text-soft);">Diberikan Kepada Agen:</div>
+                <div class="cert-name" id="certNameDisplay">Detektif Hebat</div>
+                <p style="font-size: 15px; font-weight: 800; color: var(--mint-dark); margin: 8px 0;">
+                    Telah berhasil menyelesaikan Tantangan Kuis Aljabar Detektif Kelas 4-5 SD (30 Kasus)
+                </p>
+                <p style="font-size: 14px; color: var(--text-soft);" id="certScoreDisplay">Dengan Nilai Akhir: 100</p>
+                <div class="cert-stars" id="certStars">⭐⭐⭐⭐⭐</div>
+                <div style="font-size: 12px; color: var(--text-soft);" id="certDate"></div>
+            </div>
+
+            <div style="width: 100%; margin-top: 6px;">
+                <p style="text-align: center; font-size: 14px; font-weight: 800; margin-bottom: 8px;">Tulis nama lengkapmu untuk sertifikat:</p>
+                <div style="display: flex; gap: 10px;">
+                    <input type="text" id="userNameInput" class="fill-input" placeholder="Ketik namamu..." style="flex: 1;">
+                    <button class="check-btn" onclick="applyName()">✨ Buat!</button>
+                </div>
+            </div>
+
+            <div class="card" style="text-align: center; width: 100%; border: 2px solid var(--mint-light);">
+                <div id="finalMotivationText" class="body-text" style="font-weight: 800; color: var(--mint-bright);">
+                    Hebat! Terus pertahankan semangat belajarmu ya! Aljabar akan terasa semakin menyenangkan di kelas berikutnya! 💪
+                </div>
+            </div>
+
+            <button class="reset-quiz-btn" onclick="resetQuiz()">
+                🔄 Ulangi Kuis dari Awal
+            </button>
+        </div>
+    </div>
+
+</div>
+
+<!-- NAVIGATION BAR -->
+<div class="nav-bar" id="navigationBar" style="display: none;">
+  <button class="nav-btn" id="btn-prev" onclick="navigate(-1)">
+    ← Kembali
+  </button>
+  <div>
+    <div class="page-counter" id="pageLabel">Kasus 1 / 30</div>
+  </div>
+  <button class="nav-btn primary" id="btn-next" onclick="navigate(1)">
+    Lanjut →
+  </button>
+</div>
+
+<script>
+const questionsData = [
+  // --- TAHAP 1: PENJUMLAHAN ALJABAR (1-5) ---
+  {
+    category: "Penjumlahan Aljabar",
+    icon: "🔍",
+    text: "Tentukan nilai variabel x yang tersembunyi pada persamaan di bawah:",
+    math: "x + 8 = 15",
+    options: [
+      { text: "$x = 7$", correct: true },
+      { text: "$x = 8$" },
+      { text: "$x = 23$" },
+      { text: "$x = 9$" }
+    ],
+    explanation: "Kurangi 8 dari kedua sisi untuk menyendirikan x: $x = 15 - 8$, maka diperoleh $x = 7$."
+  },
+  {
+    category: "Penjumlahan Aljabar",
+    icon: "🧩",
+    text: "Berapakah nilai y yang benar agar persamaan berikut lurus seimbang?",
+    math: "12 + y = 25",
+    options: [
+      { text: "$y = 10$" },
+      { text: "$y = 13$", correct: true },
+      { text: "$y = 37$" },
+      { text: "$y = 15$" }
+    ],
+    explanation: "Gunakan operasi kebalikan dari penjumlahan, yaitu pengurangan: $y = 25 - 12 = 13$."
+  },
+  {
+    category: "Penjumlahan Aljabar",
+    icon: "💡",
+    text: "Carilah nilai variabel a yang tepat untuk memecahkan sandi penjumlahan berikut:",
+    math: "a + 15 = 30",
+    options: [
+      { text: "$a = 15$", correct: true },
+      { text: "$a = 20$" },
+      { text: "$a = 45$" },
+      { text: "$a = 10$" }
+    ],
+    explanation: "Kurangkan 15 dari kedua sisi persamaan: $a = 30 - 15$, maka diperoleh $a = 15$."
+  },
+  {
+    category: "Penjumlahan Sisi Ganda",
+    icon: "🕵️‍♂️",
+    text: "Selesaikan persamaan penjumlahan dengan penyederhanaan ruas kanan di bawah ini:",
+    math: "x + 6 = 10 + 4",
+    options: [
+      { text: "$x = 10$" },
+      { text: "$x = 8$", correct: true },
+      { text: "$x = 20$" },
+      { text: "$x = 6$" }
+    ],
+    explanation: "Sederhanakan dahulu sisi kanan: $10 + 4 = 14$. Persamaan berubah menjadi $x + 6 = 14$. Kurangi 6 dari kedua ruas: $x = 14 - 6 = 8$."
+  },
+  {
+    category: "Penjumlahan Sisi Ganda",
+    icon: "🔑",
+    text: "Carilah nilai variabel y yang tepat untuk memecahkan sandi di bawah ini:",
+    math: "y + 9 = 20 - 2",
+    options: [
+      { text: "$y = 9$", correct: true },
+      { text: "$y = 11$" },
+      { text: "$y = 18$" },
+      { text: "$y = 7$" }
+    ],
+    explanation: "Sederhanakan dahulu sisi kanan: $20 - 2 = 18$. Persamaan menjadi $y + 9 = 18$. Kurangi 9 dari kedua ruas: $y = 18 - 9 = 9$."
+  },
+
+  // --- TAHAP 2: PENGURANGAN ALJABAR (6-10) ---
+  {
+    category: "Pengurangan Aljabar",
+    icon: "💼",
+    text: "Tentukan nilai variabel p yang tepat untuk memecahkan berkas kasus berikut:",
+    math: "p - 6 = 14",
+    options: [
+      { text: "$p = 8$" },
+      { text: "$p = 20$", correct: true },
+      { text: "$p = 12$" },
+      { text: "$p = 18$" }
+    ],
+    explanation: "Kebalikan dari pengurangan adalah penjumlahan. Tambahkan 6 ke kedua ruas: $p = 14 + 6 = 20$."
+  },
+  {
+    category: "Pengurangan Aljabar",
+    icon: "🗝️",
+    text: "Cari nilai m yang tersembunyi pada persamaan di bawah ini:",
+    math: "25 - m = 11",
+    options: [
+      { text: "$m = 36$" },
+      { text: "$m = 14$", correct: true },
+      { text: "$m = 15$" },
+      { text: "$m = 12$" }
+    ],
+    explanation: "Tukar posisi variabel agar bernilai positif: $m = 25 - 11$, sehingga diperoleh nilai $m = 14$."
+  },
+  {
+    category: "Pengurangan Aljabar",
+    icon: "📁",
+    text: "Berapakah nilai x yang memenuhi persamaan pengurangan sederhana di bawah ini?",
+    math: "x - 9 = 18",
+    options: [
+      { text: "$x = 9$" },
+      { text: "$x = 27$", correct: true },
+      { text: "$x = 25$" },
+      { text: "$x = 18$" }
+    ],
+    explanation: "Gunakan operasi kebalikan yaitu penjumlahan. Pindahkan ruas: $x = 18 + 9 = 27$."
+  },
+  {
+    category: "Pengurangan Sisi Ganda",
+    icon: "🔬",
+    text: "Sederhanakan sisi kanan terlebih dahulu, kemudian tentukan nilai y yang benar:",
+    math: "y - 5 = 20 - 7",
+    options: [
+      { text: "$y = 18$", correct: true },
+      { text: "$y = 13$" },
+      { text: "$y = 8$" },
+      { text: "$y = 15$" }
+    ],
+    explanation: "Sederhanakan sisi kanan: $20 - 7 = 13$. Persamaan berubah menjadi $y - 5 = 13$. Maka diperoleh $y = 13 + 5 = 18$."
+  },
+  {
+    category: "Pengurangan Sisi Ganda",
+    icon: "🧬",
+    text: "Temukan berapakah nilai k agar timbangan aljabar ini lurus seimbang:",
+    math: "k - 14 = 6 + 5",
+    options: [
+      { text: "$k = 25$", correct: true },
+      { text: "$k = 15$" },
+      { text: "$k = 3$" },
+      { text: "$k = 11$" }
+    ],
+    explanation: "Sederhanakan sisi kanan dahulu: $6 + 5 = 11$. Tambahkan 14 ke kedua sisi: $k = 11 + 14 = 25$."
+  },
+
+  // --- TAHAP 3: PERKALIAN ALJABAR (11-15) ---
+  {
+    category: "Perkalian Aljabar",
+    icon: "📡",
+    text: "Ingat bahwa $3a$ artinya $3 \\times a$. Berapakah nilai variabel a berikut?",
+    math: "3a = 21",
+    options: [
+      { text: "$a = 7$", correct: true },
+      { text: "$a = 8$" },
+      { text: "$a = 18$" },
+      { text: "$a = 6$" }
+    ],
+    explanation: "Gunakan operasi invers (kebalikan) dari perkalian yaitu pembagian: $a = 21 \\div 3 = 7$."
+  },
+  {
+    category: "Perkalian Aljabar",
+    icon: "📱",
+    text: "Tentukan berapakah nilai y dari sandi rahasia perkalian di bawah:",
+    math: "5y = 40",
+    options: [
+      { text: "$y = 35$" },
+      { text: "$y = 8$", correct: true },
+      { text: "$y = 10$" },
+      { text: "$y = 6$" }
+    ],
+    explanation: "Bagi kedua ruas dengan angka 5 untuk mendapatkan nilai y: $y = 40 \\div 5 = 8$."
+  },
+  {
+    category: "Perkalian Aljabar",
+    icon: "💾",
+    text: "Carilah nilai variabel x yang memenuhi persamaan berikut:",
+    math: "6x = 54",
+    options: [
+      { text: "$x = 9$", correct: true },
+      { text: "$x = 8$" },
+      { text: "$x = 48$" },
+      { text: "$x = 10$" }
+    ],
+    explanation: "Bagi kedua sisi dengan angka 6: $x = 54 \\div 6 = 9$."
+  },
+  {
+    category: "Perkalian Sisi Ganda",
+    icon: "🗺️",
+    text: "Selesaikan persamaan perkalian berikut setelah menyederhanakan ruas kanan:",
+    math: "4a = 15 + 13",
+    options: [
+      { text: "$a = 7$", correct: true },
+      { text: "$a = 8$" },
+      { text: "$a = 28$" },
+      { text: "$a = 6$" }
+    ],
+    explanation: "Sederhanakan sisi kanan: $15 + 13 = 28$. Persamaan menjadi $4a = 28$. Bagi dengan 4 untuk mendapat $a = 28 \\div 4 = 7$."
+  },
+  {
+    category: "Perkalian Sisi Ganda",
+    icon: "📊",
+    text: "Cari nilai variabel b yang memenuhi persamaan perkalian di bawah ini:",
+    math: "7b = 50 - 8",
+    options: [
+      { text: "$b = 6$", correct: true },
+      { text: "$b = 7$" },
+      { text: "$b = 42$" },
+      { text: "$b = 8$" }
+    ],
+    explanation: "Sederhanakan sisi kanan: $50 - 8 = 42$. Persamaan berubah menjadi $7b = 42$. Bagi kedua sisi dengan 7: $b = 42 \\div 7 = 6$."
+  },
+
+  // --- TAHAP 4: PEMBAGIAN ALJABAR (16-20) ---
+  {
+    category: "Pembagian Aljabar",
+    icon: "🧮",
+    text: "Pecahkan nilai variabel b dari persamaan pembagian di bawah ini:",
+    math: "\\frac{b}{4} = 6",
+    options: [
+      { text: "$b = 24$", correct: true },
+      { text: "$b = 10$" },
+      { text: "$b = 2$" },
+      { text: "$b = 16$" }
+    ],
+    explanation: "Invers dari pembagian adalah perkalian. Kalikan kedua sisi dengan 4: $b = 6 \\times 4 = 24$."
+  },
+  {
+    category: "Pembagian Aljabar",
+    icon: "📊",
+    text: "Tentukan berapakah nilai n yang tepat untuk menyelesaikan pembagian rahasia berikut:",
+    math: "\\frac{n}{5} = 9",
+    options: [
+      { text: "$n = 45$", correct: true },
+      { text: "$n = 14$" },
+      { text: "$n = 4$" },
+      { text: "$n = 35$" }
+    ],
+    explanation: "Kalikan kedua ruas persamaan dengan angka 5: $n = 9 \\times 5 = 45$."
+  },
+  {
+    category: "Pembagian Aljabar",
+    icon: "📐",
+    text: "Carilah koordinat x yang memenuhi persamaan pembagian berikut ini:",
+    math: "\\frac{x}{3} = 12",
+    options: [
+      { text: "$x = 36$", correct: true },
+      { text: "$x = 4$" },
+      { text: "$x = 15$" },
+      { text: "$x = 9$" }
+    ],
+    explanation: "Kebalikan dari pembagian adalah perkalian. Maka, $x = 12 \\times 3 = 36$."
+  },
+  {
+    category: "Pembagian Sisi Ganda",
+    icon: "📡",
+    text: "Selesaikan persamaan pembagian ganda di bawah ini dengan menyederhanakan ruas kanan dahulu:",
+    math: "\\frac{p}{2} = 10 - 2",
+    options: [
+      { text: "$p = 16$", correct: true },
+      { text: "$p = 8$" },
+      { text: "$p = 12$" },
+      { text: "$p = 20$" }
+    ],
+    explanation: "Sederhanakan sisi kanan: $10 - 2 = 8$. Persamaan menjadi $\\frac{p}{2} = 8$. Kalikan dengan 2: $p = 8 \\times 2 = 16$."
+  },
+  {
+    category: "Pembagian Sisi Ganda",
+    icon: "🛡️",
+    text: "Dapatkan berapakah nilai variabel y yang tersembunyi berikut ini:",
+    math: "\\frac{y}{7} = 3 + 2",
+    options: [
+      { text: "$y = 35$", correct: true },
+      { text: "$y = 5$" },
+      { text: "$y = 14$" },
+      { text: "$y = 21$" }
+    ],
+    explanation: "Sederhanakan sisi kanan: $3 + 2 = 5$. Persamaan menjadi $\\frac{y}{7} = 5$. Kalikan kedua sisi dengan 7: $y = 5 \\times 7 = 35$."
+  },
+
+  // --- TAHAP 5: PERSAMAAN DUA LANGKAH (Two-Step Equations) (21-25) ---
+  {
+    category: "Persamaan Dua Langkah",
+    icon: "⚙️",
+    text: "Gunakan langkah ganda. Pertama, singkirkan angka +4 dengan menguranginya, lalu bagi hasilnya dengan 2:",
+    math: "2x + 4 = 14",
+    options: [
+      { text: "$x = 5$", correct: true },
+      { text: "$x = 10$" },
+      { text: "$x = 9$" },
+      { text: "$x = 7$" }
+    ],
+    explanation: "Langkah 1: Kurangkan 4 dari kedua ruas -> $2x = 10$. Langkah 2: Bagi dengan 2 -> $x = 10 \\div 2 = 5$."
+  },
+  {
+    category: "Persamaan Dua Langkah",
+    icon: "🧪",
+    text: "Selesaikan persamaan dua langkah pengurangan dan perkalian di bawah:",
+    math: "3y - 5 = 10",
+    options: [
+      { text: "$y = 5$", correct: true },
+      { text: "$y = 15$" },
+      { text: "$y = 3$" },
+      { text: "$y = 8$" }
+    ],
+    explanation: "Langkah 1: Tambahkan 5 ke kedua ruas -> $3y = 15$. Langkah 2: Bagi dengan 3 -> $y = 15 \\div 3 = 5$."
+  },
+  {
+    category: "Persamaan Dua Langkah",
+    icon: "🔬",
+    text: "Selesaikan teka-teki ganda berikut dengan cermat untuk mencari nilai a:",
+    math: "4a + 6 = 22",
+    options: [
+      { text: "$a = 4$", correct: true },
+      { text: "$a = 6$" },
+      { text: "$a = 5$" },
+      { text: "$a = 8$" }
+    ],
+    explanation: "Langkah 1: Kurangkan 6 dari kedua ruas -> $4a = 16$. Langkah 2: Bagi kedua ruas dengan 4 -> $a = 16 \\div 4 = 4$."
+  },
+  {
+    category: "Persamaan Dua Langkah",
+    icon: "🌡️",
+    text: "Selesaikan persamaan pembagian dan pengurangan dua langkah berikut:",
+    math: "\\frac{m}{3} - 2 = 5",
+    options: [
+      { text: "$m = 21$", correct: true },
+      { text: "$m = 9$" },
+      { text: "$m = 15$" },
+      { text: "$m = 7$" }
+    ],
+    explanation: "Langkah 1: Tambahkan 2 ke kedua ruas -> $\\frac{m}{3} = 7$. Langkah 2: Kalikan kedua ruas dengan 3 -> $m = 7 \\times 3 = 21$."
+  },
+  {
+    category: "Persamaan Dua Langkah",
+    icon: "⚙️",
+    text: "Tentukan berapakah nilai variabel p yang benar pada persamaan di bawah:",
+    math: "2p - 8 = 12",
+    options: [
+      { text: "$p = 10$", correct: true },
+      { text: "$p = 12$" },
+      { text: "$p = 4$" },
+      { text: "$p = 20$" }
+    ],
+    explanation: "Langkah 1: Tambahkan 8 ke kedua ruas -> $2p = 20$. Langkah 2: Bagi kedua ruas dengan 2 -> $p = 20 \\div 2 = 10$."
+  },
+
+  // --- TAHAP 6: SOAL CERITA ALJABAR (Word Problems) (26-30) ---
+  {
+    category: "Soal Cerita Aljabar",
+    icon: "🛍️",
+    text: "Andi memiliki sejumlah kelereng (kita lambangkan dengan variabel x). Setelah diberi 6 kelereng lagi oleh kakaknya, sekarang kelereng Andi berjumlah total 15 buah. Manakah bentuk model persamaan aljabar yang tepat?",
+    math: "",
+    options: [
+      { text: "$x + 6 = 15$", correct: true },
+      { text: "$x - 6 = 15$" },
+      { text: "$6x = 15$" },
+      { text: "$\\frac{x}{6} = 15$" }
+    ],
+    explanation: "Jumlah kelereng awal ($x$) bertambah atau diberi lagi ($+ 6$) menghasilkan total akhir ($= 15$). Maka model persamaannya adalah $x + 6 = 15$."
+  },
+  {
+    category: "Soal Cerita Aljabar",
+    icon: "🍰",
+    text: "Ibu membeli 4 kotak kue. Setiap kotak berisi k potong kue dengan jumlah yang sama banyak. Setelah dihitung total seluruh kue Ibu adalah 24 potong. Berapakah jumlah isi kue di dalam satu kotak (k) tersebut?",
+    math: "",
+    options: [
+      { text: "6 potong kue", correct: true },
+      { text: "8 potong kue" },
+      { text: "5 potong kue" },
+      { text: "4 potong kue" }
+    ],
+    explanation: "Model persamaannya adalah $4k = 24$. Bagi total kue dengan jumlah kotak untuk menemukan jumlah per kotak: $k = 24 \\div 4 = 6$ potong."
+  },
+  {
+    category: "Logika Umur Aljabar",
+    icon: "🕰️",
+    text: "Selisih umur Kakak dan Adek saat ini adalah tepat 8 tahun. Jika umur Kakak sekarang setara dengan 2 kali lipat dari umur Adek saat ini, berapakah umur Adek sekarang?",
+    math: "",
+    options: [
+      { text: "8 tahun", correct: true },
+      { text: "10 tahun" },
+      { text: "4 tahun" },
+      { text: "16 tahun" }
+    ],
+    explanation: "Misalkan umur Adek = x, maka umur Kakak = 2x. Persamaan selisih: $2x - x = 8$. Maka diperoleh umur Adek ($x$) adalah 8 tahun."
+  },
+  {
+    category: "Soal Cerita Aljabar",
+    icon: "📚",
+    text: "Kakak membeli 3 buah buku tulis baru dengan harga masing-masing b koin. Kakak juga membeli sebuah pensil seharga 2.000 koin. Jika total belanjaan Kakak adalah 14.000 koin, berapa harga satu buah buku tulis (b)?",
+    math: "",
+    options: [
+      { text: "4.000 koin", correct: true },
+      { text: "3.000 koin" },
+      { text: "5.000 koin" },
+      { text: "6.000 koin" }
+    ],
+    explanation: "Model persamaannya: $3b + 2.000 = 14.000$. Kurangkan harga pensil dari total belanja: $3b = 12.000$. Bagi dengan jumlah buku (3): $b = 12.000 \\div 3 = 4.000$ koin."
+  },
+  {
+    category: "Soal Cerita Aljabar",
+    icon: "📏",
+    text: "Sebatang pita hias sepanjang L cm dipotong secara rata menjadi 5 bagian yang sama panjang. Masing-masing bagian pita tersebut memiliki ukuran panjang 9 cm. Manakah bentuk model aljabar yang tepat untuk menggambarkan cerita tersebut?",
+    math: "",
+    options: [
+      { text: "$\\frac{L}{5} = 9$", correct: true },
+      { text: "$L - 5 = 9$" },
+      { text: "$5L = 9$" },
+      { text: "$L + 5 = 9$" }
+    ],
+    explanation: "Pita sepanjang L dipotong rata menjadi 5 bagian melambangkan operasi pembagian (L dibagi 5). Hasil potongan berukuran 9 cm, sehingga model aljabarnya adalah $\\frac{L}{5} = 9$."
+  }
+];
+
+// ===== KONTROL UTAMA =====
+let currentIdx = -1;
+let totalQuestions = questionsData.length;
+let correctCount = 0;
+let score = 0;
+let userAnswers = {};
+
+function shuffleArray(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+}
+
+function startQuiz() {
+  // Pengacakan opsi jawaban secara dinamis pada saat tombol Mulai ditekan
+  questionsData.forEach(q => {
+    shuffleArray(q.options);
+    q.options.forEach((opt, idx) => {
+      opt.key = ["A", "B", "C", "D"][idx];
+    });
+  });
+
+  document.getElementById('page-0').classList.remove('active');
+  document.getElementById('quizContainer').classList.add('active');
+  document.getElementById('navigationBar').style.display = 'flex';
+  currentIdx = 0;
+  loadQuestion(0);
+}
+
+function loadQuestion(idx) {
+  const qData = questionsData[idx];
+  
+  document.getElementById('qIcon').textContent = qData.icon;
+  document.getElementById('qCategory').textContent = qData.category;
+  document.getElementById('qNumber').textContent = `Kasus ${idx + 1} dari ${totalQuestions}`;
+  document.getElementById('qText').textContent = qData.text;
+  
+  const mathDiv = document.getElementById('qMath');
+  if (qData.math) {
+    mathDiv.style.display = 'flex';
+    mathDiv.innerHTML = `$$${qData.math}$$`;
+    
+    if (typeof renderMathInElement !== 'undefined') {
+      renderMathInElement(mathDiv, {
+        delimiters: [
+          {left: '$$', right: '$$', display: true},
+          {left: '$', right: '$', display: false}
+        ],
+        throwOnError: false
+      });
+    }
+  } else {
+    mathDiv.style.display = 'none';
+  }
+
+  const optionsDiv = document.getElementById('optionsContainer');
+  optionsDiv.innerHTML = '';
+
+  qData.options.forEach(opt => {
+    const btn = document.createElement('button');
+    btn.className = 'quiz-option';
+    btn.innerHTML = `
+      <div class="option-letter">${opt.key}</div>
+      <div>${opt.text}</div>
+    `;
+    
+    if (userAnswers[idx]) {
+      btn.classList.add('disabled');
+      if (opt.key === userAnswers[idx].selectedKey) {
+        btn.classList.add(userAnswers[idx].isCorrect ? 'correct' : 'wrong');
+      }
+      if (opt.correct && !userAnswers[idx].isCorrect) {
+        btn.classList.add('correct');
+      }
+    } else {
+      btn.onclick = () => selectOption(idx, opt, btn);
+    }
+    optionsDiv.appendChild(btn);
+  });
+
+  const fb = document.getElementById('quizFeedback');
+  if (userAnswers[idx]) {
+    fb.className = userAnswers[idx].isCorrect ? 'feedback-box correct show' : 'feedback-box wrong show';
+    fb.innerHTML = userAnswers[idx].isCorrect 
+      ? `🎉 Benar! ${qData.explanation}` 
+      : `🤔 Kurang Tepat! Jawaban yang benar adalah pilihan berwarna hijau.<br>${qData.explanation}`;
+  } else {
+    fb.className = 'feedback-box';
+    fb.style.display = 'none';
+  }
+
+  document.getElementById('pageLabel').textContent = `Kasus ${idx + 1} / ${totalQuestions}`;
+  updateNavState();
+
+  if (typeof renderMathInElement !== 'undefined') {
+    renderMathInElement(document.getElementById('quizContainer'), {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$', right: '$', display: false}
+      ],
+      throwOnError: false
+    });
+  }
+}
+
+function selectOption(qIdx, selectedOpt, element) {
+  const qData = questionsData[qIdx];
+  const isCorrect = selectedOpt.correct === true;
+  
+  userAnswers[qIdx] = {
+    selectedKey: selectedOpt.key,
+    isCorrect: isCorrect
+  };
+
+  if (isCorrect) {
+    correctCount++;
+    // Setiap soal bernilai seimbang menuju 100 Poin
+    addScore(100 / totalQuestions);
+  }
+
+  const optionsDiv = document.getElementById('optionsContainer');
+  const buttons = optionsDiv.querySelectorAll('.quiz-option');
+  buttons.forEach(btn => {
+    btn.classList.add('disabled');
+    btn.onclick = null;
+  });
+
+  if (isCorrect) {
+    element.classList.add('correct');
+  } else {
+    element.classList.add('wrong');
+    buttons.forEach((btn, index) => {
+      if (qData.options[index].correct) {
+        btn.classList.add('correct');
+      }
+    });
+  }
+
+  const fb = document.getElementById('quizFeedback');
+  fb.className = isCorrect ? 'feedback-box correct show' : 'feedback-box wrong show';
+  fb.innerHTML = isCorrect 
+    ? `🎉 Benar! ${qData.explanation}` 
+    : `🤔 Kurang Tepat! Jawaban yang benar adalah pilihan berwarna hijau.<br>${qData.explanation}`;
+
+  if (typeof renderMathInElement !== 'undefined') {
+    renderMathInElement(fb, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$', right: '$', display: false}
+      ],
+      throwOnError: false
+    });
+  }
+}
+
+function navigate(direction) {
+  const targetIdx = currentIdx + direction;
+  
+  if (targetIdx < 0) {
+    document.getElementById('quizContainer').classList.remove('active');
+    document.getElementById('page-0').classList.add('active');
+    document.getElementById('navigationBar').style.display = 'none';
+    currentIdx = -1;
+  } else if (targetIdx >= totalQuestions) {
+    showCertificatePage();
+  } else {
+    currentIdx = targetIdx;
+    loadQuestion(currentIdx);
+    document.getElementById('pagesViewport').scrollTop = 0;
+  }
+}
+
+function updateNavState() {
+  document.getElementById('btn-prev').disabled = currentIdx === -1;
+  const btnNext = document.getElementById('btn-next');
+  if (currentIdx === totalQuestions - 1) {
+    btnNext.textContent = "Selesai 🏁";
+    btnNext.className = "nav-btn primary";
+  } else {
+    btnNext.textContent = "Lanjut →";
+    btnNext.className = "nav-btn primary";
+  }
+  const pct = ((currentIdx + 1) / totalQuestions) * 100;
+  document.getElementById('progressBar').style.width = pct + '%';
+}
+
+function showCertificatePage() {
+  document.getElementById('quizContainer').classList.remove('active');
+  document.getElementById('page-finish').classList.add('active');
+  document.getElementById('navigationBar').style.display = 'none';
+  document.getElementById('progressBar').style.width = '100%';
+  
+  const finalDisplayScore = Math.round(score);
+  document.getElementById('certScoreDisplay').textContent = `Dengan Nilai Akhir: ${finalDisplayScore} dari 100`;
+
+  let stars = "☆";
+  let motivation = "";
+  if (finalDisplayScore >= 90) {
+    stars = "⭐⭐⭐⭐⭐";
+    motivation = "🏆 Luar Biasa! Kamu adalah Detektif Aljabar Elit dengan logika pemecahan masalah yang luar biasa cerdas!";
+  } else if (finalDisplayScore >= 70) {
+    stars = "⭐⭐⭐⭐☆";
+    motivation = "✨ Sangat Hebat! Pemahaman aljabarmu sudah sangat kuat. Sedikit latihan lagi untuk mencapai nilai sempurna!";
+  } else if (finalDisplayScore >= 50) {
+    stars = "⭐⭐⭐☆☆";
+    motivation = "👍 Bagus! Kamu berhasil memecahkan sebagian besar berkas kasus. Yuk, pelajari ulasan jawabannya!";
+  } else {
+    stars = "⭐⭐☆☆☆";
+    motivation = "🌸 Detektif Hebat tidak pernah menyerah! Mari ulangi kuis sekali lagi dan perkuat pemahaman aljabarmu!";
+  }
+
+  document.getElementById('certStars').textContent = stars;
+  document.getElementById('finalMotivationText').textContent = motivation;
+  
+  setCertDate();
+}
+
+function addScore(pts) {
+  score += pts;
+  const roundedScore = Math.round(score);
+  document.getElementById('scoreChip').textContent = '⭐ ' + roundedScore + ' Poin';
+  document.getElementById('scoreChip').style.animation = 'pop 0.3s ease';
+  setTimeout(() => document.getElementById('scoreChip').style.animation = '', 400);
+}
+
+function applyName() {
+  const nameInput = document.getElementById('userNameInput').value.trim();
+  const displayName = nameInput ? nameInput : "Detektif Hebat";
+  document.getElementById('certNameDisplay').textContent = displayName;
+}
+
+function setCertDate() {
+  const d = new Date();
+  document.getElementById('certDate').textContent = d.toLocaleDateString('id-ID', {day:'numeric', month:'long', year:'numeric'});
+}
+
+function resetQuiz() {
+  currentIdx = -1;
+  score = 0;
+  correctCount = 0;
+  userAnswers = {};
+  document.getElementById('scoreChip').textContent = '⭐ 0 Poin';
+  document.getElementById('progressBar').style.width = '0%';
+  
+  document.getElementById('userNameInput').value = '';
+  document.getElementById('certNameDisplay').textContent = 'Detektif Hebat';
+  
+  document.getElementById('page-finish').classList.remove('active');
+  document.getElementById('page-0').classList.add('active');
+}
+
+document.addEventListener('keydown', e => {
+  if (currentIdx >= 0 && currentIdx < totalQuestions) {
+    if (e.key === 'ArrowRight') navigate(1);
+    if (e.key === 'ArrowLeft') navigate(-1);
+  }
+});
+</script>
+</body>
+</html>
