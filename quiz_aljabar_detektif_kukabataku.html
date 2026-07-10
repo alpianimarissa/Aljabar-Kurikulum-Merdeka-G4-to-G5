@@ -1,0 +1,930 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Akademi Detektif KUKABATAKU - Divisi Rahasia Agen X (Aljabar)</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Fredoka & Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- KaTeX for beautiful math notation -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+    
+    <style>
+        body {
+            font-family: 'Fredoka', 'Poppins', sans-serif;
+        }
+        .math-font {
+            font-family: 'Poppins', sans-serif;
+        }
+        /* Cute custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #fff7ed;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #a855f7;
+            border-radius: 6px;
+            border: 2px solid #fff7ed;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #9333ea;
+        }
+        /* Playful animations */
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-12px) rotate(2deg); }
+        }
+        .animate-float {
+            animation: float 4s ease-in-out infinite;
+        }
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 10px rgba(168, 85, 247, 0.5); }
+            50% { box-shadow: 0 0 25px rgba(168, 85, 247, 0.9); }
+        }
+        .glow-purple {
+            animation: pulse-glow 2s infinite;
+        }
+        /* Comic book shadow styling */
+        .comic-shadow {
+            box-shadow: 6px 6px 0px 0px #1e293b;
+        }
+        .comic-shadow-sm {
+            box-shadow: 4px 4px 0px 0px #1e293b;
+        }
+        .comic-btn-active:active {
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0px 0px #1e293b;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-[#faf5ff] via-[#fef3c7] to-[#ecfdf5] text-slate-800 min-h-screen flex flex-col justify-between overflow-x-hidden">
+
+    <script>
+        // Fun sound generator using Web Audio API
+        const SoundFX = {
+            ctx: null,
+            init() {
+                if (!this.ctx) {
+                    this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+                }
+            },
+            playClick() {
+                this.init();
+                let osc = this.ctx.createOscillator();
+                let gain = this.ctx.createGain();
+                osc.connect(gain);
+                gain.connect(this.ctx.destination);
+                osc.frequency.setValueAtTime(600, this.ctx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(1200, this.ctx.currentTime + 0.08);
+                gain.gain.setValueAtTime(0.1, this.ctx.currentTime);
+                gain.gain.linearRampToValueAtTime(0.01, this.ctx.currentTime + 0.08);
+                osc.start();
+                osc.stop(this.ctx.currentTime + 0.1);
+            },
+            playSuccess() {
+                this.init();
+                let now = this.ctx.currentTime;
+                let notes = [523.25, 659.25, 783.99, 1046.50]; // C5, E5, G5, C6 (Major chord)
+                notes.forEach((freq, idx) => {
+                    let osc = this.ctx.createOscillator();
+                    let gain = this.ctx.createGain();
+                    osc.connect(gain);
+                    gain.connect(this.ctx.destination);
+                    osc.frequency.setValueAtTime(freq, now + idx * 0.06);
+                    gain.gain.setValueAtTime(0.1, now + idx * 0.06);
+                    gain.gain.linearRampToValueAtTime(0.01, now + idx * 0.06 + 0.1);
+                    osc.start(now + idx * 0.06);
+                    osc.stop(now + idx * 0.06 + 0.15);
+                });
+            },
+            playWrong() {
+                this.init();
+                let osc = this.ctx.createOscillator();
+                let gain = this.ctx.createGain();
+                osc.connect(gain);
+                gain.connect(this.ctx.destination);
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(180, this.ctx.currentTime);
+                osc.frequency.linearRampToValueAtTime(90, this.ctx.currentTime + 0.3);
+                gain.gain.setValueAtTime(0.12, this.ctx.currentTime);
+                gain.gain.linearRampToValueAtTime(0.01, this.ctx.currentTime + 0.3);
+                osc.start();
+                osc.stop(this.ctx.currentTime + 0.3);
+            },
+            playFanfare() {
+                this.init();
+                let now = this.ctx.currentTime;
+                let chords = [261.63, 329.63, 392.00, 523.25, 659.25, 783.99];
+                chords.forEach((freq, idx) => {
+                    let osc = this.ctx.createOscillator();
+                    let gain = this.ctx.createGain();
+                    osc.connect(gain);
+                    gain.connect(this.ctx.destination);
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(freq, now);
+                    osc.frequency.exponentialRampToValueAtTime(freq * 2, now + 0.8);
+                    gain.gain.setValueAtTime(0.08, now);
+                    gain.gain.linearRampToValueAtTime(0.01, now + 0.8);
+                    osc.start(now);
+                    osc.stop(now + 0.8);
+                });
+            }
+        };
+
+        // Main game state
+        const GameState = {
+            playerName: "Detektif Hebat",
+            avatar: "detective_boy1",
+            currentSlide: 1,
+            totalSlides: 34, // 1 welcome + 30 quizzes + 2 reflections + 1 certificate
+            score: 0,
+            completedSlides: new Set(),
+            answers: {},
+        };
+
+        // Render mathematical formulas inside elements using KaTeX auto-render
+        function renderMath(element) {
+            if (window.renderMathInElement) {
+                renderMathInElement(element || document.body, {
+                    delimiters: [
+                        {left: '$$', right: '$$', display: true},
+                        {left: '$', right: '$', display: false}
+                    ],
+                    throwOnError: false
+                });
+            }
+        }
+    </script>
+
+    <!-- Header / HUD (Heads Up Display) -->
+    <header class="bg-white border-b-4 border-purple-500 px-4 py-3 sticky top-0 z-50 shadow-sm">
+        <div class="max-w-6xl mx-auto flex flex-wrap items-center justify-between gap-3">
+            <!-- Brand & Sidebar Toggle -->
+            <div class="flex items-center gap-3">
+                <button onclick="toggleSidebar()" class="bg-purple-400 hover:bg-purple-500 text-white p-2.5 rounded-xl border-2 border-slate-900 comic-shadow-sm comic-btn-active transition-all">
+                    <i class="fa-solid fa-compass text-lg"></i>
+                </button>
+                <div class="flex items-center gap-2">
+                    <span class="text-3xl animate-pulse">🕵️‍♂️</span>
+                    <div>
+                        <h1 class="font-black text-xl text-purple-950 leading-none tracking-wide">DIVISI RAHASIA AGEN X</h1>
+                        <span class="text-xs text-slate-500 font-bold">Misi Khusus Aljabar Cepat (Fast-Track SD)</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Detective Badge & HUD Score -->
+            <div class="flex items-center gap-4 bg-purple-50 px-4 py-2 rounded-2xl border-2 border-slate-900 comic-shadow-sm">
+                <div class="flex items-center gap-2">
+                    <div id="hud-avatar" class="w-8 h-8 rounded-full bg-purple-200 flex items-center justify-center text-lg border-2 border-slate-900">👦</div>
+                    <span id="hud-name" class="text-sm font-bold text-purple-950">Detektif</span>
+                </div>
+                <div class="h-6 w-[2px] bg-slate-900"></div>
+                <div class="flex items-center gap-1 text-purple-700 font-extrabold text-sm">
+                    <i class="fa-solid fa-shield-halved animate-bounce text-purple-600"></i>
+                    <span id="hud-score">0 XP</span>
+                </div>
+                <div class="h-6 w-[2px] bg-slate-900"></div>
+                <div class="text-xs text-purple-950 font-black bg-white px-3 py-1 rounded-xl border border-slate-900">
+                    Sandi <span id="hud-slide-num">1</span>/34
+                </div>
+            </div>
+        </div>
+        <!-- Progress Bar -->
+        <div class="max-w-6xl mx-auto w-full bg-slate-200 h-3 mt-3 rounded-full overflow-hidden border-2 border-slate-900">
+            <div id="main-progress-bar" class="bg-gradient-to-r from-purple-500 via-pink-500 to-emerald-400 h-full transition-all duration-300" style="width: 2.94%"></div>
+        </div>
+    </header>
+
+    <!-- Side Map Drawer (All 34 Pages Quick Selection) -->
+    <div id="sidebar" class="fixed left-0 top-0 bottom-0 w-80 bg-purple-50 border-r-4 border-slate-900 z-[100] transform -translate-x-full transition-transform duration-300 flex flex-col shadow-2xl">
+        <div class="p-4 border-b-2 border-slate-900 flex justify-between items-center bg-purple-200">
+            <div class="flex items-center gap-2 text-purple-950 font-extrabold text-lg">
+                <i class="fa-solid fa-map-location-dot text-purple-700"></i>
+                <span>Sandi Navigasi Misi</span>
+            </div>
+            <button onclick="toggleSidebar()" class="text-slate-800 hover:text-red-500 transition-colors">
+                <i class="fa-solid fa-xmark text-2xl"></i>
+            </button>
+        </div>
+        <div class="flex-1 overflow-y-auto p-4 space-y-2 bg-gradient-to-b from-purple-50 to-emerald-50" id="sidebar-mission-list">
+            <!-- Injected dynamically in script -->
+        </div>
+        <div class="p-4 border-t-2 border-slate-900 bg-purple-200 text-center text-xs text-purple-950 font-bold">
+            Modul Aljabar Spesialis • SD Akselerasi
+        </div>
+    </div>
+
+    <!-- Main Container for Slides -->
+    <main class="flex-1 max-w-5xl w-full mx-auto p-4 md:p-6 flex flex-col justify-center items-center">
+        <!-- Interactive Slide Card -->
+        <div class="w-full bg-white border-4 border-slate-900 rounded-3xl p-6 md:p-8 comic-shadow relative min-h-[530px] flex flex-col justify-between">
+            
+            <!-- STAGE: Slides dynamic mount point -->
+            <div id="slides-viewport" class="w-full h-full flex-1">
+
+                <!-- SLIDE 1: Welcome & Identity Entry -->
+                <div id="slide-1" class="slide-item space-y-6">
+                    <div class="text-center space-y-3">
+                        <span class="text-purple-950 font-black uppercase tracking-widest text-xs bg-purple-300 px-4 py-1.5 rounded-full border-2 border-slate-900 glow-purple">Misi Agen Khusus SD</span>
+                        <h2 class="text-3xl md:text-5xl font-black bg-gradient-to-r from-purple-600 via-pink-600 to-emerald-500 bg-clip-text text-transparent drop-shadow-sm">Divisi Aljabar Agen X</h2>
+                        <p class="text-slate-600 max-w-lg mx-auto text-sm md:text-base font-medium">Selamat datang, Agen Cerdas! Siapkan otak taktis dan kecepatan analisismu. Kita akan melatih insting aljabar mulai dari perkalian, pembagian, hingga teka-teki 2 langkah melalui **30 Sandi Kasus Misterius**!</p>
+                    </div>
+
+                    <div class="flex justify-center my-4 animate-float">
+                        <svg class="w-36 h-36" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <defs>
+                                <radialGradient id="badgeGrad" cx="50%" cy="50%" r="50%">
+                                    <stop offset="0%" stop-color="#a855f7" />
+                                    <stop offset="100%" stop-color="#6b21a8" />
+                                </radialGradient>
+                            </defs>
+                            <rect x="40" y="80" width="120" height="80" rx="15" fill="#faf5ff" stroke="#1e293b" stroke-width="6" />
+                            <circle cx="100" cy="120" r="30" fill="url(#badgeGrad)" stroke="#1e293b" stroke-width="4" />
+                            <path d="M40,65 L160,65 L140,35 L60,35 Z" fill="#1e293b" stroke="#1e293b" stroke-width="4" />
+                            <rect x="30" y="65" width="140" height="10" rx="4" fill="#a855f7" stroke="#1e293b" stroke-width="4" />
+                            <path d="M90,110 L110,130 M110,110 L90,130" stroke="#fff" stroke-width="6" stroke-linecap="round" />
+                        </svg>
+                    </div>
+
+                    <div class="max-w-sm mx-auto space-y-3 bg-purple-50 p-5 rounded-2xl border-2 border-slate-900 comic-shadow-sm">
+                        <label class="block text-xs text-purple-950 font-black uppercase tracking-wider">Nama Sandi Agenmu</label>
+                        <input type="text" id="player-name-input" placeholder="Masukkan Nama Agen..." class="w-full px-4 py-2 rounded-xl bg-white border-2 border-slate-900 text-slate-800 text-center font-bold focus:outline-none focus:ring-2 focus:ring-purple-400">
+                        
+                        <div class="pt-1">
+                            <label class="block text-xs text-purple-950 font-black uppercase tracking-wider mb-2">Pilih Sobat Detektif</label>
+                            <div class="grid grid-cols-4 gap-2">
+                                <button onclick="selectAvatar('detective_boy1', '👦')" class="avatar-opt p-2 bg-purple-300 border-2 border-slate-900 rounded-xl text-2xl hover:bg-purple-200 comic-btn-active transition-all">👦</button>
+                                <button onclick="selectAvatar('detective_girl', '👧')" class="avatar-opt p-2 bg-white border-2 border-slate-900 rounded-xl text-2xl hover:bg-purple-200 comic-btn-active transition-all">👧</button>
+                                <button onclick="selectAvatar('detective_fox', '🦊')" class="avatar-opt p-2 bg-white border-2 border-slate-900 rounded-xl text-2xl hover:bg-purple-200 comic-btn-active transition-all">🦊</button>
+                                <button onclick="selectAvatar('detective_owl', '🦉')" class="avatar-opt p-2 bg-white border-2 border-slate-900 rounded-xl text-2xl hover:bg-purple-200 comic-btn-active transition-all">🦉</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- QUIZ SLIDES: Generated dynamically with structured, tailored content -->
+                <!-- SLIDES 2 TO 31: THE 30 QUESTIONS -->
+                <!-- We render placeholders which will load dynamically and beautifully with custom shuffled options -->
+                <div id="quiz-question-container"></div>
+
+                <!-- SLIDE 32: Reflection 1 -->
+                <div id="slide-32" class="slide-item hidden space-y-6">
+                    <div class="text-center space-y-2">
+                        <span class="text-purple-950 font-black bg-amber-300 px-3 py-1 rounded-full border-2 border-slate-900 text-xs">Evaluasi Detektif 1</span>
+                        <h3 class="text-2xl font-black text-purple-950">Bagaimana Perasaanmu Sekarang?</h3>
+                    </div>
+                    <div class="bg-amber-50 p-6 rounded-2xl border-2 border-slate-900 max-w-md mx-auto text-center space-y-4 comic-shadow">
+                        <p class="text-xs sm:text-sm text-slate-700 font-bold">Apakah kamu merasa aljabar perkalian, pembagian, dan 2-langkah sekarang jauh lebih seru?</p>
+                        <div class="flex justify-center gap-6 py-4">
+                            <button onclick="selectFeeling('bingung', '😕')" class="feel-btn p-3 bg-white rounded-full text-5xl border-2 border-slate-900 hover:scale-110 comic-shadow-sm comic-btn-active transition-transform animate-pulse">😕</button>
+                            <button onclick="selectFeeling('paham', '🙂')" class="feel-btn p-3 bg-white rounded-full text-5xl border-2 border-slate-900 hover:scale-110 comic-shadow-sm comic-btn-active transition-transform animate-pulse">🙂</button>
+                            <button onclick="selectFeeling('hebat', '😎')" class="feel-btn p-3 bg-white rounded-full text-5xl border-2 border-slate-900 hover:scale-110 comic-shadow-sm comic-btn-active transition-transform animate-pulse">😎</button>
+                        </div>
+                        <p id="feel-msg" class="text-sm text-purple-700 font-black h-8"></p>
+                    </div>
+                </div>
+
+                <!-- SLIDE 33: Reflection 2 -->
+                <div id="slide-33" class="slide-item hidden space-y-6">
+                    <div class="text-center space-y-2">
+                        <span class="text-purple-950 font-black bg-amber-300 px-3 py-1 rounded-full border-2 border-slate-900 text-xs">Evaluasi Detektif 2</span>
+                        <h3 class="text-2xl font-black text-purple-950">Gelar Kelulusan Pilihanmu</h3>
+                    </div>
+                    <p class="text-center text-xs sm:text-sm text-slate-700 font-bold">Pilih lencana kebanggaan yang paling sesuai dengan tingkat pemahamanmu saat ini!</p>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-2xl mx-auto pt-2 font-bold">
+                        <div onclick="selectBadge('kadet')" class="badge-card p-4 bg-white rounded-2xl border-2 border-slate-900 text-center cursor-pointer hover:bg-amber-100 comic-shadow-sm transition-all">
+                            <span class="text-4xl block">🥉</span>
+                            <h4 class="font-black text-sm text-slate-800 mt-2">Detektif Aljabar Muda</h4>
+                            <p class="text-[11px] text-slate-500 mt-1">Menguasai perpindahan ruas dasar untuk perkalian dan pembagian sederhana.</p>
+                        </div>
+                        <div onclick="selectBadge('inspektur')" class="badge-card p-4 bg-white rounded-2xl border-2 border-slate-900 text-center cursor-pointer hover:bg-amber-100 comic-shadow-sm transition-all">
+                            <span class="text-4xl block">🥈</span>
+                            <h4 class="font-black text-sm text-slate-800 mt-2">Inspektur Agen X</h4>
+                            <p class="text-[11px] text-slate-500 mt-1">Sangat lancar memecahkan aljabar 2-langkah dan menerjemahkan kalimat cerita.</p>
+                        </div>
+                        <div onclick="selectBadge('komandan')" class="badge-card p-4 bg-white rounded-2xl border-2 border-slate-900 text-center cursor-pointer hover:bg-amber-100 comic-shadow-sm transition-all">
+                            <span class="text-4xl block">🥇</span>
+                            <h4 class="font-black text-sm text-slate-800 mt-2">Ahli Kriptografi Aljabar</h4>
+                            <p class="text-[11px] text-slate-500 mt-1">Mampu membongkar brankas cyber ganda dengan model aljabar rumit sekalipun!</p>
+                        </div>
+                    </div>
+                    <p id="badge-msg" class="text-center text-sm font-black text-amber-700 h-6 pt-2"></p>
+                </div>
+
+                <!-- SLIDE 34: Certificate of Achievement -->
+                <div id="slide-34" class="slide-item hidden space-y-6 text-center">
+                    <div class="space-y-2">
+                        <span class="text-amber-950 font-black bg-amber-300 px-3 py-1 rounded-full border-2 border-slate-900 text-xs">Kelulusan Agen</span>
+                        <h3 class="text-3xl md:text-4xl font-black bg-gradient-to-r from-purple-500 via-pink-600 to-emerald-500 bg-clip-text text-transparent">KONTRAK AL JABR DISELESAIKAN!</h3>
+                    </div>
+                    <div class="max-w-md mx-auto bg-amber-50 p-6 rounded-2xl border-4 border-slate-900 space-y-4 shadow-xl relative overflow-hidden">
+                        <div class="absolute -top-10 -left-10 w-24 h-24 bg-purple-300/30 rounded-full blur-2xl"></div>
+                        <div class="absolute -bottom-10 -right-10 w-24 h-24 bg-emerald-300/30 rounded-full blur-2xl"></div>
+                        
+                        <div class="flex justify-center">
+                            <span class="text-7xl animate-bounce">🏆</span>
+                        </div>
+                        <h4 class="font-black text-lg text-slate-800">Sertifikat Kelulusan Detektif Aljabar Agen X</h4>
+                        <p class="text-xs text-slate-500 font-bold">Diberikan secara istimewa kepada:</p>
+                        <p id="cert-name" class="text-2xl font-black text-purple-950 underline tracking-wide">Detektif Hebat</p>
+                        <p class="text-[12px] text-slate-700 font-bold leading-relaxed">Telah sukses melampaui 30 Tantangan Aljabar Khusus Perkalian, Pembagian, Persamaan 2-Langkah dan Dekoding Soal Cerita Matematika dengan Sempurna!</p>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Footer / Navigation bar within container -->
+            <footer class="mt-8 pt-4 border-t-2 border-slate-900 flex justify-between items-center bg-white">
+                <button id="btn-prev" onclick="navigateSlide(-1)" class="px-5 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 border-2 border-slate-900 font-black text-sm text-slate-800 transition-all flex items-center gap-2 comic-shadow-sm comic-btn-active">
+                    <i class="fa-solid fa-arrow-left"></i> Kembali
+                </button>
+                <div class="hidden sm:flex gap-1.5 items-center">
+                    <span class="text-xs text-slate-500 font-black uppercase mr-1">Misi:</span>
+                    <span id="slide-pills" class="flex gap-1.5">
+                        <!-- Dynamic indicators -->
+                    </span>
+                </div>
+                <button id="btn-next" onclick="navigateSlide(1)" class="px-6 py-2.5 rounded-xl bg-gradient-to-r from-purple-500 via-pink-500 to-emerald-400 hover:from-purple-600 hover:to-emerald-500 border-2 border-slate-900 text-slate-900 font-black text-sm transition-all flex items-center gap-2 comic-shadow-sm comic-btn-active">
+                    Misi Lanjut <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </footer>
+
+        </div>
+    </main>
+
+    <!-- Interactive Bottom Toast Message Area -->
+    <div id="toast-container" class="fixed bottom-6 right-6 z-[200] space-y-2 pointer-events-none"></div>
+
+    <!-- MAIN SYSTEM LOGIC -->
+    <script>
+        // Custom message notifications
+        function showNotification(text, type = "info") {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = `p-4 rounded-xl border-2 border-slate-900 flex items-center gap-3 text-sm font-black shadow-lg transition-all duration-300 transform translate-y-4 opacity-0 pointer-events-auto max-w-sm ${
+                type === 'success' ? 'bg-emerald-100 text-emerald-900' :
+                type === 'error' ? 'bg-red-100 text-red-900' :
+                'bg-purple-100 text-slate-800'
+            }`;
+            
+            const icon = type === 'success' ? '🏆' : type === 'error' ? '🦹‍♂️' : 'ℹ️';
+            toast.innerHTML = `<span class="text-2xl">${icon}</span> <span>${text}</span>`;
+            
+            container.appendChild(toast);
+            setTimeout(() => {
+                toast.classList.remove('translate-y-4', 'opacity-0');
+            }, 50);
+
+            setTimeout(() => {
+                toast.classList.add('translate-y-4', 'opacity-0');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // Define the 30 Challenge Questions with beautifully styled story tags (no LaTeX mismatch in narratives!)
+        const QuizQuestions = [
+            {
+                id: 1,
+                title: "Misteri Kotak Donat",
+                story: "Kamu membeli <span class='text-purple-600 font-extrabold text-lg'>3</span> kotak donat misterius <span class='text-pink-600 font-extrabold text-lg'>x</span> yang isinya seragam. Setelah seluruh kotak dibuka, total donatmu adalah <span class='text-emerald-600 font-extrabold text-lg'>18</span> buah. Berapa banyak donat di setiap kotak?",
+                equation: "$3x = 18$",
+                correct: "$x = 6$ donat",
+                options: ["$x = 6$ donat", "$x = 15$ donat", "$x = 5$ donat", "$x = 54$ donat"],
+                desc: "Gunakan kebalikan operasi: karena perkalian, bagi kedua ruas: $18 \\div 3 = 6$!"
+            },
+            {
+                id: 2,
+                title: "Gelas Jus Lemon",
+                story: "Satu teko besar berisi jus lemon <span class='text-pink-600 font-extrabold text-lg'>y</span> dibagi rata ke dalam <span class='text-purple-600 font-extrabold text-lg'>4</span> gelas besar. Setiap gelas berisi tepat <span class='text-emerald-600 font-extrabold text-lg'>6</span> ons jus. Berapa isi awal seluruh wadah teko?",
+                equation: "$\\frac{y}{4} = 6$",
+                correct: "$y = 24$ ons",
+                options: ["$y = 24$ ons", "$y = 10$ ons", "$y = 2$ ons", "$y = 1.5$ ons"],
+                desc: "Pembagi $4$ pindah ruas melompat ke kanan menjadi pengali: $6 \\times 4 = 24$!"
+            },
+            {
+                id: 3,
+                title: "Kantong Kelereng Sakti",
+                story: "Detektif Sani membawa <span class='text-purple-600 font-extrabold text-lg'>7</span> kantong kelereng rahasia <span class='text-pink-600 font-extrabold text-lg'>a</span>. Total seluruh kelereng yang ia punya adalah <span class='text-emerald-600 font-extrabold text-lg'>42</span> buah. Berapa isi kelereng dalam tiap kantong?",
+                equation: "$7a = 42$",
+                correct: "$a = 6$ kelereng",
+                options: ["$a = 6$ kelereng", "$a = 35$ kelereng", "$a = 49$ kelereng", "$a = 8$ kelereng"],
+                desc: "Perkalian $7$ dipindah menjadi pembagi di sisi kanan: $42 \\div 7 = 6$!"
+            },
+            {
+                id: 4,
+                title: "Pembagian Kelereng",
+                story: "Satu kantung kelereng <span class='text-pink-600 font-extrabold text-lg'>b</span> dibagi rata kepada <span class='text-purple-600 font-extrabold text-lg'>5</span> anak di kompleks perumahan. Setiap anak memperoleh jatah <span class='text-emerald-600 font-extrabold text-lg'>9</span> kelereng. Berapa jumlah kelereng semula?",
+                equation: "$\\frac{b}{5} = 9$",
+                correct: "$b = 45$ kelereng",
+                options: ["$b = 45$ kelereng", "$b = 14$ kelereng", "$b = 4$ kelereng", "$b = 50$ kelereng"],
+                desc: "Lompatkan pembagi $5$ ke ruas kanan menjadi pengali: $9 \\times 5 = 45$!"
+            },
+            {
+                id: 5,
+                title: "Kotak Pensil Rahasia",
+                story: "Kakak membeli <span class='text-purple-600 font-extrabold text-lg'>2</span> kotak pensil warna <span class='text-pink-600 font-extrabold text-lg'>c</span> dan menaruh lagi <span class='text-amber-600 font-extrabold text-lg'>4</span> pensil tambahan di luar kotak. Sekarang total seluruh pensil di atas meja adalah <span class='text-emerald-600 font-extrabold text-lg'>14</span> buah. Berapakah isi pensil per kotak?",
+                equation: "$2c + 4 = 14$",
+                correct: "$c = 5$ pensil",
+                options: ["$c = 5$ pensil", "$c = 9$ pensil", "$c = 18$ pensil", "$c = 7$ pensil"],
+                desc: "Protokol 2 langkah: Usir $+4$ menjadi $-4 \\implies 2c = 10$. Lalu bagi $10 \\div 2 = 5$!"
+            },
+            {
+                id: 6,
+                title: "Diskon Toko Mainan",
+                story: "Kamu membeli <span class='text-purple-600 font-extrabold text-lg'>3</span> paket robot aksi <span class='text-pink-600 font-extrabold text-lg'>d</span>. Setelah memakai kupon potongan langsung <span class='text-rose-600 font-extrabold text-lg'>Rp5.000</span> di kasir, total belanjaanmu adalah <span class='text-emerald-600 font-extrabold text-lg'>Rp10.000</span>. Berapa harga awal 1 robot?",
+                equation: "$3d - 5.000 = 10.000$",
+                correct: "Rp5.000",
+                options: ["Rp5.000", "Rp15.000", "Rp2.500", "Rp4.000"],
+                desc: "Pindahkan $-5.000$ menjadi $+5.000 \\implies 3d = 15.000$. Bagi hasil: $15.000 \\div 3 = 5.000$!"
+            },
+            {
+                id: 7,
+                title: "Menyusun Rak Buku",
+                story: "Ayah meletakkan <span class='text-purple-600 font-extrabold text-lg'>5</span> kardus buku dongeng <span class='text-pink-600 font-extrabold text-lg'>e</span> secara rata pada lemari kayu, dan menambahkan lagi <span class='text-amber-600 font-extrabold text-lg'>6</span> buku di bagian atas lemari. Total seluruh buku adalah <span class='text-emerald-600 font-extrabold text-lg'>36</span> buah. Berapa isi tiap kardus?",
+                equation: "$5e + 6 = 36$",
+                correct: "$e = 6$ buku",
+                options: ["$e = 6$ buku", "$e = 30$ buku", "$e = 8$ buku", "$e = 5$ buku"],
+                desc: "Langkah 1: Usir $+6$ menjadi $-6 \\implies 5e = 30$. Langkah 2: Bagi $30 \\div 5 = 6$!"
+            },
+            {
+                id: 8,
+                title: "Tabungan Celengan",
+                story: "Siska menyimpan uangnya dalam <span class='text-purple-600 font-extrabold text-lg'>4</span> celengan amplop <span class='text-pink-600 font-extrabold text-lg'>f</span> yang berisi sama banyak. Setelah mengambil <span class='text-rose-600 font-extrabold text-lg'>Rp8.000</span> dari dompetnya, sisa seluruh uang Siska adalah <span class='text-emerald-600 font-extrabold text-lg'>Rp24.000</span>. Berapa isi uang tiap amplop?",
+                equation: "$4f - 8.000 = 24.000$",
+                correct: "Rp8.000",
+                options: ["Rp8.000", "Rp32.000", "Rp6.000", "Rp10.000"],
+                desc: "Selesaikan: $4f = 24.000 + 8.000 = 32.000$. Maka isi per amplop $32.000 \\div 4 = 8.000$!"
+            },
+            {
+                id: 9,
+                title: "Gulungan Pita Kakak",
+                story: "Kakak mengambil setengah gulungan pita merah <span class='text-pink-600 font-extrabold text-lg'>g</span> dan menyambungnya dengan <span class='text-amber-600 font-extrabold text-lg'>3</span> meter pita sisa. Panjang total pita menjadi <span class='text-emerald-600 font-extrabold text-lg'>8</span> meter. Berapakah panjang awal gulungan pita merah?",
+                equation: "$\\frac{g}{2} + 3 = 8$",
+                correct: "$g = 10$ meter",
+                options: ["$g = 10$ meter", "$g = 22$ meter", "$g = 5$ meter", "$g = 6$ meter"],
+                desc: "Langkah 1: Usir $+3$ menjadi $-3 \\implies \\frac{g}{2} = 5$. Langkah 2: Kalikan pembagi 2 menjadi $5 \\times 2 = 10$!"
+            },
+            {
+                id: 10,
+                title: "Kantung Permen Rusak",
+                story: "Sepertiga isi kantung permen cokelat <span class='text-pink-600 font-extrabold text-lg'>h</span> dimakan adik. Roni membuang lagi <span class='text-amber-600 font-extrabold text-lg'>2</span> permen yang rusak. Permen yang bagus tersisa <span class='text-emerald-600 font-extrabold text-lg'>5</span> butir. Berapakah isi awal satu kantung cokelat?",
+                equation: "$\\frac{h}{3} - 2 = 5$",
+                correct: "$h = 21$ permen",
+                options: ["$h = 21$ permen", "$h = 9$ permen", "$h = 15$ permen", "$h = 10$ permen"],
+                desc: "Gunakan langkah taktis: $\\frac{h}{3} = 5 + 2 = 7$. Maka total awal $h = 7 \\times 3 = 21$!"
+            },
+            {
+                id: 11,
+                title: "Skenario Buku Budi",
+                story: "Budi membeli <span class='text-purple-600 font-extrabold text-lg'>4</span> pak buku tulis berlogo rahasia <span class='text-pink-600 font-extrabold text-lg'>b</span>. Ia diberi bonus <span class='text-amber-600 font-extrabold text-lg'>2</span> buku tambahan oleh kasir toko. Total buku Budi sekarang menjadi <span class='text-emerald-600 font-extrabold text-lg'>18</span> buah. Berapa isi buku per pak?",
+                equation: "$4b + 2 = 18$",
+                correct: "$b = 4$ buku",
+                options: ["$b = 4$ buku", "$b = 5$ buku", "$b = 16$ buku", "$b = 3$ buku"],
+                desc: "Pecahkan modelnya: $4b = 18 - 2 = 16$. Jadi, isi satu pak buku adalah $16 \\div 4 = 4$!"
+            },
+            {
+                id: 12,
+                title: "Bagi Rata Es Krim",
+                story: "Kakak membagi satu nampan es krim stik <span class='text-pink-600 font-extrabold text-lg'>e</span> sama rata kepada <span class='text-purple-600 font-extrabold text-lg'>3</span> adiknya. Setelah adiknya memakan <span class='text-amber-600 font-extrabold text-lg'>2</span> stik es krim bersama-sama, sisa es krim yang belum dibuka adalah <span class='text-emerald-600 font-extrabold text-lg'>5</span> stik. Berapa isi awal nampan?",
+                equation: "$\\frac{e}{3} - 2 = 5$",
+                correct: "$e = 21$ stik",
+                options: ["$e = 21$ stik", "$e = 9$ stik", "$e = 15$ stik", "$e = 18$ stik"],
+                desc: "Langkah penyelesaian: $\\frac{e}{3} = 5 + 2 = 7 \\implies e = 7 \\times 3 = 21$!"
+            },
+            {
+                id: 13,
+                title: "Laci Kelereng Andi",
+                story: "Andi mengemas kelereng koleksinya ke dalam <span class='text-purple-600 font-extrabold text-lg'>5</span> laci kotak <span class='text-pink-600 font-extrabold text-lg'>l</span> secara sama banyak. Ia masih meletakkan <span class='text-amber-600 font-extrabold text-lg'>12</span> kelereng di luar laci. Jika total seluruh kelereng Andi adalah <span class='text-emerald-600 font-extrabold text-lg'>47</span> buah, berapa isi per laci?",
+                equation: "$5l + 12 = 47$",
+                correct: "$l = 7$ kelereng",
+                options: ["$l = 7$ kelereng", "$l = 11$ kelereng", "$l = 35$ kelereng", "$l = 8$ kelereng"],
+                desc: "Pindahkan $+12$ menjadi $-12 \\implies 5l = 47 - 12 = 35$. Nilai $l = 35 \\div 5 = 7$!"
+            },
+            {
+                id: 14,
+                title: "Kue Pecah Rara",
+                story: "Rara memanggang kue manis lalu menyimpannya dalam <span class='text-purple-600 font-extrabold text-lg'>3</span> toples kaca <span class='text-pink-600 font-extrabold text-lg'>t</span> sama banyak. Karena tersenggol kucing, sebanyak <span class='text-amber-600 font-extrabold text-lg'>4</span> kue pecah. Rara menghitung sisa kue utuh adalah <span class='text-emerald-600 font-extrabold text-lg'>26</span> buah. Berapa kapasitas kue satu toples?",
+                equation: "$3t - 4 = 26$",
+                correct: "$t = 10$ kue",
+                options: ["$t = 10$ kue", "$t = 30$ kue", "$t = 8$ kue", "$t = 12$ kue"],
+                desc: "Selesaikan model aljabarnya: $3t = 26 + 4 = 30 \\implies t = 30 \\div 3 = 10$ kue!"
+            },
+            {
+                id: 15,
+                title: "Koin Emas Kakek",
+                story: "Setengah bagian koin emas dalam kantong kain <span class='text-pink-600 font-extrabold text-lg'>k</span> diberikan kepada Kakak. Lalu Kakek memberinya bonus <span class='text-amber-600 font-extrabold text-lg'>4</span> koin lagi di atas meja. Total koin Kakak adalah <span class='text-emerald-600 font-extrabold text-lg'>12</span> koin. Berapa isi awal kantong emas?",
+                equation: "$\\frac{k}{2} + 4 = 12$",
+                correct: "$k = 16$ koin",
+                options: ["$k = 16$ koin", "$k = 32$ koin", "$k = 8$ koin", "$k = 24$ koin"],
+                desc: "Singkirkan angka penambah: $\\frac{k}{2} = 12 - 4 = 8$. Lalu kalikan pembagi: $k = 8 \\times 2 = 16$!"
+            },
+            {
+                id: 16,
+                title: "Sandi Warna Rahasia",
+                story: "Kotak sandi merah <span class='text-purple-600 font-extrabold text-lg'>6</span> gram dan kotak sandi biru <span class='text-pink-600 font-extrabold text-lg'>b</span> memiliki berat gabungan <span class='text-emerald-600 font-extrabold text-lg'>10</span> gram. Berapakah berat kotak biru?",
+                equation: "$6 + b = 10$",
+                correct: "$b = 4$ gram",
+                options: ["$b = 4$ gram", "$b = 16$ gram", "$b = 6$ gram", "$b = 5$ gram"],
+                desc: "Penjumlahan $+6$ dipindah ruas melompat ke kanan menjadi pengurangan $\\implies b = 10 - 6 = 4$!"
+            },
+            {
+                id: 17,
+                title: "Tantangan Sandi 45",
+                story: "Seorang ilmuwan jahat mengunci gerbang dengan rumus rahasia <span class='text-purple-600 font-extrabold text-lg'>6</span><span class='text-pink-600 font-extrabold text-lg'>x</span> + <span class='text-amber-600 font-extrabold text-lg'>9</span> = <span class='text-emerald-600 font-extrabold text-lg'>45</span>. Selesaikan nilai variabel $x$ untuk meretas kodenya!",
+                equation: "$6x + 9 = 45$",
+                correct: "$x = 6$",
+                options: ["$x = 6$", "$x = 9$", "$x = 5$", "$x = 54$"],
+                desc: "Langkah 1: $6x = 45 - 9 = 36$. Langkah 2: $x = 36 \\div 6 = 6$!"
+            },
+            {
+                id: 18,
+                title: "Teka-teki Sandi Pembagi",
+                story: "Sandi sekuriti komputer utama menggunakan enkripsi berbasis pembagian: variabel <span class='text-pink-600 font-extrabold text-lg'>y</span> dibagi <span class='text-purple-600 font-extrabold text-lg'>6</span> dikurangi <span class='text-amber-600 font-extrabold text-lg'>3</span> hasilnya <span class='text-emerald-600 font-extrabold text-lg'>7</span>. Hitunglah berapakah kode rahasia $y$!",
+                equation: "$\\frac{y}{6} - 3 = 7$",
+                correct: "$y = 60$",
+                options: ["$y = 60$", "$y = 24$", "$y = 10$", "$y = 30$"],
+                desc: "Langkah 1: $\\frac{y}{6} = 7 + 3 = 10$. Langkah 2: $y = 10 \\times 6 = 60$!"
+            },
+            {
+                id: 19,
+                title: "Cashback Kotak Donat",
+                story: "Ibu membeli <span class='text-purple-600 font-extrabold text-lg'>5</span> kotak donat manis <span class='text-pink-600 font-extrabold text-lg'>d</span> untuk pesta dan mendapatkan cashback langsung berupa potongan harga <span class='text-rose-600 font-extrabold text-lg'>Rp3.000</span>. Ibu membayar tepat <span class='text-emerald-600 font-extrabold text-lg'>Rp22.000</span> di kasir. Berapakah harga asli satu kotak donat?",
+                equation: "$5d - 3.000 = 22.000$",
+                correct: "Rp5.000",
+                options: ["Rp5.000", "Rp25.000", "Rp4.000", "Rp6.000"],
+                desc: "Modelnya: $5d = 22.000 + 3.000 = 25.000$. Harga asli kotak donat adalah $25.000 \\div 5 = 5.000$!"
+            },
+            {
+                id: 20,
+                title: "The Ultimate Combo Boss",
+                story: "Untuk membongkar brankas emas utama, cari kombinasi ganda ini: Jika <span class='text-purple-600 font-extrabold text-lg'>2</span><span class='text-pink-600 font-extrabold text-lg'>a</span> + <span class='text-amber-600 font-extrabold text-lg'>5</span> = <span class='text-emerald-600 font-extrabold text-lg'>15</span> dan <span class='text-pink-600 font-extrabold text-lg'>b</span> dibagi <span class='text-purple-600 font-extrabold text-lg'>3</span> dikurangi <span class='text-amber-600 font-extrabold text-lg'>4</span> = <span class='text-emerald-600 font-extrabold text-lg'>2</span>, berapakah nilai akhir dari perkalian <span class='text-purple-600 font-extrabold text-lg'>(a x b)</span>?",
+                equation: "$2a + 5 = 15$ dan $\\frac{b}{3} - 4 = 2$",
+                correct: "$90$",
+                options: ["$90$", "$30$", "$45$", "$60$"],
+                desc: "Hitung dulu $a \\implies 2a = 10 \\implies a = 5$. Hitung $b \\implies \\frac{b}{3} = 6 \\implies b = 18$. Maka $5 \\times 18 = 90$!"
+            },
+            {
+                id: 21,
+                title: "Misteri Kotak Pensil Hilang",
+                story: "Susi membawa <span class='text-purple-600 font-extrabold text-lg'>4</span> kotak pensil warna <span class='text-pink-600 font-extrabold text-lg'>p</span>. Dia membagikan <span class='text-rose-600 font-extrabold text-lg'>6</span> pensil kepada temannya. Sekarang sisa pensilnya adalah <span class='text-emerald-600 font-extrabold text-lg'>34</span> buah. Berapa isi pensil per kotak?",
+                equation: "$4p - 6 = 34$",
+                correct: "$p = 10$ pensil",
+                options: ["$p = 10$ pensil", "$p = 7$ pensil", "$p = 40$ pensil", "$p = 8$ pensil"],
+                desc: "Langkah 1: Tambahkan kembali pensil yang dibagikan $\\implies 4p = 34 + 6 = 40$. Langkah 2: Bagi dengan 4 kotak $\\implies p = 40 \\div 4 = 10$!"
+            },
+            {
+                id: 22,
+                title: "Teka-teki Kue Cubit",
+                story: "Roni membagi kue cubit dalam satu nampan besar <span class='text-pink-600 font-extrabold text-lg'>k</span> ke dalam <span class='text-purple-600 font-extrabold text-lg'>6</span> kotak kecil. Setiap kotak berisi <span class='text-emerald-600 font-extrabold text-lg'>8</span> kue. Berapa isi nampan besar semula?",
+                equation: "$\\frac{k}{6} = 8$",
+                correct: "$k = 48$ kue",
+                options: ["$k = 48$ kue", "$k = 14$ kue", "$k = 2$ kue", "$k = 42$ kue"],
+                desc: "Lompatkan pembagi $6$ ke kanan menjadi pengali: $8 \\times 6 = 48$!"
+            },
+            {
+                id: 23,
+                title: "Mainan Robot Lego",
+                story: "Deni merakit <span class='text-purple-600 font-extrabold text-lg'>5</span> set robot lego <span class='text-pink-600 font-extrabold text-lg'>r</span>. Setelah membongkar <span class='text-rose-600 font-extrabold text-lg'>10</span> bagian kecil yang rusak, ia memiliki total <span class='text-emerald-600 font-extrabold text-lg'>40</span> bagian lego yang bagus. Berapa isi bagian lego per set robot?",
+                equation: "$5r - 10 = 40$",
+                correct: "$r = 10$ bagian",
+                options: ["$r = 10$ bagian", "$r = 6$ bagian", "$r = 8$ bagian", "$r = 50$ bagian"],
+                desc: "Langkah 1: Tambahkan kembali bagian rusak $\\implies 5r = 40 + 10 = 50$. Langkah 2: Bagi dengan 5 $\\implies r = 50 \\div 5 = 10$!"
+            },
+            {
+                id: 24,
+                title: "Balon Warna-warni",
+                story: "Sebanyak <span class='text-pink-600 font-extrabold text-lg'>w</span> balon dibagi rata kepada <span class='text-purple-600 font-extrabold text-lg'>8</span> anak. Setelah itu, masing-masing anak meletuskan <span class='text-rose-600 font-extrabold text-lg'>2</span> balon sehingga sisa balon tiap anak tinggal <span class='text-emerald-600 font-extrabold text-lg'>5</span> balon. Berapa total balon semula?",
+                equation: "$\\frac{w}{8} - 2 = 5$",
+                correct: "$w = 56$ balon",
+                options: ["$w = 56$ balon", "$w = 40$ balon", "$w = 24$ balon", "$w = 48$ balon"],
+                desc: "Langkah 1: Kembalikan balon meletus $\\implies \\frac{w}{8} = 5 + 2 = 7$. Langkah 2: Kalikan dengan pembagi 8 $\\implies w = 7 \\times 8 = 56$!"
+            },
+            {
+                id: 25,
+                title: "Tabungan Hari Raya",
+                story: "Ahmad menabung dalam <span class='text-purple-600 font-extrabold text-lg'>6</span> amplop merah <span class='text-pink-600 font-extrabold text-lg'>m</span> sama rata. Setelah ia diberi tambahan uang oleh ayah sebesar <span class='text-amber-600 font-extrabold text-lg'>Rp15.000</span>, total tabungannya sekarang adalah <span class='text-emerald-600 font-extrabold text-lg'>Rp75.000</span>. Berapa isi masing-masing amplop merah?",
+                equation: "$6m + 15.000 = 75.000$",
+                correct: "Rp10.000",
+                options: ["Rp10.000", "Rp15.000", "Rp12.000", "Rp8.000"],
+                desc: "Langkah 1: Kurangi dengan uang tambahan ayah $\\implies 6m = 75.000 - 15.000 = 60.000$. Langkah 2: Bagi dengan 6 amplop $\\implies m = 60.000 \\div 6 = 10.000$!"
+            },
+            {
+                id: 26,
+                title: "Pembagian Susu Kotak",
+                story: "Satu kardus besar susu kotak <span class='text-pink-600 font-extrabold text-lg'>s</span> dibagikan kepada <span class='text-purple-600 font-extrabold text-lg'>7</span> kelompok belajar. Setiap kelompok mengambil jatahnya dan menambah <span class='text-amber-600 font-extrabold text-lg'>3</span> susu dari lemari cadangan, sehingga total susu tiap kelompok adalah <span class='text-emerald-600 font-extrabold text-lg'>9</span> kotak. Berapa isi susu di kardus besar mula-mula?",
+                equation: "$\\frac{s}{7} + 3 = 9$",
+                correct: "$s = 42$ kotak",
+                options: ["$s = 42$ kotak", "$s = 84$ kotak", "$s = 21$ kotak", "$s = 49$ kotak"],
+                desc: "Langkah 1: Cari jatah susu asli dari kardus $\\implies \\frac{s}{7} = 9 - 3 = 6$. Langkah 2: Kalikan $\\implies s = 6 \\times 7 = 42$!"
+            },
+            {
+                id: 27,
+                title: "Pengumpul Kerikil Hias",
+                story: "Lina mengumpulkan <span class='text-purple-600 font-extrabold text-lg'>8</span> botol kerikil hias <span class='text-pink-600 font-extrabold text-lg'>h</span>. Namun, ada <span class='text-rose-600 font-extrabold text-lg'>12</span> kerikil hias yang pecah dan harus dibuang. Sekarang kerikil hias yang utuh tersisa <span class='text-emerald-600 font-extrabold text-lg'>52</span> buah. Berapa isi kerikil hias per botol?",
+                equation: "$8h - 12 = 52$",
+                correct: "$h = 8$ kerikil",
+                options: ["$h = 8$ kerikil", "$h = 5$ kerikil", "$h = 10$ kerikil", "$h = 6$ kerikil"],
+                desc: "Langkah 1: Tambahkan kembali yang pecah $\\implies 8h = 52 + 12 = 64$. Langkah 2: Bagi dengan 8 botol $\\implies h = 64 \\div 8 = 8$!"
+            },
+            {
+                id: 28,
+                title: "Pembagian Permen Karet",
+                story: "Satu toples permen karet <span class='text-pink-600 font-extrabold text-lg'>p</span> dibagi rata ke dalam <span class='text-purple-600 font-extrabold text-lg'>9</span> kantong kecil. Jika adik memakan <span class='text-rose-600 font-extrabold text-lg'>4</span> permen dari salah satu kantong, sisa permen di kantong tersebut tinggal <span class='text-emerald-600 font-extrabold text-lg'>2</span> buah. Berapa total permen karet di toples semula?",
+                equation: "$\\frac{p}{9} - 4 = 2$",
+                correct: "$p = 54$ permen",
+                options: ["$p = 54$ permen", "$p = 18$ permen", "$p = 45$ permen", "$p = 36$ permen"],
+                desc: "Langkah 1: Hitung isi kantong sebelum dimakan adik $\\implies \\frac{p}{9} = 2 + 4 = 6$. Langkah 2: Kalikan $\\implies p = 6 \\times 9 = 54$!"
+            },
+            {
+                id: 29,
+                title: "Paket Hemat Kue Nastar",
+                story: "Kakak menyusun <span class='text-purple-600 font-extrabold text-lg'>5</span> toples nastar <span class='text-pink-600 font-extrabold text-lg'>n</span> dan menyisakan <span class='text-amber-600 font-extrabold text-lg'>8</span> nastar di luar toples. Setelah diletakkan di meja makan, total seluruh nastar Kakak adalah <span class='text-emerald-600 font-extrabold text-lg'>68</span> buah. Berapa isi nastar per toples?",
+                equation: "$5n + 8 = 68$",
+                correct: "$n = 12$ nastar",
+                options: ["$n = 12$ nastar", "$n = 10$ nastar", "$n = 15$ nastar", "$n = 60$ nastar"],
+                desc: "Langkah 1: Kurangi nastar di luar toples $\\implies 5n = 68 - 8 = 60$. Langkah 2: Bagi $\\implies n = 60 \\div 5 = 12$!"
+            },
+            {
+                id: 30,
+                title: "Cyber Double Defense Boss",
+                story: "Untuk membuka pintu lab rahasia terdalam, pecahkan enkripsi ganda ini: Jika <span class='text-purple-600 font-extrabold text-lg'>3</span><span class='text-pink-600 font-extrabold text-lg'>x</span> - <span class='text-rose-600 font-extrabold text-lg'>4</span> = <span class='text-emerald-600 font-extrabold text-lg'>20</span> dan <span class='text-pink-600 font-extrabold text-lg'>y</span> dibagi <span class='text-purple-600 font-extrabold text-lg'>2</span> ditambah <span class='text-amber-600 font-extrabold text-lg'>5</span> = <span class='text-emerald-600 font-extrabold text-lg'>11</span>, berapakah nilai akhir dari pertambahan <span class='text-purple-600 font-extrabold text-lg'>(x + y)</span>?",
+                equation: "$3x - 4 = 20$ dan $\\frac{y}{2} + 5 = 11$",
+                correct: "$20$",
+                options: ["$20$", "$16$", "$12$", "$24$"],
+                desc: "Hitung $x \\implies 3x = 24 \\implies x = 8$. Hitung $y \\implies \\frac{y}{2} = 6 \\implies y = 12$. Maka $x + y = 8 + 12 = 20$!"
+            }
+        ];
+
+        // Dynamically inject quiz slides into container
+        function generateQuizSlides() {
+            const container = document.getElementById('quiz-question-container');
+            container.innerHTML = "";
+
+            QuizQuestions.forEach((q, idx) => {
+                const slideNum = q.id + 1; // Quiz starts directly at slide 2
+                const div = document.createElement('div');
+                div.id = `slide-${slideNum}`;
+                div.className = "slide-item hidden space-y-6";
+
+                div.innerHTML = `
+                    <div class="text-center space-y-2">
+                        <span class="text-purple-950 font-black bg-pink-300 px-3 py-1 rounded-full border-2 border-slate-900 text-xs">Sandi Misi ${q.id} dari 30</span>
+                        <h3 class="text-2xl font-black text-purple-950">${q.title}</h3>
+                    </div>
+                    <p class="text-center text-sm md:text-base text-slate-700 font-bold max-w-2xl mx-auto leading-relaxed">${q.story}</p>
+                    <div class="bg-purple-50 p-5 rounded-2xl border-2 border-slate-900 max-w-md mx-auto space-y-4 comic-shadow">
+                        <div class="text-center text-3xl font-black text-purple-950 bg-white py-3 rounded-xl border-2 border-slate-900">
+                            ${q.equation}
+                        </div>
+                        <div id="options-container-${slideNum}" class="space-y-2">
+                            <!-- Shuffled options will load here -->
+                        </div>
+                        <p id="practice-ans-${q.id}" class="text-center font-black text-sm h-12 pt-2 transition-all duration-300"></p>
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        // Initialize and generate side navigation drawer with all slides
+        function initSidebarAndMap() {
+            const container = document.getElementById('sidebar-mission-list');
+            container.innerHTML = "";
+
+            const sectionTitles = {
+                1: "Gerbang Akademi Agen X"
+            };
+
+            // Inject 30 quiz questions titles
+            QuizQuestions.forEach(q => {
+                sectionTitles[q.id + 1] = `Misi ${q.id}: ${q.title}`;
+            });
+
+            // Ending titles
+            sectionTitles[32] = "Evaluasi Perasaan";
+            sectionTitles[33] = "Gelar Lencana Kehormatan";
+            sectionTitles[34] = "Sertifikat Kelulusan";
+
+            for (let i = 1; i <= GameState.totalSlides; i++) {
+                const btn = document.createElement('button');
+                btn.className = `w-full text-left p-3 rounded-xl border-2 flex items-center justify-between text-xs transition duration-200 ${
+                    GameState.currentSlide === i 
+                    ? 'bg-purple-300 border-slate-900 text-slate-900 font-black shadow-sm' 
+                    : 'bg-white border-slate-200 text-slate-500 hover:border-slate-400 font-bold'
+                }`;
+                btn.onclick = () => {
+                    goToSlide(i);
+                    toggleSidebar(false);
+                };
+
+                let label = sectionTitles[i] || `Misi ${i}`;
+                let statusIcon = "🔒";
+                if (i === 1 || GameState.completedSlides.has(i) || i <= GameState.currentSlide) {
+                    statusIcon = "✅";
+                }
+                
+                btn.innerHTML = `
+                    <span class="flex items-center gap-2">
+                        <span class="font-extrabold text-slate-400">${i}.</span>
+                        <span>${label}</span>
+                    </span>
+                    <span>${statusIcon}</span>
+                `;
+                container.appendChild(btn);
+            }
+        }
+
+        function toggleSidebar(forcedState) {
+            SoundFX.playClick();
+            const sb = document.getElementById('sidebar');
+            if (forcedState !== undefined) {
+                if (forcedState) sb.classList.remove('-translate-x-full');
+                else sb.classList.add('-translate-x-full');
+            } else {
+                sb.classList.toggle('-translate-x-full');
+            }
+        }
+
+        function selectAvatar(id, emoji) {
+            SoundFX.playClick();
+            GameState.avatar = id;
+            document.getElementById('hud-avatar').textContent = emoji;
+            
+            document.querySelectorAll('.avatar-opt').forEach(btn => {
+                btn.classList.remove('bg-purple-300');
+            });
+            event.currentTarget.classList.add('bg-purple-300');
+            showNotification(`Asisten penyelidikan berubah menjadi ${emoji}!`, "success");
+        }
+
+        function goToSlide(targetNum) {
+            if (targetNum < 1 || targetNum > GameState.totalSlides) return;
+
+            // Save player name if on Slide 1
+            if (GameState.currentSlide === 1) {
+                const nameInp = document.getElementById('player-name-input').value.trim();
+                if (nameInp) {
+                    GameState.playerName = nameInp;
+                    document.getElementById('hud-name').textContent = nameInp;
+                    document.getElementById('cert-name').textContent = nameInp;
+                }
+            }
+
+            // Progression lock: Quiz constraint logic
+            if (targetNum > GameState.currentSlide) {
+                const currentQuestionIdx = GameState.currentSlide - 1; // Check if on a quiz slide (2 to 31)
+                if (currentQuestionIdx >= 1 && currentQuestionIdx <= 30) {
+                    if (!GameState.completedSlides.has(GameState.currentSlide)) {
+                        showNotification(`Pecahkan Sandi Misi ${currentQuestionIdx} untuk melanjutkan petualangan!`, "error");
+                        SoundFX.playWrong();
+                        return;
+                    }
+                }
+            }
+
+            // Slide Transition
+            const currentEl = document.getElementById(`slide-${GameState.currentSlide}`);
+            if (currentEl) currentEl.classList.add('hidden');
+
+            GameState.currentSlide = targetNum;
+            const nextEl = document.getElementById(`slide-${GameState.currentSlide}`);
+            if (nextEl) {
+                nextEl.classList.remove('hidden');
+                setTimeout(() => {
+                    renderMath(nextEl);
+                }, 30);
+            }
+
+            // Update HUD
+            document.getElementById('hud-slide-num').textContent = GameState.currentSlide;
+            const progressPct = (GameState.currentSlide / GameState.totalSlides) * 100;
+            document.getElementById('main-progress-bar').style.width = `${progressPct}%`;
+
+            // Back button opacity limit
+            document.getElementById('btn-prev').style.opacity = GameState.currentSlide === 1 ? '0.3' : '1';
+            
+            if (GameState.currentSlide === GameState.totalSlides) {
+                document.getElementById('btn-next').innerHTML = `Selesai <i class="fa-solid fa-flag-checkered"></i>`;
+                SoundFX.playFanfare();
+            } else {
+                document.getElementById('btn-next').innerHTML = `Misi Lanjut <i class="fa-solid fa-arrow-right"></i>`;
+            }
+
+            // Shuffle & Load options if on a quiz slide
+            const quizIndex = GameState.currentSlide - 2;
+            if (quizIndex >= 0 && quizIndex < QuizQuestions.length) {
+                loadChallengeButtons(GameState.currentSlide, QuizQuestions[quizIndex]);
+            }
+
+            initSidebarAndMap();
+            SoundFX.playClick();
+        }
+
+        function navigateSlide(direction) {
+            goToSlide(GameState.currentSlide + direction);
+        }
+
+        // --- SHUFFLE OPTIONS ENGINE (Fisher-Yates) ---
+        function loadChallengeButtons(slideNum, questionObj) {
+            const container = document.getElementById(`options-container-${slideNum}`);
+            if (!container || container.children.length > 0) return; // Prevent duplicating options
+
+            const shuffledOptions = [...questionObj.options];
+            for (let i = shuffledOptions.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffledOptions[i], shuffledOptions[j]] = [shuffledOptions[j], shuffledOptions[i]];
+            }
+
+            const colors = [
+                "bg-sky-100 hover:bg-sky-200 border-sky-400",
+                "bg-purple-100 hover:bg-purple-200 border-purple-400",
+                "bg-amber-100 hover:bg-amber-200 border-amber-400",
+                "bg-emerald-100 hover:bg-emerald-200 border-emerald-400"
+            ];
+
+            shuffledOptions.forEach((opt, idx) => {
+                const btn = document.createElement('button');
+                btn.className = `w-full text-left p-3.5 rounded-xl border-2 font-black text-sm comic-shadow-sm comic-btn-active transition-all ${colors[idx % colors.length]}`;
+                btn.textContent = opt;
+                btn.onclick = () => {
+                    const ansLabel = document.getElementById(`practice-ans-${questionObj.id}`);
+                    if (opt === questionObj.correct) {
+                        SoundFX.playSuccess();
+                        ansLabel.innerHTML = `🎯 <strong>Hebat! Jawabannya Akurat!</strong> <br><small class="text-slate-500 font-bold">${questionObj.desc}</small>`;
+                        ansLabel.className = "text-center font-black text-xs text-emerald-600";
+                        
+                        GameState.completedSlides.add(slideNum);
+                        addScore(100);
+                        initSidebarAndMap();
+                        
+                        Array.from(container.children).forEach(b => {
+                            b.disabled = true;
+                            if (b.textContent === opt) {
+                                b.className = "w-full text-left p-3.5 rounded-xl border-2 font-black text-sm bg-emerald-300 border-emerald-500";
+                            } else {
+                                b.className = "w-full text-left p-3.5 rounded-xl border-2 font-black text-sm bg-slate-100 border-slate-300 opacity-50";
+                            }
+                        });
+                        // Triggers LaTeX render on the success feedback
+                        renderMath(ansLabel);
+                    } else {
+                        SoundFX.playWrong();
+                        ansLabel.innerHTML = `❌ <strong>Sandi Belum Tepat!</strong> <br><small class="text-slate-500 font-bold">Lacak ulang kebalikan operasi ruas tersebut!</small>`;
+                        ansLabel.className = "text-center font-black text-xs text-rose-500 animate-shake";
+                        btn.className = "w-full text-left p-3.5 rounded-xl border-2 font-black text-sm bg-rose-100 border-rose-300 opacity-50 cursor-not-allowed";
+                        btn.disabled = true;
+                    }
+                };
+                container.appendChild(btn);
+                renderMath(btn);
+            });
+        }
+
+        function selectFeeling(feel, emoji) {
+            SoundFX.playSuccess();
+            const msg = document.getElementById('feel-msg');
+            document.querySelectorAll('.feel-btn').forEach(b => b.classList.remove('bg-purple-300'));
+            event.currentTarget.classList.add('bg-purple-300');
+            if (feel === 'hebat') {
+                msg.textContent = "Keren sekali! Kamu sudah setara dengan agen matematika tingkat olimpiade!";
+            } else if (feel === 'paham') {
+                msg.textContent = "Bagus sekali! Pemahaman aljabar perkalian & pembagianmu kini sangat mantap.";
+            } else {
+                msg.textContent = "Jangan khawatir, kamu bisa membuka kompas navigasi di kiri untuk mengulang misi!";
+            }
+        }
+
+        function selectBadge(level) {
+            SoundFX.playSuccess();
+            const msg = document.getElementById('badge-msg');
+            document.querySelectorAll('.badge-card').forEach(c => c.classList.remove('bg-purple-200', 'border-slate-900'));
+            event.currentTarget.classList.add('bg-purple-200', 'border-slate-900');
+            msg.textContent = `Pangkat dikunci! Kamu resmi dilantik menjadi ${level === 'komandan' ? 'Ahli Kriptografi Aljabar' : level === 'inspektur' ? 'Inspektur Agen X' : 'Detektif Aljabar Muda'}!`;
+        }
+
+        function addScore(pts) {
+            GameState.score += pts;
+            document.getElementById('hud-score').innerHTML = `<i class="fa-solid fa-shield-halved animate-bounce text-purple-600"></i> ${GameState.score} XP`;
+        }
+
+        // Initialize execution on load
+        window.onload = function() {
+            generateQuizSlides();
+            initSidebarAndMap();
+            SoundFX.init();
+            renderMath();
+        }
+    </script>
+</body>
+</html>
