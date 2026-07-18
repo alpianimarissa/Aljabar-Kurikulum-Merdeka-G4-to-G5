@@ -1,0 +1,1449 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Akademi Detektif KUKABATAKU - Divisi Sandi Ganda Agen X (Aljabar 2 Langkah)</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Fredoka & Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- KaTeX for beautiful math notation -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+    
+    <style>
+        body {
+            font-family: 'Fredoka', 'Poppins', sans-serif;
+        }
+        .math-font {
+            font-family: 'Poppins', sans-serif;
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #fff7ed;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #6366f1;
+            border-radius: 6px;
+            border: 2px solid #fff7ed;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #4f46e5;
+        }
+        /* Custom animations */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(1deg); }
+        }
+        .animate-float {
+            animation: float 4s ease-in-out infinite;
+        }
+        @keyframes glow-indigo {
+            0%, 100% { box-shadow: 0 0 10px rgba(99, 102, 241, 0.5); }
+            50% { box-shadow: 0 0 25px rgba(99, 102, 241, 0.9); }
+        }
+        .glow-indigo {
+            animation: glow-indigo 2s infinite;
+        }
+        /* Comic book style styling */
+        .comic-shadow {
+            box-shadow: 6px 6px 0px 0px #1e293b;
+        }
+        .comic-shadow-sm {
+            box-shadow: 4px 4px 0px 0px #1e293b;
+        }
+        .comic-btn-active:active {
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0px 0px #1e293b;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-[#faf5ff] via-[#f0f9ff] to-[#ecfdf5] text-[#1e293b] min-h-screen flex flex-col justify-between overflow-x-hidden">
+
+    <script>
+        // Fun synthesized sound effects (Web Audio API)
+        const SoundFX = {
+            ctx: null,
+            init() {
+                if (!this.ctx) {
+                    this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+                }
+            },
+            playClick() {
+                this.init();
+                let osc = this.ctx.createOscillator();
+                let gain = this.ctx.createGain();
+                osc.connect(gain);
+                gain.connect(this.ctx.destination);
+                osc.frequency.setValueAtTime(580, this.ctx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(1160, this.ctx.currentTime + 0.08);
+                gain.gain.setValueAtTime(0.08, this.ctx.currentTime);
+                gain.gain.linearRampToValueAtTime(0.01, this.ctx.currentTime + 0.08);
+                osc.start();
+                osc.stop(this.ctx.currentTime + 0.1);
+            },
+            playSuccess() {
+                this.init();
+                let now = this.ctx.currentTime;
+                let notes = [523.25, 659.25, 783.99, 1046.50]; // C5, E5, G5, C6
+                notes.forEach((freq, idx) => {
+                    let osc = this.ctx.createOscillator();
+                    let gain = this.ctx.createGain();
+                    osc.connect(gain);
+                    gain.connect(this.ctx.destination);
+                    osc.frequency.setValueAtTime(freq, now + idx * 0.06);
+                    gain.gain.setValueAtTime(0.1, now + idx * 0.06);
+                    gain.gain.linearRampToValueAtTime(0.01, now + idx * 0.06 + 0.1);
+                    osc.start(now + idx * 0.06);
+                    osc.stop(now + idx * 0.06 + 0.15);
+                });
+            },
+            playWrong() {
+                this.init();
+                let osc = this.ctx.createOscillator();
+                let gain = this.ctx.createGain();
+                osc.connect(gain);
+                gain.connect(this.ctx.destination);
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(180, this.ctx.currentTime);
+                osc.frequency.linearRampToValueAtTime(90, this.ctx.currentTime + 0.3);
+                gain.gain.setValueAtTime(0.12, this.ctx.currentTime);
+                gain.gain.linearRampToValueAtTime(0.01, this.ctx.currentTime + 0.3);
+                osc.start();
+                osc.stop(this.ctx.currentTime + 0.3);
+            },
+            playFanfare() {
+                this.init();
+                let now = this.ctx.currentTime;
+                let chords = [261.63, 329.63, 392.00, 523.25, 659.25, 783.99];
+                chords.forEach((freq, idx) => {
+                    let osc = this.ctx.createOscillator();
+                    let gain = this.ctx.createGain();
+                    osc.connect(gain);
+                    gain.connect(this.ctx.destination);
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(freq, now);
+                    osc.frequency.exponentialRampToValueAtTime(freq * 2, now + 0.8);
+                    gain.gain.setValueAtTime(0.08, now);
+                    gain.gain.linearRampToValueAtTime(0.01, now + 0.8);
+                    osc.start(now);
+                    osc.stop(now + 0.8);
+                });
+            }
+        };
+
+        // Main game states
+        const GameState = {
+            playerName: "Detektif Hebat",
+            avatar: "👩‍🚀",
+            currentSlide: 1,
+            totalSlides: 35,
+            score: 0,
+            scaleLeft: 2, // 2x
+            scaleLeftConst: 6, // + 6
+            scaleRight: 16, // = 16
+            scaleActiveStep: 1, // 1: Pindahkan konstanta, 2: Bagi koefisien, 3: Selesai
+            completedSlides: new Set()
+        };
+
+        // Math Renderer helper
+        function renderMath(element) {
+            if (window.renderMathInElement) {
+                renderMathInElement(element || document.body, {
+                    delimiters: [
+                        {left: '$$', right: '$$', display: true},
+                        {left: '$', right: '$', display: false}
+                    ],
+                    throwOnError: false
+                });
+            }
+        }
+    </script>
+
+    <!-- Header HUD -->
+    <header class="bg-white border-b-4 border-indigo-500 px-4 py-3 sticky top-0 z-50 shadow-sm">
+        <div class="max-w-6xl mx-auto flex flex-wrap items-center justify-between gap-3">
+            <div class="flex items-center gap-3">
+                <button onclick="toggleSidebar()" class="bg-indigo-500 hover:bg-indigo-600 text-white p-2.5 rounded-xl border-2 border-slate-900 comic-shadow-sm comic-btn-active transition-all" title="Buka Peta Misi">
+                    <i class="fa-solid fa-map-location-dot text-lg"></i>
+                </button>
+                <div class="flex items-center gap-2">
+                    <span class="text-3xl animate-bounce">🛰️</span>
+                    <div>
+                        <h1 class="font-black text-xl text-indigo-950 leading-none tracking-wide">SANDI GANDA DETEKTIF</h1>
+                        <span class="text-xs text-slate-500 font-bold">Misi Penguatan Aljabar 2 Langkah</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-4 bg-indigo-50 px-4 py-2 rounded-2xl border-2 border-slate-900 comic-shadow-sm">
+                <div class="flex items-center gap-2">
+                    <div id="hud-avatar" class="w-8 h-8 rounded-full bg-indigo-200 flex items-center justify-center text-lg border-2 border-slate-900">👩‍🚀</div>
+                    <span id="hud-name" class="text-sm font-bold text-indigo-950">Detektif</span>
+                </div>
+                <div class="h-6 w-[2px] bg-slate-900"></div>
+                <div class="flex items-center gap-1 text-indigo-700 font-extrabold text-sm">
+                    <i class="fa-solid fa-shield-halved animate-bounce text-indigo-600"></i>
+                    <span id="hud-score">0 XP</span>
+                </div>
+                <div class="h-6 w-[2px] bg-slate-900"></div>
+                <div class="text-xs text-indigo-950 font-black bg-white px-3 py-1 rounded-xl border border-slate-900">
+                    Misi <span id="hud-slide-num">1</span>/35
+                </div>
+            </div>
+        </div>
+        <!-- Progress Bar -->
+        <div class="max-w-6xl mx-auto w-full bg-slate-100 h-3 mt-3 rounded-full overflow-hidden border-2 border-slate-900">
+            <div id="main-progress-bar" class="bg-gradient-to-r from-indigo-500 via-pink-500 to-emerald-400 h-full transition-all duration-300" style="width: 2.85%"></div>
+        </div>
+    </header>
+
+    <!-- Side Map Drawer (All 35 Pages Quick Selection) -->
+    <div id="sidebar" class="fixed left-0 top-0 bottom-0 w-80 bg-indigo-50 border-r-4 border-slate-900 z-[100] transform -translate-x-full transition-transform duration-300 flex flex-col shadow-2xl">
+        <div class="p-4 border-b-2 border-slate-900 flex justify-between items-center bg-indigo-200">
+            <div class="flex items-center gap-2 text-indigo-950 font-extrabold text-lg">
+                <i class="fa-solid fa-compass text-indigo-700"></i>
+                <span>Sandi Navigasi Misi</span>
+            </div>
+            <button onclick="toggleSidebar(false)" class="text-slate-800 hover:text-red-500 transition-colors">
+                <i class="fa-solid fa-xmark text-2xl"></i>
+            </button>
+        </div>
+        <div class="flex-1 overflow-y-auto p-4 space-y-2 bg-gradient-to-b from-indigo-50 to-purple-50" id="sidebar-mission-list">
+            <!-- Populated dynamically in script -->
+        </div>
+        <div class="p-4 border-t-2 border-slate-900 bg-indigo-200 text-center text-xs text-indigo-950 font-bold">
+            Modul Aljabar Spesialis • Akademi KUKABATAKU
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <main class="flex-1 max-w-5xl w-full mx-auto p-4 md:p-6 flex flex-col justify-center items-center">
+        <div class="w-full bg-white border-4 border-slate-900 rounded-3xl p-6 md:p-8 comic-shadow relative min-h-[530px] flex flex-col justify-between">
+            
+            <div id="slides-viewport" class="w-full h-full flex-1">
+
+                <!-- SLIDE 1: Welcome & Setup -->
+                <div id="slide-1" class="slide-item space-y-6">
+                    <div class="text-center space-y-3">
+                        <span class="text-indigo-950 font-black uppercase tracking-widest text-xs bg-indigo-300 px-4 py-1.5 rounded-full border-2 border-slate-900 glow-indigo">Misi Akademi Detektif</span>
+                        <h2 class="text-3xl md:text-5xl font-black bg-gradient-to-r from-indigo-600 via-pink-600 to-emerald-500 bg-clip-text text-transparent drop-shadow-sm">Sandi Ganda Aljabar</h2>
+                        <p class="text-slate-600 max-w-lg mx-auto text-sm md:text-base font-medium">Selamat datang kembali Agen Cerdas! Kemarin kamu sudah membabat habis kuis satu langkah. Kali ini, kita akan melompat ke **Aljabar 2 Langkah** yang menantang pikiran cepatmu!</p>
+                    </div>
+
+                    <div class="flex justify-center my-4 animate-float">
+                        <svg class="w-36 h-36" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="100" cy="100" r="85" fill="#e0f2fe" stroke="#1e293b" stroke-width="5"/>
+                            <path d="M60,110 L140,110 M100,110 L100,160 M70,160 L130,160" stroke="#1e293b" stroke-width="6" stroke-linecap="round"/>
+                            <circle cx="60" cy="110" r="15" fill="#f87171" stroke="#1e293b" stroke-width="3"/>
+                            <circle cx="140" cy="110" r="15" fill="#3b82f6" stroke="#1e293b" stroke-width="3"/>
+                            <text x="54" y="115" font-family="Fredoka" font-size="14" font-weight="900" fill="white">x</text>
+                            <text x="135" y="115" font-family="Fredoka" font-size="14" font-weight="900" fill="white">y</text>
+                        </svg>
+                    </div>
+
+                    <div class="max-w-sm mx-auto space-y-3 bg-indigo-50 p-5 rounded-2xl border-2 border-slate-900 comic-shadow-sm">
+                        <label class="block text-xs text-indigo-950 font-black uppercase tracking-wider">Isi Sandi Kode Panggilanmu</label>
+                        <input type="text" id="player-name-input" placeholder="Masukkan Nama Detektif..." value="Detektif Hebat" class="w-full px-4 py-2 rounded-xl bg-white border-2 border-slate-900 text-slate-800 text-center font-bold focus:outline-none focus:ring-2 focus:ring-indigo-400">
+                        
+                        <div class="pt-1">
+                            <label class="block text-xs text-indigo-950 font-black uppercase tracking-wider mb-2">Pilih Jas Sobat Detektif</label>
+                            <div class="grid grid-cols-4 gap-2">
+                                <button onclick="selectAvatar('👩‍🚀', '👩‍🚀')" class="avatar-opt p-2 bg-indigo-300 border-2 border-slate-900 rounded-xl text-2xl hover:bg-indigo-200 comic-btn-active transition-all">👩‍🚀</button>
+                                <button onclick="selectAvatar('👨‍🚀', '👨‍🚀')" class="avatar-opt p-2 bg-white border-2 border-slate-900 rounded-xl text-2xl hover:bg-indigo-200 comic-btn-active transition-all">👨‍🚀</button>
+                                <button onclick="selectAvatar('👾', '👾')" class="avatar-opt p-2 bg-white border-2 border-slate-900 rounded-xl text-2xl hover:bg-indigo-200 comic-btn-active transition-all">👾</button>
+                                <button onclick="selectAvatar('🤖', '🤖')" class="avatar-opt p-2 bg-white border-2 border-slate-900 rounded-xl text-2xl hover:bg-indigo-200 comic-btn-active transition-all">🤖</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SLIDE 2: Target & Tujuan Misi -->
+                <div id="slide-2" class="slide-item hidden space-y-6">
+                    <div class="text-center space-y-2">
+                        <span class="text-white font-black uppercase tracking-widest text-xs bg-indigo-600 px-3 py-1 rounded-full border-2 border-slate-900">Target Belajar</span>
+                        <h3 class="text-2xl md:text-3xl font-black text-indigo-950">Misi Khusus Sandi Ganda</h3>
+                    </div>
+                    <div class="grid md:grid-cols-2 gap-6 items-center">
+                        <div class="space-y-4 font-medium text-slate-700 text-sm md:text-base leading-relaxed">
+                            <p>
+                                Detektif handal mampu melacak silsilah hitungan. Kali ini kita memiliki target khusus:
+                            </p>
+                            <ul class="space-y-2 list-disc list-inside text-slate-600 font-bold">
+                                <li>Melatih insting <strong class="text-pink-600">Aljabar 1 Langkah</strong> sebagai pemanasan wajib.</li>
+                                <li>Membongkar sandi <strong class="text-indigo-600">Aljabar 2 Langkah</strong> tipe penjumlahan & pengurangan ($Ax \pm B = C$).</li>
+                                <li>Menjinakkan bentuk <strong class="text-emerald-600">Aljabar Pecahan Ganda</strong> ($\frac{x}{A} \pm B = C$).</li>
+                                <li>Mengenal pintu masuk <strong class="text-amber-600">Sifat Distributif</strong> sederhana sebagai tantangan ekstra!</li>
+                            </ul>
+                        </div>
+                        <div class="bg-indigo-50 p-5 rounded-2xl border-2 border-slate-900 comic-shadow-sm text-center space-y-2">
+                            <span class="text-6xl block transform hover:scale-110 transition-transform duration-200">🧪</span>
+                            <div class="bg-white border-2 border-slate-900 text-indigo-800 p-3 rounded-xl text-xs font-bold italic shadow-sm">
+                                "Sandi ganda membutuhkan penyelesaian terstruktur. Usir angka di baris luar dulu sebelum membagi variabel!" - Dr. Kukabataku
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SLIDE 3: Warm-up 1 (1-Step Addition) -->
+                <div id="slide-3" class="slide-item hidden space-y-6">
+                    <div class="text-center space-y-2">
+                        <span class="text-slate-900 font-black bg-pink-300 px-3 py-1 rounded-full border-2 border-slate-900 text-xs">Pemanasan Sandi 1</span>
+                        <h3 class="text-2xl md:text-3xl font-black text-slate-900">Misteri Kotak Rahasia $x$</h3>
+                    </div>
+                    <p class="text-center text-sm md:text-base text-slate-700 font-bold">Sebuah kotak koin $x$ ditambah 8 koin menghasilkan total 15 koin. Berapa isi kotak $x$?</p>
+                    <div class="bg-indigo-50 p-6 rounded-2xl border-2 border-slate-900 comic-shadow max-w-md mx-auto space-y-4">
+                        <div class="text-center text-3xl font-black text-indigo-950 bg-white py-3 rounded-xl border-2 border-slate-900">
+                            $x + 8 = 15$
+                        </div>
+                        <div class="grid grid-cols-3 gap-2">
+                            <button onclick="checkWarmup(3, 5, false, this)" class="p-3 bg-white hover:bg-indigo-100 border-2 border-slate-900 rounded-xl font-black comic-btn-active">5</button>
+                            <button onclick="checkWarmup(3, 7, true, this)" class="p-3 bg-white hover:bg-indigo-100 border-2 border-slate-900 rounded-xl font-black comic-btn-active">7</button>
+                            <button onclick="checkWarmup(3, 23, false, this)" class="p-3 bg-white hover:bg-indigo-100 border-2 border-slate-900 rounded-xl font-black comic-btn-active">23</button>
+                        </div>
+                        <p id="warmup-ans-3" class="text-center font-bold text-sm h-10 pt-2"></p>
+                    </div>
+                </div>
+
+                <!-- SLIDE 4: Warm-up 2 (1-Step Subtraction) -->
+                <div id="slide-4" class="slide-item hidden space-y-6">
+                    <div class="text-center space-y-2">
+                        <span class="text-slate-900 font-black bg-pink-300 px-3 py-1 rounded-full border-2 border-slate-900 text-xs">Pemanasan Sandi 2</span>
+                        <h3 class="text-2xl md:text-3xl font-black text-slate-900">Misteri Kunci Keluar</h3>
+                    </div>
+                    <p class="text-center text-sm md:text-base text-slate-700 font-bold">Kotak ajaib $y$ dikurangi 6 kunci menghasilkan tepat 12 kunci di atas meja. Berapakah nilai $y$?</p>
+                    <div class="bg-indigo-50 p-6 rounded-2xl border-2 border-slate-900 comic-shadow max-w-md mx-auto space-y-4">
+                        <div class="text-center text-3xl font-black text-indigo-950 bg-white py-3 rounded-xl border-2 border-slate-900">
+                            $y - 6 = 12$
+                        </div>
+                        <div class="grid grid-cols-3 gap-2">
+                            <button onclick="checkWarmup(4, 6, false, this)" class="p-3 bg-white hover:bg-indigo-100 border-2 border-slate-900 rounded-xl font-black comic-btn-active">6</button>
+                            <button onclick="checkWarmup(4, 18, true, this)" class="p-3 bg-white hover:bg-indigo-100 border-2 border-slate-900 rounded-xl font-black comic-btn-active">18</button>
+                            <button onclick="checkWarmup(4, 20, false, this)" class="p-3 bg-white hover:bg-indigo-100 border-2 border-slate-900 rounded-xl font-black comic-btn-active">20</button>
+                        </div>
+                        <p id="warmup-ans-4" class="text-center font-bold text-sm h-10 pt-2"></p>
+                    </div>
+                </div>
+
+                <!-- SLIDE 5: Warm-up 3 (1-Step Multiplication) -->
+                <div id="slide-5" class="slide-item hidden space-y-6">
+                    <div class="text-center space-y-2">
+                        <span class="text-slate-900 font-black bg-pink-300 px-3 py-1 rounded-full border-2 border-slate-900 text-xs">Pemanasan Sandi 3</span>
+                        <h3 class="text-2xl md:text-3xl font-black text-slate-900">Tumpukan Kantong Kelereng</h3>
+                    </div>
+                    <p class="text-center text-sm md:text-base text-slate-700 font-bold">Empat kantong kelereng identik $a$ ditumpuk dan berisi total 20 kelereng. Berapa isi 1 kantong $a$?</p>
+                    <div class="bg-indigo-50 p-6 rounded-2xl border-2 border-slate-900 comic-shadow max-w-md mx-auto space-y-4">
+                        <div class="text-center text-3xl font-black text-indigo-950 bg-white py-3 rounded-xl border-2 border-slate-900">
+                            $4a = 20$
+                        </div>
+                        <div class="grid grid-cols-3 gap-2">
+                            <button onclick="checkWarmup(5, 5, true, this)" class="p-3 bg-white hover:bg-indigo-100 border-2 border-slate-900 rounded-xl font-black comic-btn-active">5</button>
+                            <button onclick="checkWarmup(5, 16, false, this)" class="p-3 bg-white hover:bg-indigo-100 border-2 border-slate-900 rounded-xl font-black comic-btn-active">16</button>
+                            <button onclick="checkWarmup(5, 80, false, this)" class="p-3 bg-white hover:bg-indigo-100 border-2 border-slate-900 rounded-xl font-black comic-btn-active">80</button>
+                        </div>
+                        <p id="warmup-ans-5" class="text-center font-bold text-sm h-10 pt-2"></p>
+                    </div>
+                </div>
+
+                <!-- SLIDE 6: Warm-up 4 (1-Step Division) -->
+                <div id="slide-6" class="slide-item hidden space-y-6">
+                    <div class="text-center space-y-2">
+                        <span class="text-slate-900 font-black bg-pink-300 px-3 py-1 rounded-full border-2 border-slate-900 text-xs">Pemanasan Sandi 4</span>
+                        <h3 class="text-2xl md:text-3xl font-black text-slate-900">Membagi Harta Donat</h3>
+                    </div>
+                    <p class="text-center text-sm md:text-base text-slate-700 font-bold">Satu wadah besar donat $b$ dibagi rata kepada 3 anak, masing-masing mendapat 7 donat. Berapa isi awal wadah $b$?</p>
+                    <div class="bg-indigo-50 p-6 rounded-2xl border-2 border-slate-900 comic-shadow max-w-md mx-auto space-y-4">
+                        <div class="text-center text-3xl font-black text-indigo-950 bg-white py-3 rounded-xl border-2 border-slate-900">
+                            $\frac{b}{3} = 7$
+                        </div>
+                        <div class="grid grid-cols-3 gap-2">
+                            <button onclick="checkWarmup(6, 10, false, this)" class="p-3 bg-white hover:bg-indigo-100 border-2 border-slate-900 rounded-xl font-black comic-btn-active">10</button>
+                            <button onclick="checkWarmup(6, 21, true, this)" class="p-3 bg-white hover:bg-indigo-100 border-2 border-slate-900 rounded-xl font-black comic-btn-active">21</button>
+                            <button onclick="checkWarmup(6, 4, false, this)" class="p-3 bg-white hover:bg-indigo-100 border-2 border-slate-900 rounded-xl font-black comic-btn-active">4</button>
+                        </div>
+                        <p id="warmup-ans-6" class="text-center font-bold text-sm h-10 pt-2"></p>
+                    </div>
+                </div>
+
+                <!-- SLIDE 7: Warm-up 5 (1-Step Story) -->
+                <div id="slide-7" class="slide-item hidden space-y-6">
+                    <div class="text-center space-y-2">
+                        <span class="text-slate-900 font-black bg-pink-300 px-3 py-1 rounded-full border-2 border-slate-900 text-xs">Pemanasan Sandi 5</span>
+                        <h3 class="text-2xl md:text-3xl font-black text-slate-900">Sandi Logika Cerita</h3>
+                    </div>
+                    <div class="bg-indigo-50 p-6 rounded-2xl border-2 border-slate-900 comic-shadow max-w-xl mx-auto text-center space-y-4">
+                        <p class="text-slate-800 text-sm md:text-base italic font-bold leading-relaxed bg-white p-4 rounded-xl border-2 border-slate-900">
+                            "Kru Agen Siska mempunyai 5 kotak donat rahasia $d$. Total seluruh donat yang ia miliki adalah 45 buah. Berapa isi donat per kotak $d$?"
+                        </p>
+                        <div class="grid grid-cols-2 gap-3 max-w-md mx-auto text-sm font-bold">
+                            <button onclick="checkCaseSlide(7, true)" class="p-4 bg-indigo-100 hover:bg-indigo-200 border-2 border-slate-900 text-slate-900 rounded-xl comic-shadow-sm comic-btn-active">$5d = 45 \implies d = 9$ donat</button>
+                            <button onclick="checkCaseSlide(7, false)" class="p-4 bg-red-100 hover:bg-red-200 border-2 border-slate-900 text-slate-900 rounded-xl comic-shadow-sm comic-btn-active">$5+d = 45 \implies d = 40$ donat</button>
+                        </div>
+                        <p id="case-ans-7" class="text-center font-black text-sm h-10 pt-2"></p>
+                    </div>
+                </div>
+
+                <!-- SLIDE 8: Konsep Timbangan 2 Langkah -->
+                <div id="slide-8" class="slide-item hidden space-y-6">
+                    <div class="text-center space-y-2">
+                        <span class="text-white font-black bg-indigo-600 px-3 py-1 rounded-full border-2 border-slate-900 text-xs">Misi Konsep 1</span>
+                        <h3 class="text-2xl font-black text-indigo-950">Apa Itu Sandi Ganda (2 Langkah)?</h3>
+                    </div>
+                    <div class="grid md:grid-cols-2 gap-6 items-center">
+                        <div class="space-y-4 font-medium text-slate-700 text-sm md:text-base leading-relaxed">
+                            <p>
+                                Mengapa disebut <strong class="text-indigo-600">Aljabar 2 Langkah</strong>? Karena di sisi kiri variabel kamu tidak sendirian, melainkan memiliki dua penghalang, misalnya dikali sekaligus ditambah!
+                            </p>
+                            <p class="font-extrabold text-slate-800 text-center bg-yellow-100 py-2 border-2 border-slate-900 rounded-xl">
+                                Contoh: $2x + 6 = 16$
+                            </p>
+                            <p>
+                                Untuk mencari nilai $x$, kamu tidak boleh langsung membagi dengan 2! Kita harus mengusir "+6" terlebih dahulu dengan menguranginya dari kedua sisi, baru membaginya dengan 2.
+                            </p>
+                        </div>
+                        <div class="bg-indigo-50 p-6 rounded-2xl border-2 border-slate-900 comic-shadow flex flex-col items-center justify-center text-center">
+                            <span class="text-6xl animate-pulse">⚖️</span>
+                            <span class="text-sm font-black text-indigo-950 mt-3 bg-white px-3 py-1 rounded-xl border border-slate-900">Dua Operasi Penghalang</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SLIDE 9: Visualisasi Interaktif Sandbox -->
+                <div id="slide-9" class="slide-item hidden space-y-6">
+                    <div class="text-center space-y-1">
+                        <span class="text-slate-900 font-black bg-emerald-300 px-3 py-1 rounded-full border-2 border-slate-900 text-xs">Simulator Timbangan Interaktif</span>
+                        <h3 class="text-2xl font-black text-slate-900">Mainkan Simulator Timbangan!</h3>
+                        <p class="text-xs text-slate-500 font-bold">Bantu kami menyeimbangkan timbangan di bawah langkah demi langkah!</p>
+                    </div>
+
+                    <div class="bg-sky-50 p-5 rounded-2xl border-2 border-slate-900 max-w-xl mx-auto space-y-4">
+                        <div class="text-center">
+                            <span class="text-xs font-bold uppercase tracking-wider text-indigo-800">Rumus Saat Ini:</span>
+                            <div class="text-2xl font-black text-slate-800 bg-white py-2 rounded-xl border border-slate-900" id="scale-equation-display">
+                                $2x + 6 = 16$
+                            </div>
+                        </div>
+
+                        <!-- Interactive Balance Scale -->
+                        <div class="flex justify-between items-center h-28 relative border-b-4 border-slate-900 px-6">
+                            <div class="text-center flex flex-col items-center justify-end w-1/3">
+                                <div class="flex gap-1 mb-2 flex-wrap justify-center" id="scale-left-visual"></div>
+                                <span class="text-xs font-black bg-blue-100 px-2 rounded-full border border-slate-900 animate-pulse" id="scale-left-text"></span>
+                            </div>
+                            
+                            <div class="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-8 h-8 bg-slate-800" style="clip-path: polygon(50% 0%, 0% 100%, 100% 100%);"></div>
+
+                            <div class="text-center flex flex-col items-center justify-end w-1/3">
+                                <div class="flex gap-0.5 mb-2 flex-wrap justify-center max-w-[120px]" id="scale-right-visual"></div>
+                                <span class="text-xs font-black bg-blue-100 px-2 rounded-full border border-slate-900" id="scale-right-text"></span>
+                            </div>
+                        </div>
+
+                        <!-- Control Steps -->
+                        <div class="space-y-2 pt-2">
+                            <button onclick="performScaleStep(1)" id="btn-scale-step1" class="w-full p-3 bg-indigo-500 hover:bg-indigo-600 text-white font-black rounded-xl border-2 border-slate-900 comic-shadow-sm comic-btn-active">
+                                Langkah 1: Hilangkan +6 (Kurangi 6 di kedua sisi)
+                            </button>
+                            <button onclick="performScaleStep(2)" id="btn-scale-step2" disabled class="w-full p-3 bg-slate-300 text-slate-500 font-black rounded-xl border-2 border-slate-200 cursor-not-allowed">
+                                Langkah 2: Selesaikan 2x = 10 (Bagi kedua sisi dengan 2)
+                            </button>
+                        </div>
+                        <p id="scale-feedback" class="text-center text-sm font-bold text-indigo-900 min-h-[24px]"></p>
+                    </div>
+                </div>
+
+                <!-- SLIDE 10: Aturan Emas 1 (Constants First) -->
+                <div id="slide-10" class="slide-item hidden space-y-6">
+                    <div class="text-center space-y-2">
+                        <span class="text-white font-black bg-indigo-600 px-3 py-1 rounded-full border-2 border-slate-900 text-xs">Aturan Emas 1</span>
+                        <h3 class="text-2xl font-black text-indigo-950">Usir "Pengganggu" Luar Terlebih Dahulu!</h3>
+                    </div>
+                    <div class="bg-amber-50 p-6 rounded-2xl border-2 border-slate-900 comic-shadow max-w-2xl mx-auto space-y-4">
+                        <div class="flex items-start gap-4">
+                            <span class="text-4xl">🚪</span>
+                            <div>
+                                <h4 class="font-extrabold text-lg text-amber-950">Protokol Pemisahan Suku:</h4>
+                                <p class="text-slate-700 text-sm md:text-base mt-2 leading-relaxed font-medium">
+                                    Ketika kamu melihat persamaan seperti $3x + 5 = 20$, angka $+5$ adalah pengganggu luar yang paling mudah dilepaskan. Pindahkan ia melompati pagar tanda sama dengan ($=$), dan otomatis tanda tambahnya berbalik menjadi tanda kurang ($-5$).
+                                </p>
+                            </div>
+                        </div>
+                        <div class="bg-white p-3.5 rounded-xl border-2 border-slate-900 text-center font-bold text-slate-800 text-xs sm:text-sm">
+                            $3x + 5 = 20 \implies 3x = 20 - 5 \implies 3x = 15$
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SLIDE 11: Aturan Emas 2 (Coefficients Next) -->
+                <div id="slide-11" class="slide-item hidden space-y-6">
+                    <div class="text-center space-y-2">
+                        <span class="text-white font-black bg-indigo-600 px-3 py-1 rounded-full border-2 border-slate-900 text-xs">Aturan Emas 2</span>
+                        <h3 class="text-2xl font-black text-indigo-950">Bereskan Koefisien Dekat Suku</h3>
+                    </div>
+                    <div class="bg-emerald-50 p-6 rounded-2xl border-2 border-slate-900 comic-shadow max-w-2xl mx-auto space-y-4">
+                        <div class="flex items-start gap-4">
+                            <span class="text-4xl">🎯</span>
+                            <div>
+                                <h4 class="font-extrabold text-lg text-emerald-950">Membagi Sisa Akhir:</h4>
+                                <p class="text-slate-700 text-sm md:text-base mt-2 leading-relaxed font-medium">
+                                    Setelah pengganggu luar dihilangkan, kita mendapat bentuk satu langkah bersih $3x = 15$. Selesaikan sisa perkalian 3 ini dengan cara membagi hasil di sisi kanan dengan koefisien variabel tersebut!
+                                </p>
+                            </div>
+                        </div>
+                        <div class="bg-white p-3.5 rounded-xl border-2 border-slate-900 text-center font-bold text-slate-800 text-xs sm:text-sm">
+                            $3x = 15 \implies x = 15 \div 3 \implies x = 5$
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SLIDE 12: Kamus Sandi 2 Langkah -->
+                <div id="slide-12" class="slide-item hidden space-y-6">
+                    <div class="text-center space-y-2">
+                        <span class="text-white font-black bg-indigo-600 px-3 py-1 rounded-full border-2 border-slate-900 text-xs">Misi Konsep 4</span>
+                        <h3 class="text-2xl font-black text-indigo-950">Kamus Penerjemah Sandi Ganda</h3>
+                    </div>
+                    <p class="text-center text-xs sm:text-sm text-slate-700 font-bold mb-2">Klik kartu untuk mempelajari konversi bahasa cerita ke aljabar ganda!</p>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        <div onclick="this.querySelector('.card-inner').classList.toggle('[transform:rotateY(180deg)]')" class="w-full h-32 [perspective:1000px] cursor-pointer">
+                            <div class="card-inner relative w-full h-full text-center transition-transform duration-500 [transform-style:preserve-3d] comic-shadow-sm rounded-2xl border-2 border-slate-900">
+                                <div class="absolute inset-0 w-full h-full rounded-2xl bg-purple-100 flex items-center justify-center font-black text-xs text-slate-800 [backface-visibility:hidden] p-2">
+                                    "Dua kotak robot ditambah 5 mainan..."
+                                </div>
+                                <div class="absolute inset-0 w-full h-full rounded-2xl bg-indigo-400 flex flex-col items-center justify-center font-black text-white [transform:rotateY(180deg)] [backface-visibility:hidden]">
+                                    <span class="text-2xl">🤖</span>
+                                    <span class="text-sm">$2x + 5$</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div onclick="this.querySelector('.card-inner').classList.toggle('[transform:rotateY(180deg)]')" class="w-full h-32 [perspective:1000px] cursor-pointer">
+                            <div class="card-inner relative w-full h-full text-center transition-transform duration-500 [transform-style:preserve-3d] comic-shadow-sm rounded-2xl border-2 border-slate-900">
+                                <div class="absolute inset-0 w-full h-full rounded-2xl bg-amber-100 flex items-center justify-center font-black text-xs text-slate-800 [backface-visibility:hidden] p-2">
+                                    "Tiga kantong apel dikurang 4 buah..."
+                                </div>
+                                <div class="absolute inset-0 w-full h-full rounded-2xl bg-amber-400 flex flex-col items-center justify-center font-black text-white [transform:rotateY(180deg)] [backface-visibility:hidden]">
+                                    <span class="text-2xl">🍎</span>
+                                    <span class="text-sm">$3a - 4$</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div onclick="this.querySelector('.card-inner').classList.toggle('[transform:rotateY(180deg)]')" class="w-full h-32 [perspective:1000px] cursor-pointer">
+                            <div class="card-inner relative w-full h-full text-center transition-transform duration-500 [transform-style:preserve-3d] comic-shadow-sm rounded-2xl border-2 border-slate-900">
+                                <div class="absolute inset-0 w-full h-full rounded-2xl bg-emerald-100 flex items-center justify-center font-black text-xs text-slate-800 [backface-visibility:hidden] p-2">
+                                    "Setengah dari kotak koin ditambah 2..."
+                                </div>
+                                <div class="absolute inset-0 w-full h-full rounded-2xl bg-emerald-400 flex flex-col items-center justify-center font-black text-white [transform:rotateY(180deg)] [backface-visibility:hidden]">
+                                    <span class="text-2xl">🪙</span>
+                                    <span class="text-sm">$\frac{x}{2} + 2$</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div onclick="this.querySelector('.card-inner').classList.toggle('[transform:rotateY(180deg)]')" class="w-full h-32 [perspective:1000px] cursor-pointer">
+                            <div class="card-inner relative w-full h-full text-center transition-transform duration-500 [transform-style:preserve-3d] comic-shadow-sm rounded-2xl border-2 border-slate-900">
+                                <div class="absolute inset-0 w-full h-full rounded-2xl bg-indigo-100 flex items-center justify-center font-black text-xs text-slate-800 [backface-visibility:hidden] p-2">
+                                    "Sepertiga dari tabungan dikurang Rp3.000..."
+                                </div>
+                                <div class="absolute inset-0 w-full h-full rounded-2xl bg-indigo-500 flex flex-col items-center justify-center font-black text-white [transform:rotateY(180deg)] [backface-visibility:hidden]">
+                                    <span class="text-2xl">👛</span>
+                                    <span class="text-sm">$\frac{w}{3} - 3.000$</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SLIDE 13: Tantangan Taktis 1 ($2x + 5 = 15$) -->
+                <div id="slide-13" class="slide-item hidden space-y-6">
+                    <div class="text-center space-y-2">
+                        <span class="text-indigo-950 font-black bg-orange-300 px-3 py-1 rounded-full border-2 border-slate-900 text-xs">Contoh Terstruktur 1</span>
+                        <h3 class="text-2xl font-black text-indigo-950">Membongkar Sandi Penjumlahan</h3>
+                    </div>
+                    <div class="bg-indigo-50 p-6 rounded-2xl border-2 border-slate-900 comic-shadow max-w-2xl mx-auto space-y-4 text-center">
+                        <span class="text-5xl block">🧩</span>
+                        <div class="text-slate-800 text-sm sm:text-base italic font-bold leading-relaxed bg-white p-4 rounded-xl border-2 border-slate-900">
+                            "Bagaimana cara memecahkan persamaan: $2x + 5 = 15$?"
+                        </div>
+                        <div class="bg-emerald-100 p-3.5 rounded-xl border-2 border-slate-900 text-left font-bold text-xs sm:text-sm">
+                            👉 <span class="text-emerald-800">Dekoding Langkah:</span><br>
+                            1. Usir $+5$ melintasi pagar menjadi $-5 \implies 2x = 15 - 5 \implies 2x = 10$.<br>
+                            2. Selesaikan koefisien variabel dengan pembagian $\implies x = 10 \div 2 \implies x = 5$!
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SLIDE 14: Tantangan Taktis 2 ($3y - 4 = 17$) -->
+                <div id="slide-14" class="slide-item hidden space-y-6">
+                    <div class="text-center space-y-2">
+                        <span class="text-indigo-950 font-black bg-orange-300 px-3 py-1 rounded-full border-2 border-slate-900 text-xs">Contoh Terstruktur 2</span>
+                        <h3 class="text-2xl font-black text-indigo-950">Membongkar Sandi Pengurangan</h3>
+                    </div>
+                    <div class="bg-indigo-50 p-6 rounded-2xl border-2 border-slate-900 comic-shadow max-w-2xl mx-auto space-y-4 text-center">
+                        <span class="text-5xl block">🔑</span>
+                        <div class="text-slate-800 text-sm sm:text-base italic font-bold leading-relaxed bg-white p-4 rounded-xl border-2 border-slate-900">
+                            "Bagaimana cara memecahkan persamaan: $3y - 4 = 17$?"
+                        </div>
+                        <div class="bg-amber-100 p-3.5 rounded-xl border-2 border-slate-900 text-left font-bold text-xs sm:text-sm">
+                            👉 <span class="text-amber-800">Dekoding Langkah:</span><br>
+                            1. Usir $-4$ melintasi pagar menjadi $+4 \implies 3y = 17 + 4 \implies 3y = 21$.<br>
+                            2. Selesaikan koefisien variabel dengan pembagian $\implies y = 21 \div 3 \implies y = 7$!
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SLIDE 15: Tantangan Taktis 3 ($\frac{a}{2} + 3 = 9$) -->
+                <div id="slide-15" class="slide-item hidden space-y-6">
+                    <div class="text-center space-y-2">
+                        <span class="text-indigo-950 font-black bg-orange-300 px-3 py-1 rounded-full border-2 border-slate-900 text-xs">Contoh Terstruktur 3</span>
+                        <h3 class="text-2xl font-black text-indigo-950">Sandi Pecahan & Penjumlahan</h3>
+                    </div>
+                    <div class="bg-indigo-50 p-6 rounded-2xl border-2 border-slate-900 comic-shadow max-w-2xl mx-auto space-y-4 text-center">
+                        <span class="text-5xl block">🍋</span>
+                        <div class="text-slate-800 text-sm sm:text-base italic font-bold leading-relaxed bg-white p-4 rounded-xl border-2 border-slate-900">
+                            "Bagaimana cara memecahkan persamaan: $\frac{a}{2} + 3 = 9$?"
+                        </div>
+                        <div class="bg-purple-100 p-3.5 rounded-xl border-2 border-slate-900 text-left font-bold text-xs sm:text-sm">
+                            👉 <span class="text-indigo-800">Dekoding Langkah:</span><br>
+                            1. Usir $+3$ melintasi pagar menjadi $-3 \implies \frac{a}{2} = 9 - 3 \implies \frac{a}{2} = 6$.<br>
+                            2. Selesaikan pembagian dengan cara dikalikan silang ke kanan $\implies a = 6 \times 2 \implies a = 12$!
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SLIDE 16: Tantangan Taktis 4 ($\frac{w}{3} - 2 = 4$) -->
+                <div id="slide-16" class="slide-item hidden space-y-6">
+                    <div class="text-center space-y-2">
+                        <span class="text-indigo-950 font-black bg-orange-300 px-3 py-1 rounded-full border-2 border-slate-900 text-xs">Contoh Terstruktur 4</span>
+                        <h3 class="text-2xl font-black text-indigo-950">Sandi Pecahan & Pengurangan</h3>
+                    </div>
+                    <div class="bg-indigo-50 p-6 rounded-2xl border-2 border-slate-900 comic-shadow max-w-2xl mx-auto space-y-4 text-center">
+                        <span class="text-5xl block">🧪</span>
+                        <div class="text-slate-800 text-sm sm:text-base italic font-bold leading-relaxed bg-white p-4 rounded-xl border-2 border-slate-900">
+                            "Bagaimana cara memecahkan persamaan: $\frac{w}{3} - 2 = 4$?"
+                        </div>
+                        <div class="bg-rose-100 p-3.5 rounded-xl border-2 border-slate-900 text-left font-bold text-xs sm:text-sm">
+                            👉 <span class="text-rose-800">Dekoding Langkah:</span><br>
+                            1. Usir $-2$ melintasi pagar menjadi $+2 \implies \frac{w}{3} = 4 + 2 \implies \frac{w}{3} = 6$.<br>
+                            2. Selesaikan pembagian dengan dikalikan silang ke kanan $\implies w = 6 \times 3 \implies w = 18$!
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SLIDE 17: Mengenal Sifat Distributif (Extra) -->
+                <div id="slide-17" class="slide-item hidden space-y-6">
+                    <div class="text-center space-y-2">
+                        <span class="text-white font-black bg-purple-600 px-3 py-1 rounded-full border-2 border-slate-900 text-xs">Misi Khusus Tambahan</span>
+                        <h3 class="text-2xl font-black text-purple-950">Gerbang Sifat Distributif (Tanda Kurung)</h3>
+                    </div>
+                    <div class="grid md:grid-cols-2 gap-6 items-center">
+                        <div class="space-y-4 font-medium text-slate-700 text-sm md:text-base leading-relaxed">
+                            <p>
+                                Terkadang, detektif menemukan musuh bertanda kurung, contoh: <strong class="text-purple-600">$2(x + 3) = 14$</strong>.
+                            </p>
+                            <p>
+                                Tanda kurung artinya sekelompok isi di dalamnya dikalikan dengan angka di depan kurung.
+                            </p>
+                            <p>
+                                Cara paling mudah membongkarnya adalah: **Bagi dulu** hasil kanan dengan angka pengali luar kurung, baru usir angka pengganggu dalam kurung!
+                            </p>
+                        </div>
+                        <div class="bg-purple-50 p-6 rounded-2xl border-2 border-slate-900 comic-shadow flex flex-col items-center justify-center text-center">
+                            <span class="text-6xl animate-bounce">📦</span>
+                            <span class="text-sm font-black text-purple-950 mt-3 bg-white px-3 py-1 rounded-xl border border-slate-900">Isi Paket Bertanda Kurung</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SLIDE 18: Cara Membongkar Distributif -->
+                <div id="slide-18" class="slide-item hidden space-y-6">
+                    <div class="text-center space-y-2">
+                        <span class="text-white font-black bg-purple-600 px-3 py-1 rounded-full border-2 border-slate-900 text-xs">Misi Konsep 6</span>
+                        <h3 class="text-2xl font-black text-purple-950">Aturan Pembongkaran Distributif</h3>
+                    </div>
+                    <div class="bg-purple-50 p-6 rounded-2xl border-2 border-slate-900 comic-shadow max-w-2xl mx-auto space-y-4">
+                        <p class="text-slate-700 text-sm md:text-base leading-relaxed font-bold text-center">
+                            Mari kita bongkar sandi kurung $2(x + 3) = 14$ dengan urutan pembagian awal:
+                        </p>
+                        <div class="grid grid-cols-2 gap-4 text-center font-extrabold">
+                            <div class="bg-white p-4 rounded-xl border-2 border-slate-900">
+                                <span class="text-purple-600 block text-sm">Langkah 1: Bagi Sisi Kanan</span>
+                                <p class="text-xs text-slate-500 mt-2 font-medium">Bagi 14 dengan angka luar (2), menyisakan isi di dalam tanda kurung saja: $x + 3 = 14 \div 2 \implies x + 3 = 7$.</p>
+                            </div>
+                            <div class="bg-white p-4 rounded-xl border-2 border-slate-900">
+                                <span class="text-emerald-600 block text-sm">Langkah 2: Selesaikan</span>
+                                <p class="text-xs text-slate-500 mt-2 font-medium">Usir $+3$ dari sisi kiri ke sebelah kanan menjadi pengurangan: $x = 7 - 3 \implies x = 4$!</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SLIDE 19: Contoh Sifat Distributif -->
+                <div id="slide-19" class="slide-item hidden space-y-6">
+                    <div class="text-center space-y-2">
+                        <span class="text-indigo-950 font-black bg-orange-300 px-3 py-1 rounded-full border-2 border-slate-900 text-xs">Contoh Terstruktur 5</span>
+                        <h3 class="text-2xl font-black text-indigo-950">Sandi Kurung dengan Pengurangan</h3>
+                    </div>
+                    <div class="bg-indigo-50 p-6 rounded-2xl border-2 border-slate-900 comic-shadow max-w-2xl mx-auto space-y-4 text-center">
+                        <span class="text-5xl block">🎁</span>
+                        <div class="text-slate-800 text-sm sm:text-base italic font-bold leading-relaxed bg-white p-4 rounded-xl border-2 border-slate-900">
+                            "Bagaimana cara memecahkan persamaan: $3(k - 2) = 15$?"
+                        </div>
+                        <div class="bg-yellow-100 p-3.5 rounded-xl border-2 border-slate-900 text-left font-bold text-xs sm:text-sm">
+                            👉 <span class="text-amber-800">Dekoding Langkah:</span><br>
+                            1. Hilangkan pengali 3 di luar kurung dengan membagi sisi kanan $\implies k - 2 = 15 \div 3 \implies k - 2 = 5$.<br>
+                            2. Usir $-2$ dari dalam kurung menjadi penjumlahan di kanan $\implies k = 5 + 2 \implies k = 7$!
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SLIDE 20: Uji Mandiri 1 ($3x + 7 = 22$) -->
+                <div id="slide-20" class="slide-item hidden space-y-6">
+                    <div class="text-center space-y-2">
+                        <span class="text-indigo-950 font-black bg-emerald-300 px-3 py-1 rounded-full border-2 border-slate-900 text-xs">Uji Mandiri 1</span>
+                        <h3 class="text-2xl font-black text-slate-900">Kasus Tambah Ganda</h3>
+                    </div>
+                    <p class="text-center text-xs sm:text-sm text-slate-700 font-bold">Cari nilai $x$ dari persamaan berikut: $3x + 7 = 22$.</p>
+                    <div class="bg-indigo-50 p-5 rounded-2xl border-2 border-slate-900 max-w-md mx-auto space-y-4 comic-shadow">
+                        <div id="options-container-20" class="space-y-2"></div>
+                        <p id="practice-ans-20" class="text-center font-black text-sm h-10"></p>
+                    </div>
+                </div>
+
+                <!-- SLIDE 21: Uji Mandiri 2 ($4y - 8 = 16$) -->
+                <div id="slide-21" class="slide-item hidden space-y-6">
+                    <div class="text-center space-y-2">
+                        <span class="text-indigo-950 font-black bg-emerald-300 px-3 py-1 rounded-full border-2 border-slate-900 text-xs">Uji Mandiri 2</span>
+                        <h3 class="text-2xl font-black text-slate-900">Kasus Kurang Ganda</h3>
+                    </div>
+                    <p class="text-center text-xs sm:text-sm text-slate-700 font-bold">Cari nilai $y$ dari persamaan berikut: $4y - 8 = 16$.</p>
+                    <div class="bg-indigo-50 p-5 rounded-2xl border-2 border-slate-900 max-w-md mx-auto space-y-4 comic-shadow">
+                        <div id="options-container-21" class="space-y-2"></div>
+                        <p id="practice-ans-21" class="text-center font-black text-sm h-10"></p>
+                    </div>
+                </div>
+
+                <!-- SLIDE 22: Uji Mandiri 3 ($\frac{a}{4} + 6 = 11$) -->
+                <div id="slide-22" class="slide-item hidden space-y-6">
+                    <div class="text-center space-y-2">
+                        <span class="text-indigo-950 font-black bg-emerald-300 px-3 py-1 rounded-full border-2 border-slate-900 text-xs">Uji Mandiri 3</span>
+                        <h3 class="text-2xl font-black text-slate-900">Kasus Pembagian Ganda Tambah</h3>
+                    </div>
+                    <p class="text-center text-xs sm:text-sm text-slate-700 font-bold">Cari nilai $a$ dari persamaan berikut: $\frac{a}{4} + 6 = 11$.</p>
+                    <div class="bg-indigo-50 p-5 rounded-2xl border-2 border-slate-900 max-w-md mx-auto space-y-4 comic-shadow">
+                        <div id="options-container-22" class="space-y-2"></div>
+                        <p id="practice-ans-22" class="text-center font-black text-sm h-10"></p>
+                    </div>
+                </div>
+
+                <!-- SLIDE 23: Uji Mandiri 4 ($\frac{b}{2} - 5 = 3$) -->
+                <div id="slide-23" class="slide-item hidden space-y-6">
+                    <div class="text-center space-y-2">
+                        <span class="text-indigo-950 font-black bg-emerald-300 px-3 py-1 rounded-full border-2 border-slate-900 text-xs">Uji Mandiri 4</span>
+                        <h3 class="text-2xl font-black text-slate-900">Kasus Pembagian Ganda Kurang</h3>
+                    </div>
+                    <p class="text-center text-xs sm:text-sm text-slate-700 font-bold">Cari nilai $b$ dari persamaan berikut: $\frac{b}{2} - 5 = 3$.</p>
+                    <div class="bg-indigo-50 p-5 rounded-2xl border-2 border-slate-900 max-w-md mx-auto space-y-4 comic-shadow">
+                        <div id="options-container-23" class="space-y-2"></div>
+                        <p id="practice-ans-23" class="text-center font-black text-sm h-10"></p>
+                    </div>
+                </div>
+
+                <!-- SLIDE 24: Uji Mandiri 5 ($5w + 12 = 42$) -->
+                <div id="slide-24" class="slide-item hidden space-y-6">
+                    <div class="text-center space-y-2">
+                        <span class="text-indigo-950 font-black bg-emerald-300 px-3 py-1 rounded-full border-2 border-slate-900 text-xs">Uji Mandiri 5</span>
+                        <h3 class="text-2xl font-black text-slate-900">Kasus Koefisien Besar</h3>
+                    </div>
+                    <p class="text-center text-xs sm:text-sm text-slate-700 font-bold">Cari nilai $w$ dari persamaan berikut: $5w + 12 = 42$.</p>
+                    <div class="bg-indigo-50 p-5 rounded-2xl border-2 border-slate-900 max-w-md mx-auto space-y-4 comic-shadow">
+                        <div id="options-container-24" class="space-y-2"></div>
+                        <p id="practice-ans-24" class="text-center font-black text-sm h-10"></p>
+                    </div>
+                </div>
+
+                <!-- SLIDE 25: Uji Mandiri 6 ($2(x + 4) = 18$) -->
+                <div id="slide-25" class="slide-item hidden space-y-6">
+                    <div class="text-center space-y-2">
+                        <span class="text-purple-950 font-black bg-purple-300 px-3 py-1 rounded-full border-2 border-slate-900 text-xs">Uji Mandiri Distributif 1</span>
+                        <h3 class="text-2xl font-black text-purple-950">Misteri Tanda Kurung Tambah</h3>
+                    </div>
+                    <p class="text-center text-xs sm:text-sm text-slate-700 font-bold">Cari nilai $x$ dari persamaan berikut: $2(x + 4) = 18$.</p>
+                    <div class="bg-purple-50 p-5 rounded-2xl border-2 border-slate-900 max-w-md mx-auto space-y-4 comic-shadow">
+                        <div id="options-container-25" class="space-y-2"></div>
+                        <p id="practice-ans-25" class="text-center font-black text-sm h-10"></p>
+                    </div>
+                </div>
+
+                <!-- SLIDE 26: Uji Mandiri 7 ($3(y - 5) = 12$) -->
+                <div id="slide-26" class="slide-item hidden space-y-6">
+                    <div class="text-center space-y-2">
+                        <span class="text-purple-950 font-black bg-purple-300 px-3 py-1 rounded-full border-2 border-slate-900 text-xs">Uji Mandiri Distributif 2</span>
+                        <h3 class="text-2xl font-black text-purple-950">Misteri Tanda Kurung Kurang</h3>
+                    </div>
+                    <p class="text-center text-xs sm:text-sm text-slate-700 font-bold">Cari nilai $y$ dari persamaan berikut: $3(y - 5) = 12$.</p>
+                    <div class="bg-purple-50 p-5 rounded-2xl border-2 border-slate-900 max-w-md mx-auto space-y-4 comic-shadow">
+                        <div id="options-container-26" class="space-y-2"></div>
+                        <p id="practice-ans-26" class="text-center font-black text-sm h-10"></p>
+                    </div>
+                </div>
+
+                <!-- SLIDE 27: Kasus Cerita 1 (Donut Paket) -->
+                <div id="slide-27" class="slide-item hidden space-y-6">
+                    <div class="text-center space-y-2">
+                        <span class="text-white font-black bg-indigo-600 px-3 py-1 rounded-full border-2 border-slate-900 text-xs">Misi Logika Cerita 1</span>
+                        <h3 class="text-2xl font-black text-indigo-950">Misteri Kantong Donat Agen</h3>
+                    </div>
+                    <div class="bg-indigo-50 p-6 rounded-2xl border-2 border-slate-900 comic-shadow max-w-2xl mx-auto space-y-4 text-center">
+                        <span class="text-5xl block">🍩</span>
+                        <p class="text-slate-800 text-sm sm:text-base italic font-bold leading-relaxed bg-white p-4 rounded-xl border-2 border-slate-900">
+                            "Rara memesan 2 kantong donat misterius $d$ dan mendapatkan bonus 5 donat tambahan di luar kantong. Total donat seluruhnya adalah 19 buah. Berapakah isi donat per kantong $d$?"
+                        </p>
+                        <div id="options-container-27" class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs sm:text-sm font-bold max-w-md mx-auto"></div>
+                        <p id="practice-ans-27" class="text-center font-black text-sm h-10 pt-2"></p>
+                    </div>
+                </div>
+
+                <!-- SLIDE 28: Kasus Cerita 2 (Koin Penyelamat) -->
+                <div id="slide-28" class="slide-item hidden space-y-6">
+                    <div class="text-center space-y-2">
+                        <span class="text-white font-black bg-indigo-600 px-3 py-1 rounded-full border-2 border-slate-900 text-xs">Misi Logika Cerita 2</span>
+                        <h3 class="text-2xl font-black text-indigo-950">Kasus Koin yang Dibagi Rata</h3>
+                    </div>
+                    <div class="bg-indigo-50 p-6 rounded-2xl border-2 border-slate-900 comic-shadow max-w-2xl mx-auto space-y-4 text-center">
+                        <span class="text-5xl block">🪙</span>
+                        <p class="text-slate-800 text-sm sm:text-base italic font-bold leading-relaxed bg-white p-4 rounded-xl border-2 border-slate-900">
+                            "Sejumlah koin penyelamat di brankas $k$ dibagi rata ke dalam 3 tim penolong. Salah satu tim membelanjakan 4 koinnya untuk membeli bekal, sehingga koin mereka bersisa 2 koin saja. Berapakah jumlah awal seluruh koin $k$?"
+                        </p>
+                        <div id="options-container-28" class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs sm:text-sm font-bold max-w-md mx-auto"></div>
+                        <p id="practice-ans-28" class="text-center font-black text-sm h-10 pt-2"></p>
+                    </div>
+                </div>
+
+                <!-- SLIDE 29: Kasus Cerita 3 (Tiket Kereta) -->
+                <div id="slide-29" class="slide-item hidden space-y-6">
+                    <div class="text-center space-y-2">
+                        <span class="text-white font-black bg-indigo-600 px-3 py-1 rounded-full border-2 border-slate-900 text-xs">Misi Logika Cerita 3</span>
+                        <h3 class="text-2xl font-black text-indigo-950">Misteri Tiket Rahasia Kereta</h3>
+                    </div>
+                    <div class="bg-indigo-50 p-6 rounded-2xl border-2 border-slate-900 comic-shadow max-w-2xl mx-auto space-y-4 text-center">
+                        <span class="text-5xl block">🎫</span>
+                        <p class="text-slate-800 text-sm sm:text-base italic font-bold leading-relaxed bg-white p-4 rounded-xl border-2 border-slate-900">
+                            "Siska memesan 4 tiket perjalanan kereta $t$ dengan harga yang sama. Di loket kasir, ia mendapatkan potongan harga kupon langsung Rp10.000. Total akhir yang ia bayarkan adalah Rp30.000. Berapa harga tiket $t$ sebelum potongan?"
+                        </p>
+                        <div id="options-container-29" class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs sm:text-sm font-bold max-w-md mx-auto"></div>
+                        <p id="practice-ans-29" class="text-center font-black text-sm h-10 pt-2"></p>
+                    </div>
+                </div>
+
+                <!-- SLIDE 30: Kasus Cerita 4 (Distributif Box) -->
+                <div id="slide-30" class="slide-item hidden space-y-6">
+                    <div class="text-center space-y-2">
+                        <span class="text-purple-950 font-black bg-purple-300 px-3 py-1 rounded-full border-2 border-slate-900 text-xs">Misi Logika Cerita 4 • Distributif</span>
+                        <h3 class="text-2xl font-black text-purple-950">Misteri Bingkisan Hiasan</h3>
+                    </div>
+                    <div class="bg-purple-50 p-6 rounded-2xl border-2 border-slate-900 comic-shadow max-w-2xl mx-auto space-y-4 text-center">
+                        <span class="text-5xl block">🎁</span>
+                        <p class="text-slate-800 text-sm sm:text-base italic font-bold leading-relaxed bg-white p-4 rounded-xl border-2 border-slate-900">
+                            "Ibu memesan 2 kotak hiasan identik yang di dalamnya berisi 1 boneka $b$ dan 3 pita hias. Jika total seluruh boneka dan pita di dalam kedua kotak adalah 16 buah, berapa boneka $b$ di dalam satu kotak?"
+                        </p>
+                        <div id="options-container-30" class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs sm:text-sm font-bold max-w-md mx-auto"></div>
+                        <p id="practice-ans-30" class="text-center font-black text-sm h-10 pt-2"></p>
+                    </div>
+                </div>
+
+                <!-- SLIDE 31: BOSS BATTLE Sektor A -->
+                <div id="slide-31" class="slide-item hidden space-y-6">
+                    <div class="text-center space-y-2">
+                        <span class="text-white font-black uppercase tracking-widest text-xs bg-red-600 px-4 py-1.5 rounded-full border-2 border-slate-900 animate-pulse">🔥 PERTARUNGAN BOSS SEKTOR A</span>
+                        <h3 class="text-2xl font-black text-red-600">Kode Sektor A Brankas Cyber X</h3>
+                    </div>
+                    <div class="bg-red-50 p-5 rounded-2xl border-2 border-slate-900 max-w-xl mx-auto space-y-4 comic-shadow">
+                        <div class="text-center space-y-2">
+                            <span class="text-5xl block transform hover:scale-110 transition-transform">🤖</span>
+                            <p class="text-xs sm:text-sm italic text-red-700 font-extrabold">"Aku adalah Cyber X! Pecahkan persamaan Sektor A di bawah untuk mendapatkan nilai rahasia $x$!"</p>
+                        </div>
+                        <div class="p-4 bg-white rounded-xl border-2 border-slate-900 text-center text-2xl font-black">
+                            $3x - 5 = 16$
+                        </div>
+                        <div id="options-container-31" class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs sm:text-sm font-bold"></div>
+                        <p id="practice-ans-31" class="text-center font-black text-sm h-10"></p>
+                    </div>
+                </div>
+
+                <!-- SLIDE 32: BOSS BATTLE Sektor B -->
+                <div id="slide-32" class="slide-item hidden space-y-6">
+                    <div class="text-center space-y-2">
+                        <span class="text-white font-black uppercase tracking-widest text-xs bg-red-600 px-4 py-1.5 rounded-full border-2 border-slate-900 animate-pulse">🔥 PERTARUNGAN BOSS SEKTOR B</span>
+                        <h3 class="text-2xl font-black text-red-600">Kode Sektor B Brankas Cyber X</h3>
+                    </div>
+                    <div class="bg-red-50 p-5 rounded-2xl border-2 border-slate-900 max-w-xl mx-auto space-y-4 comic-shadow">
+                        <div class="text-center space-y-2">
+                            <span class="text-5xl block transform hover:scale-110 transition-transform">🛸</span>
+                            <p class="text-xs sm:text-sm italic text-red-700 font-extrabold">"Bagus, Sektor A roboh! Sekarang pecahkan persamaan Sektor B untuk mendapatkan nilai $y$!"</p>
+                        </div>
+                        <div class="p-4 bg-white rounded-xl border-2 border-slate-900 text-center text-2xl font-black">
+                            $\frac{y}{2} + 4 = 11$
+                        </div>
+                        <div id="options-container-32" class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs sm:text-sm font-bold"></div>
+                        <p id="practice-ans-32" class="text-center font-black text-sm h-10"></p>
+                    </div>
+                </div>
+
+                <!-- SLIDE 33: BOSS BATTLE FINAL COMBINATION -->
+                <div id="slide-33" class="slide-item hidden space-y-6">
+                    <div class="text-center space-y-2">
+                        <span class="text-white font-black uppercase tracking-widest text-xs bg-red-600 px-4 py-1.5 rounded-full border-2 border-slate-900 glow-indigo">🔥 KODE AKSES FINAL BRANKAS</span>
+                        <h3 class="text-2xl font-black text-red-600">Kombinasi Akhir Sektor A + B</h3>
+                    </div>
+                    <div class="bg-red-100 p-5 rounded-2xl border-2 border-slate-900 max-w-xl mx-auto space-y-4 comic-shadow">
+                        <div class="text-center space-y-2">
+                            <span class="text-6xl block transform hover:scale-110 transition-transform">🔑</span>
+                            <p class="text-xs sm:text-sm italic text-slate-800 font-extrabold">"Gabungkan kode rahasia dari Sektor A ($x$) dan Sektor B ($y$) untuk membuka pintu baja!"</p>
+                        </div>
+                        <div class="bg-white p-4 rounded-xl border-2 border-slate-900 text-center text-lg font-black text-slate-800 leading-relaxed">
+                            Berapakah nilai gabungan dari: $x + y$?
+                        </div>
+                        <div id="options-container-33" class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs sm:text-sm font-bold"></div>
+                        <p id="practice-ans-33" class="text-center font-black text-sm h-10"></p>
+                    </div>
+                </div>
+
+                <!-- SLIDE 34: Gelar Kelulusan & Catatan Emas -->
+                <div id="slide-34" class="slide-item hidden space-y-6">
+                    <div class="text-center space-y-2">
+                        <span class="text-indigo-950 font-black bg-amber-300 px-3 py-1 rounded-full border-2 border-slate-900 text-xs">Evaluasi Akhir Misi</span>
+                        <h3 class="text-2xl font-black text-indigo-950">Pilih Lencana Kebanggaanmu</h3>
+                    </div>
+                    <p class="text-center text-xs sm:text-sm text-slate-700 font-bold">Klik salah satu lencana kehormatan di bawah ini sesuai kesukaanmu!</p>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-2xl mx-auto pt-2 font-bold">
+                        <div onclick="selectRank('Spesialis Timbangan', '🥈')" class="rank-card p-4 bg-white rounded-2xl border-2 border-slate-900 text-center cursor-pointer hover:bg-amber-100 comic-shadow-sm transition-all">
+                            <span class="text-4xl block animate-bounce">🥈</span>
+                            <h4 class="font-black text-sm text-slate-800 mt-2">Spesialis Timbangan</h4>
+                            <p class="text-[11px] text-slate-500 mt-1">Sangat lancar menguji keseimbangan timbangan dan membuang konstanta luar.</p>
+                        </div>
+                        <div onclick="selectRank('Kapten Aljabar Ganda', '🥇')" class="rank-card p-4 bg-white rounded-2xl border-2 border-slate-900 text-center cursor-pointer hover:bg-amber-100 comic-shadow-sm transition-all">
+                            <span class="text-4xl block animate-bounce">🥇</span>
+                            <h4 class="font-black text-sm text-slate-800 mt-2">Kapten Aljabar Ganda</h4>
+                            <p class="text-[11px] text-slate-500 mt-1">Sangat cerdik menerjemahkan sandi kalimat cerita ke model aljabar ganda.</p>
+                        </div>
+                        <div onclick="selectRank('Master Kriptografi Semesta', '👑')" class="rank-card p-4 bg-white rounded-2xl border-2 border-slate-900 text-center cursor-pointer hover:bg-amber-100 comic-shadow-sm transition-all">
+                            <span class="text-4xl block animate-bounce">👑</span>
+                            <h4 class="font-black text-sm text-slate-800 mt-2">Master Kriptografi Semesta</h4>
+                            <p class="text-[11px] text-slate-500 mt-1">Sukses mematikan brankas cyber ganda dan menyingkap misteri tanda kurung!</p>
+                        </div>
+                    </div>
+                    <p id="rank-msg" class="text-center text-sm font-black text-amber-700 h-6 pt-2"></p>
+                </div>
+
+                <!-- SLIDE 35: Certificate of Achievement -->
+                <div id="slide-35" class="slide-item hidden space-y-6 text-center">
+                    <div class="space-y-2">
+                        <span class="text-amber-950 font-black bg-amber-300 px-3 py-1 rounded-full border-2 border-slate-900 text-xs">Kelulusan Detektif Elite</span>
+                        <h3 class="text-3xl md:text-4xl font-black bg-gradient-to-r from-indigo-500 to-indigo-600 bg-clip-text text-transparent">AKADEMI SELESAI DENGAN GEMILANG!</h3>
+                    </div>
+                    <div class="max-w-md mx-auto bg-amber-50 p-6 rounded-2xl border-4 border-slate-900 space-y-4 shadow-xl relative overflow-hidden">
+                        <div class="absolute -top-10 -left-10 w-24 h-24 bg-indigo-300/20 rounded-full blur-2xl"></div>
+                        <div class="absolute -bottom-10 -right-10 w-24 h-24 bg-pink-300/20 rounded-full blur-2xl"></div>
+                        
+                        <div class="flex justify-center">
+                            <span class="text-7xl animate-bounce">🏆</span>
+                        </div>
+                        <h4 class="font-black text-lg text-slate-800">Sertifikat Kelulusan Ahli Aljabar Ganda</h4>
+                        <p class="text-xs text-slate-500 font-bold">Diberikan secara terakreditasi kepada:</p>
+                        <p id="cert-name" class="text-2xl font-black text-indigo-950 underline tracking-wide">Detektif Hebat</p>
+                        <p class="text-[12px] text-slate-700 font-bold leading-relaxed">Telah sukses melampaui 35 Misi Tantangan Aljabar Ganda tingkat tinggi mencakup operasi timbangan konstanta, pengisian pecahan silang, distributif tanda kurung, dan pemecahan kasus sandi cerita secara sempurna!</p>
+                        <div class="pt-2">
+                            <span class="text-xs font-black bg-white px-3 py-1 rounded-full border border-slate-900 text-indigo-950">Gelar: <span id="cert-rank">Detektif Spesialis</span></span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Footer Navigation inside main card -->
+            <footer class="mt-8 pt-4 border-t-2 border-slate-900 flex justify-between items-center bg-white">
+                <button id="btn-prev" onclick="navigateSlide(-1)" class="px-5 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 border-2 border-slate-900 font-black text-sm text-slate-800 transition-all flex items-center gap-2 comic-shadow-sm comic-btn-active">
+                    <i class="fa-solid fa-arrow-left"></i> Kembali
+                </button>
+                <div class="hidden sm:flex gap-1.5 items-center">
+                    <span class="text-xs text-slate-500 font-black uppercase mr-1">Misi:</span>
+                    <span id="slide-pills" class="flex gap-1.5"></span>
+                </div>
+                <button id="btn-next" onclick="navigateSlide(1)" class="px-6 py-2.5 rounded-xl bg-gradient-to-r from-indigo-500 to-indigo-600 border-2 border-slate-900 text-slate-900 font-black text-sm transition-all flex items-center gap-2 comic-shadow-sm comic-btn-active">
+                    Misi Lanjut <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </footer>
+
+        </div>
+    </main>
+
+    <!-- Visual scale visualizer script for Slide 9 -->
+    <script>
+        function renderScaleVisualizer() {
+            const leftContainer = document.getElementById('scale-left-visual');
+            const rightContainer = document.getElementById('scale-right-visual');
+            if(!leftContainer || !rightContainer) return;
+            
+            leftContainer.innerHTML = "";
+            rightContainer.innerHTML = "";
+
+            // Left Side (variables and constants)
+            for(let i = 0; i < GameState.scaleLeft; i++) {
+                leftContainer.innerHTML += `<span class="bg-red-400 border border-slate-950 px-2 py-1 rounded text-xs font-black animate-pulse">X</span>`;
+            }
+            for(let i = 0; i < GameState.scaleLeftConst; i++) {
+                leftContainer.innerHTML += `<span class="bg-amber-400 border border-slate-950 w-5 h-5 rounded-full text-[10px] flex items-center justify-center font-bold">1</span>`;
+            }
+
+            // Right Side (constants only)
+            for(let i = 0; i < GameState.scaleRight; i++) {
+                rightContainer.innerHTML += `<span class="bg-amber-400 border border-slate-950 w-4 h-4 rounded-full text-[8px] flex items-center justify-center font-bold">1</span>`;
+            }
+
+            // Dynamic Texts
+            document.getElementById('scale-left-text').textContent = `Kiri: ${GameState.scaleLeft}x ${GameState.scaleLeftConst > 0 ? '+ ' + GameState.scaleLeftConst : ''}`;
+            document.getElementById('scale-right-text').textContent = `Kanan: ${GameState.scaleRight}`;
+            
+            let equationText = `$${GameState.scaleLeft}x + ${GameState.scaleLeftConst} = ${GameState.scaleRight}$`;
+            if (GameState.scaleLeftConst === 0) {
+                equationText = `$${GameState.scaleLeft}x = ${GameState.scaleRight}$`;
+            }
+            document.getElementById('scale-equation-display').textContent = equationText;
+            renderMath(document.getElementById('scale-equation-display'));
+        }
+
+        function performScaleStep(stepNum) {
+            if (stepNum === 1 && GameState.scaleActiveStep === 1) {
+                SoundFX.playClick();
+                GameState.scaleLeftConst = 0;
+                GameState.scaleRight = 10;
+                GameState.scaleActiveStep = 2;
+                
+                document.getElementById('scale-feedback').textContent = "💥 Hebat! Konstanta +6 berhasil dihilangkan dari kedua sisi timbangan!";
+                document.getElementById('scale-feedback').className = "text-center font-bold text-sm text-emerald-600 animate-pulse";
+                
+                const s1 = document.getElementById('btn-scale-step1');
+                const s2 = document.getElementById('btn-scale-step2');
+                s1.disabled = true;
+                s1.className = "w-full p-3 bg-slate-200 text-slate-400 font-black rounded-xl border-2 border-slate-300 cursor-not-allowed";
+                s2.disabled = false;
+                s2.className = "w-full p-3 bg-indigo-500 hover:bg-indigo-600 text-white font-black rounded-xl border-2 border-slate-900 comic-shadow-sm comic-btn-active";
+                
+                renderScaleVisualizer();
+            } else if (stepNum === 2 && GameState.scaleActiveStep === 2) {
+                SoundFX.playSuccess();
+                GameState.scaleLeft = 1;
+                GameState.scaleRight = 5;
+                GameState.scaleActiveStep = 3;
+
+                document.getElementById('scale-feedback').textContent = "🎯 Sempurna! Setiap 1 kotak X terbukti setara dengan tepat 5 kelereng! x = 5.";
+                document.getElementById('scale-feedback').className = "text-center font-black text-sm text-emerald-600 animate-bounce";
+                
+                const s2 = document.getElementById('btn-scale-step2');
+                s2.disabled = true;
+                s2.className = "w-full p-3 bg-slate-200 text-slate-400 font-black rounded-xl border-2 border-slate-350 cursor-not-allowed";
+                
+                addScore(150);
+                GameState.completedSlides.add(9);
+                renderScaleVisualizer();
+                initSidebar();
+            }
+        }
+    </script>
+
+    <!-- Side Map Drawer Generator & Event Bindings -->
+    <script>
+        function toggleSidebar(forceState) {
+            SoundFX.playClick();
+            const sb = document.getElementById('sidebar');
+            if (forceState !== undefined) {
+                if (forceState) sb.classList.remove('-translate-x-full');
+                else sb.classList.add('-translate-x-full');
+            } else {
+                sb.classList.toggle('-translate-x-full');
+            }
+        }
+
+        function selectAvatar(id, emoji) {
+            SoundFX.playClick();
+            GameState.avatar = emoji;
+            document.getElementById('hud-avatar').textContent = emoji;
+            
+            document.querySelectorAll('.avatar-opt').forEach(btn => {
+                btn.classList.remove('bg-indigo-300');
+            });
+            event.currentTarget.classList.add('bg-indigo-300');
+        }
+
+        function initSidebar() {
+            const container = document.getElementById('sidebar-mission-list');
+            if(!container) return;
+            container.innerHTML = "";
+
+            const titles = {
+                1: "Gerbang Akademi Agen X", 2: "Target Utama & Misi",
+                3: "Warm-up 1: Kotak Rahasia", 4: "Warm-up 2: Kunci Keluar", 
+                5: "Warm-up 3: Kantong Kelereng", 6: "Warm-up 4: Membagi Harta", 7: "Warm-up 5: Cerita Siska",
+                8: "Konsep 1: Sandi Ganda", 9: "Simulator Sandbox Timbangan", 
+                10: "Aturan Emas 1: Konstanta", 11: "Aturan Emas 2: Koefisien", 
+                12: "Kamus Flip Aljabar Ganda", 
+                13: "Tantangan Taktis 1: $2x+5=15$", 14: "Tantangan Taktis 2: $3y-4=17$", 
+                15: "Tantangan Taktis 3: $a/2+3=9$", 16: "Tantangan Taktis 4: $w/3-2=4$",
+                17: "Aturan 3: Tanda Kurung", 18: "Bongkar Sifat Distributif", 
+                19: "Tantangan Taktis 5: $3(k-2)=15$",
+                20: "Uji Mandiri 1: $3x+7=22$", 21: "Uji Mandiri 2: $4y-8=16$", 
+                22: "Uji Mandiri 3: $a/4+6=11$", 23: "Uji Mandiri 4: $b/2-5=3$", 
+                24: "Uji Mandiri 5: $5w+12=42$", 
+                25: "Uji Distributif 1: $2(x+4)=18$", 26: "Uji Distributif 2: $3(y-5)=12$",
+                27: "Kasus Cerita 1: Kantong Donat", 28: "Kasus Cerita 2: Koin Penolong", 
+                29: "Kasus Cerita 3: Tiket Kereta", 30: "Kasus Cerita 4: Bingkisan Hias",
+                31: "BOSS FINAL Sektor A", 32: "BOSS FINAL Sektor B", 33: "FINAL CODE Akses Brankas",
+                34: "Evaluasi & Klaim Pangkat", 35: "Sertifikat Kelulusan"
+            };
+
+            for (let i = 1; i <= GameState.totalSlides; i++) {
+                const btn = document.createElement('button');
+                btn.className = `w-full text-left p-3 rounded-xl border-2 flex items-center justify-between text-xs transition duration-200 ${
+                    GameState.currentSlide === i 
+                    ? 'bg-indigo-300 border-slate-900 text-slate-900 font-black shadow-sm' 
+                    : 'bg-white border-slate-200 text-slate-500 hover:border-slate-400 font-bold'
+                }`;
+                btn.onclick = () => {
+                    goToSlide(i);
+                    toggleSidebar(false);
+                };
+
+                let status = "🔒";
+                if (i === 1 || GameState.completedSlides.has(i) || i <= GameState.currentSlide) {
+                    status = "✅";
+                }
+
+                btn.innerHTML = `
+                    <span class="flex items-center gap-2">
+                        <span class="font-extrabold text-indigo-400">${i}.</span>
+                        <span class="truncate max-w-[150px]">${titles[i] || 'Misi ' + i}</span>
+                    </span>
+                    <span>${status}</span>
+                `;
+                container.appendChild(btn);
+            }
+        }
+
+        // Shuffled interactive questions generator for pages 20 - 33
+        function generateSlideOptions() {
+            // Slide 20: 3x + 7 = 22 -> 3x = 15 -> x = 5
+            buildQuiz(20, [
+                { text: "$x = 5$", correct: true, feedback: "🎯 Tepat Sekali! $3x = 22 - 7 \\implies 3x = 15 \\implies x = 5$!" },
+                { text: "$x = 9$", correct: false, feedback: "❌ Kurang tepat! Ingat untuk memindahkan $+7$ terlebih dahulu menjadi $-7$." },
+                { text: "$x = 15$", correct: false, feedback: "❌ Angka 15 baru sisa pengurangan, selesaikan dengan membaginya dengan 3." },
+                { text: "$x = 3$", correct: false, feedback: "❌ Salah hitung. Ulangi perpindahan ruasnya secara perlahan!" }
+            ]);
+
+            // Slide 21: 4y - 8 = 16 -> 4y = 24 -> y = 6
+            buildQuiz(21, [
+                { text: "$y = 6$", correct: true, feedback: "🎯 Benar! $-8$ dipindahkan ke kanan menjadi $+8 \\implies 4y = 24 \\implies y = 6$!" },
+                { text: "$y = 2$", correct: false, feedback: "❌ Kurang tepat! Kamu malah mengurangkan 8, padahal kebalikannya harus ditambah!" },
+                { text: "$y = 24$", correct: false, feedback: "❌ Nilai 24 adalah $16 + 8$. Bagilah angka tersebut dengan 4!" },
+                { text: "$y = 8$", correct: false, feedback: "❌ Salah hitung. Cobalah lebih teliti." }
+            ]);
+
+            // Slide 22: a/4 + 6 = 11 -> a/4 = 5 -> a = 20
+            buildQuiz(22, [
+                { text: "$a = 20$", correct: true, feedback: "🎯 Sempurna! $\\frac{a}{4} = 11 - 6 \\implies \\frac{a}{4} = 5 \\implies a = 5 \\times 4 = 20$!" },
+                { text: "$a = 5$", correct: false, feedback: "❌ Nilai 5 baru hasil pengurangan, kalikan dengan penyebutnya (4)!" },
+                { text: "$a = 1.25$", correct: false, feedback: "❌ Pembagian 4 melompat menjadi perkalian silang di sebelah kanan!" },
+                { text: "$a = 15$", correct: false, feedback: "❌ Salah hitung. Coba lakukan operasi kebalikannya lagi." }
+            ]);
+
+            // Slide 23: b/2 - 5 = 3 -> b/2 = 8 -> b = 16
+            buildQuiz(23, [
+                { text: "$b = 16$", correct: true, feedback: "🎯 Hebat! $\\frac{b}{2} = 3 + 5 \\implies \\frac{b}{2} = 8 \\implies b = 8 \\times 2 = 16$!" },
+                { text: "$b = 8$", correct: false, feedback: "❌ Nilai 8 baru sisa pertambahan, kalikan dengan 2!" },
+                { text: "$b = 4$", correct: false, feedback: "❌ Perpindahan tanda pembagi 2 berubah menjadi pengali." },
+                { text: "$b = 10$", correct: false, feedback: "❌ Kurang akurat. Selesaikan langkah demi langkah." }
+            ]);
+
+            // Slide 24: 5w + 12 = 42 -> 5w = 30 -> w = 6
+            buildQuiz(24, [
+                { text: "$w = 6$", correct: true, feedback: "🎯 Benar! $5w = 42 - 12 \\implies 5w = 30 \\implies w = 6$!" },
+                { text: "$w = 30$", correct: false, feedback: "❌ Hasil $42 - 12$ adalah 30, tinggal membaginya dengan 5." },
+                { text: "$w = 5$", correct: false, feedback: "❌ Salah operasi. Periksa kembali pembagianmu." },
+                { text: "$w = 8$", correct: false, feedback: "❌ Salah hitung. Pahami urutan memindahkan suku." }
+            ]);
+
+            // Slide 25: 2(x + 4) = 18 -> x + 4 = 9 -> x = 5
+            buildQuiz(25, [
+                { text: "$x = 5$", correct: true, feedback: "🎯 Cerdas! Bagi dulu dengan 2: $x + 4 = 18 \\div 2 \\implies x + 4 = 9 \\implies x = 5$!" },
+                { text: "$x = 9$", correct: false, feedback: "❌ Nilai 9 baru hasil pembagian awal, masih harus dikurangi 4!" },
+                { text: "$x = 14$", correct: false, feedback: "❌ Kurang tepat. Pahami langkah pengosongan tanda kurung." },
+                { text: "$x = 3$", correct: false, feedback: "❌ Salah hitung. Cobalah ulangi." }
+            ]);
+
+            // Slide 26: 3(y - 5) = 12 -> y - 5 = 4 -> y = 9
+            buildQuiz(26, [
+                { text: "$y = 9$", correct: true, feedback: "🎯 Luar Biasa! Bagi dulu dengan 3: $y - 5 = 12 \\div 3 \\implies y - 5 = 4 \\implies y = 9$!" },
+                { text: "$y = 4$", correct: false, feedback: "❌ Nilai 4 baru hasil pembagian awal, masih harus ditambah 5!" },
+                { text: "$y = 15$", correct: false, feedback: "❌ Salah tanda. Selesaikan secara bertahap." },
+                { text: "$y = 1$", correct: false, feedback: "❌ Salah hitung. Ulangi perpindahan suku $-5$ melompat ke kanan." }
+            ]);
+
+            // Slide 27: 2d + 5 = 19 -> 2d = 14 -> d = 7
+            buildQuiz(27, [
+                { text: "$2d + 5 = 19 \\implies d = 7$", correct: true, feedback: "🎯 Tepat Sekali! Model aljabarnya akurat dan isi per kantong adalah 7 donat!" },
+                { text: "$2d - 5 = 19 \\implies d = 12$", correct: false, feedback: "❌ Salah model! Donat tambahan diletakkan di luar berarti penambah ($+5$)." },
+                { text: "$2(d + 5) = 19 \\implies d = 4.5$", correct: false, feedback: "❌ Model kurung kurang tepat karena donat bonus berada di luar kantong." }
+            ], true);
+
+            // Slide 28: k/3 - 4 = 2 -> k/3 = 6 -> k = 18
+            buildQuiz(28, [
+                { text: "$\\frac{k}{3} - 4 = 2 \\implies k = 18$", correct: true, feedback: "🎯 Hebat! Model aljabarnya akurat dan jumlah awal koin penyelamat adalah 18 koin!" },
+                { text: "$\\frac{k}{3} + 4 = 2 \\implies k = -6$", correct: false, feedback: "❌ Salah model! Koin dibelanjakan berarti pengurang ($-4$)." },
+                { text: "$3k - 4 = 2 \\implies k = 2$", correct: false, feedback: "❌ Membagi koin ke dalam 3 tim digambarkan dengan pecahan $\\frac{k}{3}$." }
+            ], true);
+
+            // Slide 29: 4t - 10000 = 30000 -> 4t = 40000 -> t = 10000
+            buildQuiz(29, [
+                { text: "$4t - 10.000 = 30.000 \\implies t = 10.000$", correct: true, feedback: "🎯 Sempurna! Model aljabarnya tepat dan harga tiket sebelum potongan adalah Rp10.000!" },
+                { text: "$4t + 10.000 = 30.000 \\implies t = 5.000$", correct: false, feedback: "❌ Salah model! Potongan kupon langsung berarti operasi pengurangan ($-10.000$)." },
+                { text: "$4(t - 10.000) = 30.000 \\implies t = 17.500$", correct: false, feedback: "❌ Kupon tersebut memotong total bayar seluruh tiket, bukan per tiket individual." }
+            ], true);
+
+            // Slide 30: 2(b + 3) = 16 -> b + 3 = 8 -> b = 5
+            buildQuiz(30, [
+                { text: "$2(b + 3) = 16 \\implies b = 5$", correct: true, feedback: "🎯 Fantastis! Karena 3 pita masuk di tiap 2 kotak hiasan, model kurung $2(b+3)=16$ terbukti akurat!" },
+                { text: "$2b + 3 = 16 \\implies b = 6.5$", correct: false, feedback: "❌ Kurang tepat! Ingat pita hias juga ikut dimasukkan ke dalam kedua kotak tersebut." },
+                { text: "$2(b - 3) = 16 \\implies b = 11$", correct: false, feedback: "❌ Salah tanda! Boneka ditambah pita di dalam kotak hiasan." }
+            ], true);
+
+            // Slide 31: 3x - 5 = 16 -> 3x = 21 -> x = 7
+            buildQuiz(31, [
+                { text: "$x = 7$", correct: true, feedback: "🎯 Tepat! Kode Sektor A Terbuka! $3x = 16 + 5 \\implies 3x = 21 \\implies x = 7$!" },
+                { text: "$x = 3.6$", correct: false, feedback: "❌ Kurang tepat! Ingat $-5$ dipindahkan ke kanan menjadi $+5$." },
+                { text: "$x = 5$", correct: false, feedback: "❌ Salah hitung. Selesaikan persamaannya dengan tenang." }
+            ]);
+
+            // Slide 32: y/2 + 4 = 11 -> y/2 = 7 -> y = 14
+            buildQuiz(32, [
+                { text: "$y = 14$", correct: true, feedback: "🎯 Sempurna! Kode Sektor B Terbuka! $\\frac{y}{2} = 11 - 4 \\implies \\frac{y}{2} = 7 \\implies y = 14$!" },
+                { text: "$y = 7$", correct: false, feedback: "❌ Nilai 7 baru hasil pertengahan koin. Kalikan dengan penyebutnya!" },
+                { text: "$y = 30$", correct: false, feedback: "❌ Salah hitung. Selesaikan ruas pecahan secara hati-hati." }
+            ]);
+
+            // Slide 33: A(7) + B(14) = 21
+            buildQuiz(33, [
+                { text: "Kode Kombinasi: $21$", correct: true, feedback: "🎯 LUAR BIASA! Pintu Baja Terbuka! Cyber X Menyerah Kalah! Nilai $x=7$ ditambah $y=14$ menghasilkan 21!" },
+                { text: "Kode Kombinasi: $15$", correct: false, feedback: "❌ Kode Ditolak! Jumlahkan kembali nilai $x$ dari Sektor A dan $y$ dari Sektor B." },
+                { text: "Kode Kombinasi: $28$", correct: false, feedback: "❌ Kode Salah! Ingatlah hasil hitung Sektor A dan B sebelumnya." }
+            ]);
+        }
+
+        function buildQuiz(slideNum, opts, isFullWidth = false) {
+            const container = document.getElementById(`options-container-${slideNum}`);
+            if (!container) return;
+            container.innerHTML = "";
+
+            // Shuffle options
+            const shuffled = [...opts];
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+
+            shuffled.forEach(opt => {
+                const btn = document.createElement('button');
+                btn.className = `w-full p-3.5 bg-white hover:bg-indigo-100 text-slate-800 font-extrabold text-sm border-2 border-slate-900 rounded-xl comic-shadow-sm comic-btn-active transition-all text-left`;
+                btn.innerHTML = opt.text;
+                btn.onclick = () => {
+                    const feedback = document.getElementById(`practice-ans-${slideNum}`);
+                    if (opt.correct) {
+                        SoundFX.playSuccess();
+                        feedback.innerHTML = opt.feedback;
+                        feedback.className = "text-center font-black text-sm text-emerald-600 animate-bounce";
+                        
+                        GameState.completedSlides.add(slideNum);
+                        addScore(150);
+                        initSidebar();
+
+                        // Lock options
+                        Array.from(container.children).forEach(b => {
+                            b.disabled = true;
+                            if (b.innerHTML === opt.text) {
+                                b.className = "w-full p-3.5 bg-emerald-300 border-2 border-slate-900 rounded-xl text-left font-black text-slate-900";
+                            } else {
+                                b.className = "w-full p-3.5 bg-slate-100 border-2 border-slate-200 rounded-xl opacity-50 text-left cursor-not-allowed";
+                            }
+                        });
+                    } else {
+                        SoundFX.playWrong();
+                        feedback.innerHTML = opt.feedback;
+                        feedback.className = "text-center font-black text-sm text-rose-500 animate-pulse";
+                        btn.className = "w-full p-3.5 bg-rose-100 border-2 border-slate-300 rounded-xl opacity-50 cursor-not-allowed text-left";
+                        btn.disabled = true;
+                    }
+                    renderMath(feedback);
+                };
+                container.appendChild(btn);
+                renderMath(btn);
+            });
+        }
+
+        // --- INTERACTIVE WARM-UP CHECKER ---
+        function checkWarmup(slideNum, value, isCorrect, element) {
+            const ans = document.getElementById(`warmup-ans-${slideNum}`);
+            if (isCorrect) {
+                SoundFX.playSuccess();
+                ans.innerHTML = `🎯 Hebat! Jawabannya benar (${value}). Kamu detektif berpikir cepat!`;
+                ans.className = "text-center font-black text-sm text-emerald-600 animate-bounce";
+                element.className = "p-3 bg-emerald-300 border-2 border-slate-900 rounded-xl font-black";
+                GameState.completedSlides.add(slideNum);
+                addScore(50);
+                initSidebar();
+            } else {
+                SoundFX.playWrong();
+                ans.innerHTML = `❌ Oops! Nilai ${value} belum tepat. Silakan analisis ulang persamaannya!`;
+                ans.className = "text-center font-black text-sm text-rose-500 animate-pulse";
+                element.className = "p-3 bg-rose-200 border-2 border-slate-900 rounded-xl font-black opacity-60";
+            }
+        }
+
+        // --- DETECTIVE STORY WARM-UP CHECKER ---
+        function checkCaseSlide(slideNum, isCorrect) {
+            const ans = document.getElementById(`case-ans-${slideNum}`);
+            if (isCorrect) {
+                SoundFX.playSuccess();
+                ans.innerHTML = "🎯 Tepat sekali! Model aljabarnya adalah $5d = 45 \\implies d = 9$ donat per kotak!";
+                ans.className = "text-center font-black text-sm text-emerald-600 animate-bounce";
+                GameState.completedSlides.add(slideNum);
+                addScore(100);
+                initSidebar();
+            } else {
+                SoundFX.playWrong();
+                ans.innerHTML = "❌ Model formulanya tidak tepat! Pahami cara perkaliannya kembali.";
+                ans.className = "text-center font-black text-sm text-rose-500 animate-pulse";
+            }
+            renderMath(ans);
+        }
+
+        function selectRank(rank, emoji) {
+            SoundFX.playSuccess();
+            document.querySelectorAll('.rank-card').forEach(c => c.classList.remove('bg-indigo-200', 'border-slate-900'));
+            event.currentTarget.classList.add('bg-indigo-200', 'border-slate-900');
+            
+            document.getElementById('rank-msg').textContent = `🎖️ Selamat! Kamu resmi menyandang pangkat ${rank}!`;
+            document.getElementById('cert-rank').textContent = rank;
+        }
+
+        function addScore(pts) {
+            GameState.score += pts;
+            document.getElementById('hud-score').textContent = `${GameState.score} XP`;
+        }
+
+        // Navigation engine
+        function goToSlide(num) {
+            if (num < 1 || num > GameState.totalSlides) return;
+
+            // Save player name
+            if (GameState.currentSlide === 1) {
+                const nameInp = document.getElementById('player-name-input').value.trim();
+                if (nameInp) {
+                    GameState.playerName = nameInp;
+                    document.getElementById('hud-name').textContent = nameInp;
+                    document.getElementById('cert-name').textContent = nameInp;
+                }
+            }
+
+            // Progression locks
+            if (num > GameState.currentSlide) {
+                if (GameState.currentSlide === 9 && !GameState.completedSlides.has(9)) {
+                    document.getElementById('scale-feedback').textContent = "⚠️ Selesaikan simulasi timbangan terlebih dulu!";
+                    SoundFX.playWrong();
+                    return;
+                }
+                if (GameState.currentSlide === 31 && !GameState.completedSlides.has(31)) {
+                    document.getElementById('practice-ans-31').textContent = "⚠️ Kamu harus menguraikan Sektor A terlebih dahulu!";
+                    SoundFX.playWrong();
+                    return;
+                }
+                if (GameState.currentSlide === 32 && !GameState.completedSlides.has(32)) {
+                    document.getElementById('practice-ans-32').textContent = "⚠️ Selesaikan Sektor B terlebih dahulu!";
+                    SoundFX.playWrong();
+                    return;
+                }
+            }
+
+            // Hide old slide
+            const prevEl = document.getElementById(`slide-${GameState.currentSlide}`);
+            if (prevEl) prevEl.classList.add('hidden');
+
+            GameState.currentSlide = num;
+
+            // Show new slide
+            const nextEl = document.getElementById(`slide-${GameState.currentSlide}`);
+            if (nextEl) {
+                nextEl.classList.remove('hidden');
+                setTimeout(() => {
+                    renderMath(nextEl);
+                }, 40);
+            }
+
+            // Update HUD
+            document.getElementById('hud-slide-num').textContent = GameState.currentSlide;
+            const pct = (GameState.currentSlide / GameState.totalSlides) * 100;
+            document.getElementById('main-progress-bar').style.width = `${pct}%`;
+
+            // Back button limits
+            document.getElementById('btn-prev').style.opacity = GameState.currentSlide === 1 ? '0.3' : '1';
+            
+            if (GameState.currentSlide === GameState.totalSlides) {
+                document.getElementById('btn-next').innerHTML = `Keluar <i class="fa-solid fa-flag-checkered"></i>`;
+                SoundFX.playFanfare();
+            } else {
+                document.getElementById('btn-next').innerHTML = `Misi Lanjut <i class="fa-solid fa-arrow-right"></i>`;
+            }
+
+            if (GameState.currentSlide === 9) {
+                renderScaleVisualizer();
+            }
+
+            initSidebar();
+            buildSlidePills();
+            SoundFX.playClick();
+        }
+
+        function navigateSlide(dir) {
+            goToSlide(GameState.currentSlide + dir);
+        }
+
+        function buildSlidePills() {
+            const container = document.getElementById('slide-pills');
+            if(!container) return;
+            container.innerHTML = "";
+            const startIdx = Math.max(1, GameState.currentSlide - 2);
+            const endIdx = Math.min(GameState.totalSlides, startIdx + 4);
+
+            for (let i = startIdx; i <= endIdx; i++) {
+                const pill = document.createElement('span');
+                pill.className = `w-4 h-4 rounded-full border border-slate-900 transition-colors duration-200 ${
+                    GameState.currentSlide === i ? 'bg-indigo-500' : 'bg-slate-200'
+                }`;
+                container.appendChild(pill);
+            }
+        }
+
+        window.onload = function() {
+            initSidebar();
+            generateSlideOptions();
+            buildSlidePills();
+            renderMath();
+            SoundFX.init();
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,1009 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sandi Ganda Agen X - Akademi Aljabar Tingkat Tinggi</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Fredoka & Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- KaTeX for beautiful math notation -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+    
+    <style>
+        body {
+            font-family: 'Fredoka', 'Poppins', sans-serif;
+        }
+        .math-font {
+            font-family: 'Poppins', sans-serif;
+        }
+        /* Cute custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #eef2f6;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #3b82f6;
+            border-radius: 6px;
+            border: 2px solid #eef2f6;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #2563eb;
+        }
+        /* Comic book shadow styling */
+        .comic-shadow {
+            box-shadow: 6px 6px 0px 0px #1e293b;
+        }
+        .comic-shadow-sm {
+            box-shadow: 4px 4px 0px 0px #1e293b;
+        }
+        .comic-btn-active:active {
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0px 0px #1e293b;
+        }
+        /* Custom animations */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(1deg); }
+        }
+        .animate-float {
+            animation: float 4s ease-in-out infinite;
+        }
+        @keyframes tilt-scale {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05) rotate(1deg); }
+        }
+        .animate-tilt-scale {
+            animation: tilt-scale 3s ease-in-out infinite;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-[#f0f9ff] via-[#faf5ff] to-[#f0fdf4] text-[#1e293b] min-h-screen flex flex-col justify-between overflow-x-hidden">
+
+    <script>
+        // Highly engaging synthesizer sound generator for interactive feedback
+        const SoundFX = {
+            ctx: null,
+            init() {
+                if (!this.ctx) {
+                    this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+                }
+            },
+            playClick() {
+                this.init();
+                let osc = this.ctx.createOscillator();
+                let gain = this.ctx.createGain();
+                osc.connect(gain);
+                gain.connect(this.ctx.destination);
+                osc.frequency.setValueAtTime(550, this.ctx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(1100, this.ctx.currentTime + 0.08);
+                gain.gain.setValueAtTime(0.08, this.ctx.currentTime);
+                gain.gain.linearRampToValueAtTime(0.01, this.ctx.currentTime + 0.08);
+                osc.start();
+                osc.stop(this.ctx.currentTime + 0.1);
+            },
+            playSuccess() {
+                this.init();
+                let now = this.ctx.currentTime;
+                // Upward arpeggio representing a discovery/level-up
+                let notes = [587.33, 739.99, 880.00, 1174.66]; // D5, F#5, A5, D6
+                notes.forEach((freq, idx) => {
+                    let osc = this.ctx.createOscillator();
+                    let gain = this.ctx.createGain();
+                    osc.connect(gain);
+                    gain.connect(this.ctx.destination);
+                    osc.frequency.setValueAtTime(freq, now + idx * 0.06);
+                    gain.gain.setValueAtTime(0.1, now + idx * 0.06);
+                    gain.gain.linearRampToValueAtTime(0.01, now + idx * 0.06 + 0.12);
+                    osc.start(now + idx * 0.06);
+                    osc.stop(now + idx * 0.06 + 0.15);
+                });
+            },
+            playWrong() {
+                this.init();
+                let osc = this.ctx.createOscillator();
+                let gain = this.ctx.createGain();
+                osc.connect(gain);
+                gain.connect(this.ctx.destination);
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(220, this.ctx.currentTime);
+                osc.frequency.linearRampToValueAtTime(110, this.ctx.currentTime + 0.25);
+                gain.gain.setValueAtTime(0.1, this.ctx.currentTime);
+                gain.gain.linearRampToValueAtTime(0.01, this.ctx.currentTime + 0.25);
+                osc.start();
+                osc.stop(this.ctx.currentTime + 0.25);
+            },
+            playExplode() {
+                this.init();
+                // Simulates scale balancing/clearing obstruction
+                let osc = this.ctx.createOscillator();
+                let gain = this.ctx.createGain();
+                osc.connect(gain);
+                gain.connect(this.ctx.destination);
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(150, this.ctx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(40, this.ctx.currentTime + 0.4);
+                gain.gain.setValueAtTime(0.2, this.ctx.currentTime);
+                gain.gain.linearRampToValueAtTime(0.01, this.ctx.currentTime + 0.4);
+                osc.start();
+                osc.stop(this.ctx.currentTime + 0.4);
+            }
+        };
+
+        // Advanced Game State Tracker
+        const GameState = {
+            playerName: "Kadet Cerdas",
+            avatar: "👩‍🚀",
+            currentSlide: 1,
+            totalSlides: 14,
+            score: 0,
+            scaleLeft: 2, // 2x
+            scaleLeftConst: 6, // + 6
+            scaleRight: 16, // = 16
+            scaleActiveStep: 1, // 1: Pindah Konstanta, 2: Bagi Koefisien
+            completedSlides: new Set()
+        };
+
+        function renderMath(element) {
+            if (window.renderMathInElement) {
+                renderMathInElement(element || document.body, {
+                    delimiters: [
+                        {left: '$$', right: '$$', display: true},
+                        {left: '$', right: '$', display: false}
+                    ],
+                    throwOnError: false
+                });
+            }
+        }
+    </script>
+
+    <header class="bg-white border-b-4 border-blue-500 px-4 py-3 sticky top-0 z-50 shadow-sm">
+        <div class="max-w-6xl mx-auto flex flex-wrap items-center justify-between gap-3">
+            <div class="flex items-center gap-3">
+                <button onclick="toggleMap()" class="bg-blue-500 hover:bg-blue-600 text-white p-2.5 rounded-xl border-2 border-slate-900 comic-shadow-sm comic-btn-active transition-all" title="Buka Peta Misi">
+                    <i class="fa-solid fa-map text-lg"></i>
+                </button>
+                <div class="flex items-center gap-2">
+                    <span class="text-3xl animate-bounce">🛰️</span>
+                    <div>
+                        <h1 class="font-black text-xl text-blue-950 leading-none tracking-wide">SANDI GANDA AGEN X</h1>
+                        <span class="text-xs text-slate-500 font-bold">Misi Penguatan Aljabar 2 Langkah</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-4 bg-blue-50 px-4 py-2 rounded-2xl border-2 border-slate-900 comic-shadow-sm">
+                <div class="flex items-center gap-2">
+                    <div id="hud-avatar" class="w-8 h-8 rounded-full bg-blue-200 flex items-center justify-center text-lg border-2 border-slate-900">👩‍🚀</div>
+                    <span id="hud-name" class="text-sm font-bold text-blue-950">Kadet Cerdas</span>
+                </div>
+                <div class="h-6 w-[2px] bg-slate-900"></div>
+                <div class="flex items-center gap-1 text-blue-700 font-extrabold text-sm">
+                    <i class="fa-solid fa-star text-amber-500"></i>
+                    <span id="hud-score">0 XP</span>
+                </div>
+                <div class="h-6 w-[2px] bg-slate-900"></div>
+                <div class="text-xs text-blue-950 font-black bg-white px-3 py-1 rounded-xl border border-slate-900">
+                    Sandi <span id="hud-slide-num">1</span>/14
+                </div>
+            </div>
+        </div>
+        <!-- Fluid Progress Bar -->
+        <div class="max-w-6xl mx-auto w-full bg-slate-100 h-3 mt-3 rounded-full overflow-hidden border-2 border-slate-900">
+            <div id="main-progress-bar" class="bg-gradient-to-r from-blue-500 via-indigo-500 to-emerald-400 h-full transition-all duration-300" style="width: 7.14%"></div>
+        </div>
+    </header>
+
+    <!-- Slide Selection Map Drawer -->
+    <div id="sidebar-map" class="fixed left-0 top-0 bottom-0 w-80 bg-blue-50 border-r-4 border-slate-900 z-[100] transform -translate-x-full transition-transform duration-300 flex flex-col shadow-2xl">
+        <div class="p-4 border-b-2 border-slate-900 flex justify-between items-center bg-blue-200">
+            <div class="flex items-center gap-2 text-blue-950 font-extrabold text-lg">
+                <i class="fa-solid fa-compass text-blue-700"></i>
+                <span>Navigasi Operasi Sandi</span>
+            </div>
+            <button onclick="toggleMap(false)" class="text-slate-800 hover:text-red-500 transition-colors">
+                <i class="fa-solid fa-xmark text-2xl"></i>
+            </button>
+        </div>
+        <div class="flex-1 overflow-y-auto p-4 space-y-2 bg-gradient-to-b from-blue-50 to-indigo-50" id="map-mission-list">
+            <!-- Populated dynamically in script -->
+        </div>
+        <div class="p-4 border-t-2 border-slate-900 bg-blue-200 text-center text-xs text-blue-950 font-bold">
+            Modul Aljabar Spesialis • Level 2
+        </div>
+    </div>
+
+    <main class="flex-1 max-w-5xl w-full mx-auto p-4 md:p-6 flex flex-col justify-center items-center">
+        <div class="w-full bg-white border-4 border-slate-900 rounded-3xl p-6 md:p-8 comic-shadow relative min-h-[550px] flex flex-col justify-between">
+            
+            <div id="slides-viewport" class="w-full h-full flex-1">
+
+                <!-- SLIDE 1: Welcome & Setup -->
+                <div id="slide-1" class="slide-item space-y-6">
+                    <div class="text-center space-y-3">
+                        <span class="text-blue-950 font-black uppercase tracking-widest text-xs bg-blue-300 px-4 py-1.5 rounded-full border-2 border-slate-900">Operasi Tingkat Lanjut</span>
+                        <h2 class="text-3xl md:text-5xl font-black bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent drop-shadow-sm">Sandi Ganda Aljabar</h2>
+                        <p class="text-slate-600 max-w-xl mx-auto text-sm md:text-base font-medium">Selamat datang kembali, Agen! Karena kamu sudah hebat dalam satu langkah, kini tantangan dinaikkan. Kita akan belajar menjinakkan **Aljabar 2 Langkah** menggunakan instrumen timbangan mutakhir!</p>
+                    </div>
+
+                    <div class="flex justify-center my-4 animate-float">
+                        <svg class="w-32 h-32" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="100" cy="100" r="85" fill="#e0f2fe" stroke="#1e293b" stroke-width="5"/>
+                            <path d="M60,110 L140,110 M100,110 L100,160 M70,160 L130,160" stroke="#1e293b" stroke-width="6" stroke-linecap="round"/>
+                            <circle cx="60" cy="110" r="15" fill="#f87171" stroke="#1e293b" stroke-width="3"/>
+                            <circle cx="140" cy="110" r="15" fill="#3b82f6" stroke="#1e293b" stroke-width="3"/>
+                            <text x="54" y="115" font-family="Fredoka" font-size="14" font-weight="900" fill="white">x</text>
+                            <text x="135" y="115" font-family="Fredoka" font-size="14" font-weight="900" fill="white">y</text>
+                        </svg>
+                    </div>
+
+                    <div class="max-w-md mx-auto space-y-3 bg-blue-50 p-5 rounded-2xl border-2 border-slate-900 comic-shadow-sm">
+                        <label class="block text-xs text-blue-950 font-black uppercase tracking-wider">Isi Sandi Kode Panggilanmu</label>
+                        <input type="text" id="player-name-input" placeholder="Ketik nama detektifmu..." value="Kadet Cerdas" class="w-full px-4 py-2 rounded-xl bg-white border-2 border-slate-900 text-slate-800 text-center font-bold focus:outline-none focus:ring-2 focus:ring-blue-400">
+                        
+                        <div class="pt-2">
+                            <label class="block text-xs text-blue-950 font-black uppercase tracking-wider mb-2">Pilih Jas Astronot Angkasamu</label>
+                            <div class="grid grid-cols-4 gap-2">
+                                <button onclick="selectAvatar('👩‍🚀', '👩‍🚀')" class="avatar-opt p-2 bg-blue-300 border-2 border-slate-900 rounded-xl text-2xl hover:bg-blue-200 comic-btn-active transition-all">👩‍🚀</button>
+                                <button onclick="selectAvatar('👨‍🚀', '👨‍🚀')" class="avatar-opt p-2 bg-white border-2 border-slate-900 rounded-xl text-2xl hover:bg-blue-200 comic-btn-active transition-all">👨‍🚀</button>
+                                <button onclick="selectAvatar('👾', '👾')" class="avatar-opt p-2 bg-white border-2 border-slate-900 rounded-xl text-2xl hover:bg-blue-200 comic-btn-active transition-all">👾</button>
+                                <button onclick="selectAvatar('🤖', '🤖')" class="avatar-opt p-2 bg-white border-2 border-slate-900 rounded-xl text-2xl hover:bg-blue-200 comic-btn-active transition-all">🤖</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SLIDE 2: Interactive Sandbox Scale (Visualizing 2-Step) -->
+                <div id="slide-2" class="slide-item hidden space-y-6">
+                    <div class="text-center space-y-1">
+                        <span class="text-slate-900 font-black bg-emerald-300 px-3 py-1 rounded-full border-2 border-slate-900 text-xs">Simulator Timbangan Interaktif</span>
+                        <h3 class="text-2xl font-black text-slate-900">Mengapa Harus Dua Langkah?</h3>
+                        <p class="text-xs text-slate-500 font-bold">Coba klik tombol di bawah untuk menjinakkan timbangan agar seimbang!</p>
+                    </div>
+
+                    <div class="bg-sky-50 p-6 rounded-2xl border-2 border-slate-900 max-w-xl mx-auto space-y-4">
+                        <div class="text-center">
+                            <span class="text-xs font-bold uppercase tracking-wider text-blue-800">Rumus Aktif Saat Ini:</span>
+                            <div class="text-2xl font-black text-slate-800 bg-white py-2 rounded-xl border border-slate-900" id="scale-equation-display">
+                                $2x + 6 = 16$
+                            </div>
+                        </div>
+
+                        <!-- Interactive Balance Scale Representation -->
+                        <div class="flex justify-between items-center h-28 relative border-b-4 border-slate-900 px-6">
+                            <!-- Left Side Pan -->
+                            <div class="text-center flex flex-col items-center justify-end w-1/3">
+                                <div class="flex gap-1 mb-2 flex-wrap justify-center" id="scale-left-visual">
+                                    <span class="bg-red-400 border border-slate-950 px-2 py-1 rounded text-xs font-black">X</span>
+                                    <span class="bg-red-400 border border-slate-950 px-2 py-1 rounded text-xs font-black">X</span>
+                                    <span class="bg-amber-400 border border-slate-950 w-5 h-5 rounded-full text-[10px] flex items-center justify-center font-bold">1</span>
+                                    <span class="bg-amber-400 border border-slate-950 w-5 h-5 rounded-full text-[10px] flex items-center justify-center font-bold">1</span>
+                                    <span class="bg-amber-400 border border-slate-950 w-5 h-5 rounded-full text-[10px] flex items-center justify-center font-bold">1</span>
+                                    <span class="bg-amber-400 border border-slate-950 w-5 h-5 rounded-full text-[10px] flex items-center justify-center font-bold">1</span>
+                                    <span class="bg-amber-400 border border-slate-950 w-5 h-5 rounded-full text-[10px] flex items-center justify-center font-bold">1</span>
+                                    <span class="bg-amber-400 border border-slate-950 w-5 h-5 rounded-full text-[10px] flex items-center justify-center font-bold">1</span>
+                                </div>
+                                <span class="text-xs font-black bg-blue-100 px-2 rounded-full border border-slate-900" id="scale-left-text">Sisi Kiri: 2x + 6</span>
+                            </div>
+                            
+                            <!-- Pivot / Fulcrum -->
+                            <div class="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-8 h-8 bg-slate-800 clip-triangle"></div>
+
+                            <!-- Right Side Pan -->
+                            <div class="text-center flex flex-col items-center justify-end w-1/3">
+                                <div class="flex gap-1 mb-2 flex-wrap justify-center max-w-[120px]" id="scale-right-visual">
+                                    <!-- 16 dots -->
+                                    <span class="bg-amber-400 border border-slate-950 w-4 h-4 rounded-full text-[8px] flex items-center justify-center font-bold">1</span>
+                                    <span class="bg-amber-400 border border-slate-950 w-4 h-4 rounded-full text-[8px] flex items-center justify-center font-bold">1</span>
+                                    <span class="bg-amber-400 border border-slate-950 w-4 h-4 rounded-full text-[8px] flex items-center justify-center font-bold">1</span>
+                                    <span class="bg-amber-400 border border-slate-950 w-4 h-4 rounded-full text-[8px] flex items-center justify-center font-bold">1</span>
+                                    <span class="bg-amber-400 border border-slate-950 w-4 h-4 rounded-full text-[8px] flex items-center justify-center font-bold">1</span>
+                                    <span class="bg-amber-400 border border-slate-950 w-4 h-4 rounded-full text-[8px] flex items-center justify-center font-bold">1</span>
+                                    <span class="bg-amber-400 border border-slate-950 w-4 h-4 rounded-full text-[8px] flex items-center justify-center font-bold">1</span>
+                                    <span class="bg-amber-400 border border-slate-950 w-4 h-4 rounded-full text-[8px] flex items-center justify-center font-bold">1</span>
+                                    <span class="bg-amber-400 border border-slate-950 w-4 h-4 rounded-full text-[8px] flex items-center justify-center font-bold">1</span>
+                                    <span class="bg-amber-400 border border-slate-950 w-4 h-4 rounded-full text-[8px] flex items-center justify-center font-bold">1</span>
+                                    <span class="bg-amber-400 border border-slate-950 w-4 h-4 rounded-full text-[8px] flex items-center justify-center font-bold">1</span>
+                                    <span class="bg-amber-400 border border-slate-950 w-4 h-4 rounded-full text-[8px] flex items-center justify-center font-bold">1</span>
+                                    <span class="bg-amber-400 border border-slate-950 w-4 h-4 rounded-full text-[8px] flex items-center justify-center font-bold">1</span>
+                                    <span class="bg-amber-400 border border-slate-950 w-4 h-4 rounded-full text-[8px] flex items-center justify-center font-bold">1</span>
+                                    <span class="bg-amber-400 border border-slate-950 w-4 h-4 rounded-full text-[8px] flex items-center justify-center font-bold">1</span>
+                                    <span class="bg-amber-400 border border-slate-950 w-4 h-4 rounded-full text-[8px] flex items-center justify-center font-bold">1</span>
+                                </div>
+                                <span class="text-xs font-black bg-blue-100 px-2 rounded-full border border-slate-900" id="scale-right-text">Sisi Kanan: 16</span>
+                            </div>
+                        </div>
+
+                        <!-- Interactive Control Steps -->
+                        <div class="space-y-2 pt-4">
+                            <button onclick="performScaleStep(1)" id="btn-scale-step1" class="w-full p-3 bg-indigo-500 hover:bg-indigo-600 text-white font-black rounded-xl border-2 border-slate-900 comic-shadow-sm comic-btn-active">
+                                Langkah 1: Hilangkan +6 (Kurangi 6 di kedua sisi)
+                            </button>
+                            <button onclick="performScaleStep(2)" id="btn-scale-step2" disabled class="w-full p-3 bg-slate-300 text-slate-500 font-black rounded-xl border-2 border-slate-200 cursor-not-allowed">
+                                Langkah 2: Selesaikan 2x = 10 (Bagi kedua sisi dengan 2)
+                            </button>
+                        </div>
+                        <p id="scale-feedback" class="text-center text-sm font-bold text-indigo-900 min-h-[24px]"></p>
+                    </div>
+                </div>
+
+                <!-- SLIDE 3: Level 1 - Dasar Aljabar 2 Langkah (Tipe Tambah) -->
+                <div id="slide-3" class="slide-item hidden space-y-6">
+                    <div class="text-center space-y-1">
+                        <span class="text-white font-black bg-blue-600 px-3 py-1 rounded-full border-2 border-slate-900 text-xs">Tantangan Sandi 1</span>
+                        <h3 class="text-2xl font-black text-slate-900">Operasi Penjumlahan Ganda</h3>
+                        <p class="text-sm text-slate-600">Mari bantu Agen Siska mencari nilai dari $3x + 8 = 23$. Berapakah nilai satu kotak $x$?</p>
+                    </div>
+                    
+                    <div class="bg-indigo-50 p-6 rounded-2xl border-2 border-slate-900 max-w-md mx-auto space-y-4 comic-shadow">
+                        <div class="bg-white p-3.5 rounded-xl border-2 border-slate-900 text-center text-2xl font-black">
+                            $3x + 8 = 23$
+                        </div>
+                        <div class="grid grid-cols-2 gap-3" id="options-3">
+                            <!-- Injected inside script -->
+                        </div>
+                        <p id="feedback-3" class="text-center font-black text-sm min-h-[24px]"></p>
+                    </div>
+                </div>
+
+                <!-- SLIDE 4: Level 2 - Tipe Pengurangan (Ax - B = C) -->
+                <div id="slide-4" class="slide-item hidden space-y-6">
+                    <div class="text-center space-y-1">
+                        <span class="text-white font-black bg-blue-600 px-3 py-1 rounded-full border-2 border-slate-900 text-xs">Tantangan Sandi 2</span>
+                        <h3 class="text-2xl font-black text-slate-900">Sandi Pengurangan Ganda</h3>
+                        <p class="text-sm text-slate-600">Bagaimana jika tanda operasinya dikurang? Mari taklukkan persamaan: $4y - 7 = 21$.</p>
+                    </div>
+
+                    <div class="bg-indigo-50 p-6 rounded-2xl border-2 border-slate-900 max-w-md mx-auto space-y-4 comic-shadow">
+                        <div class="bg-white p-3.5 rounded-xl border-2 border-slate-900 text-center text-2xl font-black">
+                            $4y - 7 = 21$
+                        </div>
+                        <div class="grid grid-cols-2 gap-3" id="options-4">
+                            <!-- Injected inside script -->
+                        </div>
+                        <p id="feedback-4" class="text-center font-black text-sm min-h-[24px]"></p>
+                    </div>
+                </div>
+
+                <!-- SLIDE 5: Level 3 - Tipe Pembagian + Penjumlahan -->
+                <div id="slide-5" class="slide-item hidden space-y-6">
+                    <div class="text-center space-y-1">
+                        <span class="text-white font-black bg-blue-600 px-3 py-1 rounded-full border-2 border-slate-900 text-xs">Tantangan Sandi 3</span>
+                        <h3 class="text-2xl font-black text-slate-900">Sandi Pecahan Melompat</h3>
+                        <p class="text-sm text-slate-600">Selesaikan sandi pecahan ganda berikut dengan cermat: $\frac{a}{2} + 5 = 11$.</p>
+                    </div>
+
+                    <div class="bg-indigo-50 p-6 rounded-2xl border-2 border-slate-900 max-w-md mx-auto space-y-4 comic-shadow">
+                        <div class="bg-white p-3.5 rounded-xl border-2 border-slate-900 text-center text-2xl font-black">
+                            $\frac{a}{2} + 5 = 11$
+                        </div>
+                        <div class="grid grid-cols-2 gap-3" id="options-5">
+                            <!-- Injected inside script -->
+                        </div>
+                        <p id="feedback-5" class="text-center font-black text-sm min-h-[24px]"></p>
+                    </div>
+                </div>
+
+                <!-- SLIDE 6: Level 4 - Tipe Pembagian - Pengurangan -->
+                <div id="slide-6" class="slide-item hidden space-y-6">
+                    <div class="text-center space-y-1">
+                        <span class="text-white font-black bg-blue-600 px-3 py-1 rounded-full border-2 border-slate-900 text-xs">Tantangan Sandi 4</span>
+                        <h3 class="text-2xl font-black text-slate-900">Sandi Saku Terbalik</h3>
+                        <p class="text-sm text-slate-600">Pecahkan sandi pembagian dan pengurangan di bawah: $\frac{w}{3} - 4 = 2$.</p>
+                    </div>
+
+                    <div class="bg-indigo-50 p-6 rounded-2xl border-2 border-slate-900 max-w-md mx-auto space-y-4 comic-shadow">
+                        <div class="bg-white p-3.5 rounded-xl border-2 border-slate-900 text-center text-2xl font-black">
+                            $\frac{w}{3} - 4 = 2$
+                        </div>
+                        <div class="grid grid-cols-2 gap-3" id="options-6">
+                            <!-- Injected inside script -->
+                        </div>
+                        <p id="feedback-6" class="text-center font-black text-sm min-h-[24px]"></p>
+                    </div>
+                </div>
+
+                <!-- SLIDE 7: Level 5 - Sifat Distributif Tingkat Tinggi -->
+                <div id="slide-7" class="slide-item hidden space-y-6">
+                    <div class="text-center space-y-1">
+                        <span class="text-white font-black bg-purple-600 px-4 py-1 rounded-full border-2 border-slate-900 text-xs">Tantangan Sandi 5 • LEVEL UP!</span>
+                        <h3 class="text-2xl font-black text-purple-950">Misteri Tanda Kurung Distributif</h3>
+                        <p class="text-sm text-slate-600">Bentuk kurung seperti $2(x + 3) = 16$. Cari terlebih dahulu isi kurung dengan membaginya!</p>
+                    </div>
+
+                    <div class="bg-purple-50 p-6 rounded-2xl border-2 border-slate-900 max-w-md mx-auto space-y-4 comic-shadow">
+                        <div class="bg-white p-3.5 rounded-xl border-2 border-slate-900 text-center text-2xl font-black">
+                            $2(x + 3) = 16$
+                        </div>
+                        <div class="grid grid-cols-2 gap-3" id="options-7">
+                            <!-- Injected inside script -->
+                        </div>
+                        <p id="feedback-7" class="text-center font-black text-sm min-h-[24px]"></p>
+                    </div>
+                </div>
+
+                <!-- SLIDE 8: Soal Cerita 1 - Paket Camilan Seragam -->
+                <div id="slide-8" class="slide-item hidden space-y-6">
+                    <div class="text-center space-y-1">
+                        <span class="text-blue-950 font-black bg-amber-300 px-3 py-1 rounded-full border-2 border-slate-900 text-xs">Misi Logika Cerita 1</span>
+                        <h3 class="text-2xl font-black text-slate-900">Misteri Paket Donat Agen</h3>
+                    </div>
+                    <div class="grid md:grid-cols-2 gap-6 items-center">
+                        <div class="space-y-4 font-medium text-slate-700 text-sm md:text-base leading-relaxed">
+                            <p class="bg-white p-4 rounded-xl border-2 border-slate-900">
+                                "Siska memesan <strong class="text-blue-600">3 kantong donat misterius $d$</strong> dan mendapatkan bonus <strong class="text-blue-600">4 donat tambahan</strong> di luar kantong. Setelah dihitung total seluruh donat adalah <strong class="text-blue-600">19 buah</strong>. Berapa isi donat per kantong $d$?"
+                            </p>
+                        </div>
+                        <div class="bg-blue-50 p-6 rounded-2xl border-2 border-slate-900 comic-shadow space-y-4">
+                            <div class="text-xs font-black text-slate-500 uppercase tracking-wider">Pilih Model & Jawaban yang Benar:</div>
+                            <div class="space-y-2" id="options-8">
+                                <!-- Injected in JS -->
+                            </div>
+                            <p id="feedback-8" class="text-center font-black text-sm min-h-[24px]"></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SLIDE 9: Soal Cerita 2 - Membagi Es Krim Merata -->
+                <div id="slide-9" class="slide-item hidden space-y-6">
+                    <div class="text-center space-y-1">
+                        <span class="text-blue-950 font-black bg-amber-300 px-3 py-1 rounded-full border-2 border-slate-900 text-xs">Misi Logika Cerita 2</span>
+                        <h3 class="text-2xl font-black text-slate-900">Membagi Es Krim di Lab</h3>
+                    </div>
+                    <div class="grid md:grid-cols-2 gap-6 items-center">
+                        <div class="space-y-4 font-medium text-slate-700 text-sm md:text-base leading-relaxed">
+                            <p class="bg-white p-4 rounded-xl border-2 border-slate-900">
+                                "Sejumlah es krim rahasia di lemari pendingin $e$ dibagi rata ke <strong class="text-blue-600">2 asisten peneliti</strong>. Salah satu asisten memakan <strong class="text-blue-600">3 es krimnya</strong>, sehingga ia menyisakan tepat <strong class="text-blue-600">5 es krim</strong>. Berapa jumlah awal es krim $e$ di dalam lemari pendingin?"
+                            </p>
+                        </div>
+                        <div class="bg-blue-50 p-6 rounded-2xl border-2 border-slate-900 comic-shadow space-y-4">
+                            <div class="text-xs font-black text-slate-500 uppercase tracking-wider">Pilih Model & Jawaban yang Benar:</div>
+                            <div class="space-y-2" id="options-9">
+                                <!-- Injected in JS -->
+                            </div>
+                            <p id="feedback-9" class="text-center font-black text-sm min-h-[24px]"></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SLIDE 10: Soal Cerita 3 - Sifat Distributif Cerita -->
+                <div id="slide-10" class="slide-item hidden space-y-6">
+                    <div class="text-center space-y-1">
+                        <span class="text-blue-950 font-black bg-amber-300 px-3 py-1 rounded-full border-2 border-slate-900 text-xs">Misi Logika Cerita 3 • ADVANCED</span>
+                        <h3 class="text-2xl font-black text-slate-900">Kado Istimewa Ulang Tahun</h3>
+                    </div>
+                    <div class="grid md:grid-cols-2 gap-6 items-center">
+                        <div class="space-y-4 font-medium text-slate-700 text-sm md:text-base leading-relaxed">
+                            <p class="bg-white p-4 rounded-xl border-2 border-slate-900">
+                                "Ibu membuat <strong class="text-purple-600">3 bingkisan hadiah</strong>. Di dalam setiap bingkisan dimasukkan <strong class="text-purple-600">1 krayon gambar $k$</strong> dan <strong class="text-purple-600">2 buku tulis</strong>. Jika total krayon dan buku tulis seluruh bingkisan adalah <strong class="text-purple-600">12 buah</strong>, berapakah isi krayon $k$ di dalam satu bingkisan?"
+                            </p>
+                        </div>
+                        <div class="bg-purple-50 p-6 rounded-2xl border-2 border-slate-900 comic-shadow space-y-4">
+                            <div class="text-xs font-black text-slate-500 uppercase tracking-wider">Pilih Model & Jawaban yang Benar:</div>
+                            <div class="space-y-2" id="options-10">
+                                <!-- Injected in JS -->
+                            </div>
+                            <p id="feedback-10" class="text-center font-black text-sm min-h-[24px]"></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SLIDE 11: Boss Battle (Brankas Cyber Tingkat Tinggi) -->
+                <div id="slide-11" class="slide-item hidden space-y-6">
+                    <div class="text-center space-y-1">
+                        <span class="text-white font-black bg-red-600 px-4 py-1.5 rounded-full border-2 border-slate-900 animate-pulse">🔥 PERTARUNGAN BOSS UTAMA</span>
+                        <h3 class="text-3xl font-black text-red-600">Sandi Pintu Cyber X-II</h3>
+                        <p class="text-sm text-slate-600">Mr. Cyber meluncurkan serangan kode ganda! Selesaikan keduanya dan jumlahkan hasilnya untuk membuka pintu baja!</p>
+                    </div>
+
+                    <div class="bg-red-50 p-6 rounded-2xl border-2 border-slate-900 max-w-xl mx-auto space-y-4 comic-shadow">
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="bg-white p-3 rounded-xl border-2 border-slate-900 text-center">
+                                <span class="text-xs font-black text-red-500">Kode Sektor A:</span>
+                                <div class="text-lg font-black my-1">$2x - 5 = 11$</div>
+                            </div>
+                            <div class="bg-white p-3 rounded-xl border-2 border-slate-900 text-center">
+                                <span class="text-xs font-black text-red-500">Kode Sektor B:</span>
+                                <div class="text-lg font-black my-1">$\frac{y}{3} + 4 = 9$</div>
+                            </div>
+                        </div>
+                        <p class="text-center text-sm font-black text-slate-700">Kombinasi Akses: Berapakah total nilai dari $(x + y)$?</p>
+                        <div class="grid grid-cols-2 gap-3" id="options-11">
+                            <!-- Injected in JS -->
+                        </div>
+                        <p id="feedback-11" class="text-center font-black text-sm min-h-[24px]"></p>
+                    </div>
+                </div>
+
+                <!-- SLIDE 12: Evaluasi & Perasaan -->
+                <div id="slide-12" class="slide-item hidden space-y-6">
+                    <div class="text-center space-y-2">
+                        <span class="text-blue-950 font-black bg-amber-300 px-3 py-1 rounded-full border-2 border-slate-900 text-xs">Evaluasi Akhir Misi</span>
+                        <h3 class="text-2xl font-black text-blue-950">Bagaimana Keadaan Teknologimu?</h3>
+                        <p class="text-sm text-slate-600">Pilih perasaanmu sekarang setelah berhasil menyelesaikan sandi 2 langkah!</p>
+                    </div>
+
+                    <div class="bg-amber-50 p-6 rounded-2xl border-2 border-slate-900 max-w-md mx-auto text-center space-y-4 comic-shadow">
+                        <div class="flex justify-center gap-6 py-2">
+                            <button onclick="selectFeel('bingung', '🤨')" class="feel-btn p-3 bg-white rounded-full text-5xl border-2 border-slate-900 hover:scale-110 comic-shadow-sm comic-btn-active transition-transform">🤨</button>
+                            <button onclick="selectFeel('paham', '🙂')" class="feel-btn p-3 bg-white rounded-full text-5xl border-2 border-slate-900 hover:scale-110 comic-shadow-sm comic-btn-active transition-transform">🙂</button>
+                            <button onclick="selectFeel('hebat', '🚀')" class="feel-btn p-3 bg-white rounded-full text-5xl border-2 border-slate-900 hover:scale-110 comic-shadow-sm comic-btn-active transition-transform">🚀</button>
+                        </div>
+                        <p id="feel-msg" class="text-sm text-blue-900 font-black min-h-[24px]"></p>
+                    </div>
+                </div>
+
+                <!-- SLIDE 13: Gelar Kehormatan -->
+                <div id="slide-13" class="slide-item hidden space-y-6">
+                    <div class="text-center space-y-2">
+                        <span class="text-blue-950 font-black bg-amber-300 px-3 py-1 rounded-full border-2 border-slate-900 text-xs">Pangkat Baru</span>
+                        <h3 class="text-2xl font-black text-blue-950">Klaim Pangkat Kehormatanmu</h3>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-2xl mx-auto pt-2 font-bold">
+                        <div onclick="selectRank('Spesialis Timbangan', '🥈')" class="rank-card p-4 bg-white rounded-2xl border-2 border-slate-900 text-center cursor-pointer hover:bg-amber-100 comic-shadow-sm transition-all">
+                            <span class="text-4xl block">🥈</span>
+                            <h4 class="font-black text-sm text-slate-800 mt-2">Spesialis Timbangan</h4>
+                            <p class="text-[11px] text-slate-500 mt-1">Sangat menguasai pemindahan konstanta dengan konsep timbangan seimbang.</p>
+                        </div>
+                        <div onclick="selectRank('Kapten Aljabar Ganda', '🥇')" class="rank-card p-4 bg-white rounded-2xl border-2 border-slate-900 text-center cursor-pointer hover:bg-amber-100 comic-shadow-sm transition-all">
+                            <span class="text-4xl block">🥇</span>
+                            <h4 class="font-black text-sm text-slate-800 mt-2">Kapten Aljabar Ganda</h4>
+                            <p class="text-[11px] text-slate-500 mt-1">Sangat cerdik dan lancar menyusun model dari sandi cerita sulit.</p>
+                        </div>
+                        <div onclick="selectRank('Master Kriptografi Semesta', '👑')" class="rank-card p-4 bg-white rounded-2xl border-2 border-slate-900 text-center cursor-pointer hover:bg-amber-100 comic-shadow-sm transition-all">
+                            <span class="text-4xl block">👑</span>
+                            <h4 class="font-black text-sm text-slate-800 mt-2">Master Kriptografi Semesta</h4>
+                            <p class="text-[11px] text-slate-500 mt-1">Sukses mematikan cyber boss dan mengurai sifat distributif tanda kurung!</p>
+                        </div>
+                    </div>
+                    <p id="rank-msg" class="text-center text-sm font-black text-amber-700 min-h-[24px] pt-2"></p>
+                </div>
+
+                <!-- SLIDE 14: Certificate of Achievement -->
+                <div id="slide-14" class="slide-item hidden space-y-6 text-center">
+                    <div class="space-y-1">
+                        <span class="text-amber-950 font-black bg-amber-300 px-3 py-1 rounded-full border-2 border-slate-900 text-xs">Kelulusan Agen Elite</span>
+                        <h3 class="text-3xl md:text-4xl font-black bg-gradient-to-r from-blue-500 to-indigo-600 bg-clip-text text-transparent">OPERASI SELESAI DENGAN GEMILANG!</h3>
+                    </div>
+                    <div class="max-w-md mx-auto bg-amber-50 p-6 rounded-2xl border-4 border-slate-900 space-y-4 shadow-xl relative overflow-hidden">
+                        <div class="absolute -top-10 -left-10 w-24 h-24 bg-blue-300/20 rounded-full blur-2xl"></div>
+                        <div class="absolute -bottom-10 -right-10 w-24 h-24 bg-indigo-300/20 rounded-full blur-2xl"></div>
+                        
+                        <div class="flex justify-center">
+                            <span class="text-7xl animate-bounce">🏆</span>
+                        </div>
+                        <h4 class="font-black text-lg text-slate-800">Sertifikat Ahli Aljabar Ganda (Tingkat Tinggi)</h4>
+                        <p class="text-xs text-slate-500 font-bold">Diberikan secara terakreditasi kepada:</p>
+                        <p id="cert-name" class="text-2xl font-black text-blue-950 underline tracking-wide">Kadet Cerdas</p>
+                        <p class="text-[12px] text-slate-700 font-bold leading-relaxed">Telah membuktikan kecakapan luar biasa dalam melampaui sandi aljabar dua langkah, penguraian seimbang konstanta dan koefisien, pemecahan distributif, dan analisis taktis logika cerita.</p>
+                        <div class="pt-2">
+                            <span class="text-xs font-black bg-white px-3 py-1 rounded-full border border-slate-900 text-blue-950">Gelar Pilihan: <span id="cert-rank">Agen Elite</span></span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Footer / Navigation bar within container -->
+            <footer class="mt-8 pt-4 border-t-2 border-slate-900 flex justify-between items-center bg-white">
+                <button id="btn-prev" onclick="navigateSlide(-1)" class="px-5 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 border-2 border-slate-900 font-black text-sm text-slate-800 transition-all flex items-center gap-2 comic-shadow-sm comic-btn-active">
+                    <i class="fa-solid fa-arrow-left"></i> Kembali
+                </button>
+                <div class="hidden sm:flex gap-1.5 items-center">
+                    <span class="text-xs text-slate-500 font-black uppercase mr-1">Operasi:</span>
+                    <span id="slide-pills" class="flex gap-1.5">
+                        <!-- Indicated in script -->
+                    </span>
+                </div>
+                <button id="btn-next" onclick="navigateSlide(1)" class="px-6 py-2.5 rounded-xl bg-gradient-to-r from-blue-500 to-indigo-500 border-2 border-slate-900 text-slate-900 font-black text-sm transition-all flex items-center gap-2 comic-shadow-sm comic-btn-active">
+                    Misi Lanjut <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </footer>
+
+        </div>
+    </main>
+
+    <!-- MAIN INTERACTIVE SYSTEMS SCRIPT -->
+    <script>
+        // Custom interactive visual scale builder
+        function renderScaleVisualizer() {
+            const leftContainer = document.getElementById('scale-left-visual');
+            const rightContainer = document.getElementById('scale-right-visual');
+            
+            leftContainer.innerHTML = "";
+            rightContainer.innerHTML = "";
+
+            // Render Left Xs
+            for(let i = 0; i < GameState.scaleLeft; i++) {
+                leftContainer.innerHTML += `<span class="bg-red-400 border border-slate-950 px-2 py-1 rounded text-xs font-black animate-pulse">X</span>`;
+            }
+            // Render Left Constants
+            for(let i = 0; i < GameState.scaleLeftConst; i++) {
+                leftContainer.innerHTML += `<span class="bg-amber-400 border border-slate-950 w-5 h-5 rounded-full text-[10px] flex items-center justify-center font-bold">1</span>`;
+            }
+
+            // Render Right Constants
+            for(let i = 0; i < GameState.scaleRight; i++) {
+                rightContainer.innerHTML += `<span class="bg-amber-400 border border-slate-950 w-4 h-4 rounded-full text-[8px] flex items-center justify-center font-bold">1</span>`;
+            }
+
+            // Build dynamic text strings
+            document.getElementById('scale-left-text').textContent = `Sisi Kiri: ${GameState.scaleLeft}x ${GameState.scaleLeftConst > 0 ? '+ ' + GameState.scaleLeftConst : ''}`;
+            document.getElementById('scale-right-text').textContent = `Sisi Kanan: ${GameState.scaleRight}`;
+            
+            let eqText = `$${GameState.scaleLeft}x + ${GameState.scaleLeftConst} = ${GameState.scaleRight}$`;
+            if (GameState.scaleLeftConst === 0) {
+                eqText = `$${GameState.scaleLeft}x = ${GameState.scaleRight}$`;
+            }
+            document.getElementById('scale-equation-display').textContent = eqText;
+            renderMath(document.getElementById('scale-equation-display'));
+        }
+
+        function performScaleStep(stepNum) {
+            if (stepNum === 1 && GameState.scaleActiveStep === 1) {
+                SoundFX.playExplode();
+                GameState.scaleLeftConst = 0;
+                GameState.scaleRight = 10;
+                GameState.scaleActiveStep = 2;
+                
+                document.getElementById('scale-feedback').textContent = "💥 Hebat! Konstanta +6 berhasil dihilangkan dari kedua sisi timbangan!";
+                document.getElementById('scale-feedback').className = "text-center font-bold text-sm text-emerald-600 animate-pulse";
+                
+                // Toggle Buttons
+                const s1 = document.getElementById('btn-scale-step1');
+                const s2 = document.getElementById('btn-scale-step2');
+                s1.disabled = true;
+                s1.className = "w-full p-3 bg-slate-200 text-slate-400 font-black rounded-xl border-2 border-slate-350 cursor-not-allowed";
+                s2.disabled = false;
+                s2.className = "w-full p-3 bg-indigo-500 hover:bg-indigo-600 text-white font-black rounded-xl border-2 border-slate-900 comic-shadow-sm comic-btn-active";
+                
+                renderScaleVisualizer();
+            } else if (stepNum === 2 && GameState.scaleActiveStep === 2) {
+                SoundFX.playSuccess();
+                GameState.scaleLeft = 1;
+                GameState.scaleRight = 5;
+                GameState.scaleActiveStep = 3;
+
+                document.getElementById('scale-feedback').textContent = "🎯 Sempurna! Setiap 1 Kotak X terbukti setara dengan tepat 5 Koin! x = 5.";
+                document.getElementById('scale-feedback').className = "text-center font-black text-sm text-emerald-600 animate-bounce";
+                
+                const s2 = document.getElementById('btn-scale-step2');
+                s2.disabled = true;
+                s2.className = "w-full p-3 bg-slate-200 text-slate-400 font-black rounded-xl border-2 border-slate-350 cursor-not-allowed";
+                
+                addScore(100);
+                GameState.completedSlides.add(2);
+                renderScaleVisualizer();
+                initMapDrawer();
+            }
+        }
+
+        // --- DYNAMIC SLIDE SYSTEM ---
+        function selectAvatar(id, emoji) {
+            SoundFX.playClick();
+            GameState.avatar = emoji;
+            document.getElementById('hud-avatar').textContent = emoji;
+            
+            document.querySelectorAll('.avatar-opt').forEach(btn => {
+                btn.classList.remove('bg-blue-300');
+            });
+            event.currentTarget.classList.add('bg-blue-300');
+        }
+
+        function toggleMap(forceState) {
+            SoundFX.playClick();
+            const el = document.getElementById('sidebar-map');
+            if (forceState !== undefined) {
+                if (forceState) el.classList.remove('-translate-x-full');
+                else el.classList.add('-translate-x-full');
+            } else {
+                el.classList.toggle('-translate-x-full');
+            }
+        }
+
+        function initMapDrawer() {
+            const container = document.getElementById('map-mission-list');
+            container.innerHTML = "";
+
+            const titles = {
+                1: "Inisiasi Sandi Detektif",
+                2: "Timbangan Aljabar Sandi",
+                3: "Tantangan 3x + 8 = 23",
+                4: "Tantangan 4y - 7 = 21",
+                5: "Tantangan a/2 + 5 = 11",
+                6: "Tantangan w/3 - 4 = 2",
+                7: "Sandi Kurung 2(x + 3) = 16",
+                8: "Sandi Donat Agen Siska",
+                9: "Lab Es Krim Rahasia",
+                10: "Misteri Hadiah Istimewa",
+                11: "BOSS FINAL: Sandi Cyber X-II",
+                12: "Evaluasi Perasaan Agen",
+                13: "Klaim Pangkat Kehormatan",
+                14: "Sertifikat Kelulusan"
+            };
+
+            for (let i = 1; i <= GameState.totalSlides; i++) {
+                const btn = document.createElement('button');
+                btn.className = `w-full text-left p-3 rounded-xl border-2 flex items-center justify-between text-xs transition duration-200 ${
+                    GameState.currentSlide === i 
+                    ? 'bg-blue-300 border-slate-900 text-slate-900 font-black shadow-sm' 
+                    : 'bg-white border-slate-200 text-slate-500 hover:border-slate-400 font-bold'
+                }`;
+                btn.onclick = () => {
+                    goToSlide(i);
+                    toggleMap(false);
+                };
+
+                let status = "🔒";
+                if (i === 1 || GameState.completedSlides.has(i) || i <= GameState.currentSlide) {
+                    status = "✅";
+                }
+
+                btn.innerHTML = `
+                    <span class="flex items-center gap-2">
+                        <span class="font-extrabold text-blue-400">${i}.</span>
+                        <span>${titles[i] || 'Misi ' + i}</span>
+                    </span>
+                    <span>${status}</span>
+                `;
+                container.appendChild(btn);
+            }
+        }
+
+        // Build Interactive Options for all quiz pages (3, 4, 5, 6, 7, 8, 9, 10, 11)
+        function generateSlideOptions() {
+            // SLIDE 3 options: 3x + 8 = 23 -> 3x = 15 -> x = 5
+            buildQuiz(3, [
+                { text: "$x = 5$", correct: true, feedback: "🎯 Tepat Sekali! $3x = 23 - 8 \\implies 3x = 15 \\implies x = 5$!" },
+                { text: "$x = 10$", correct: false, feedback: "❌ Kurang tepat! Ingat untuk memindahkan +8 terlebih dahulu." },
+                { text: "$x = 15$", correct: false, feedback: "❌ Nilai 15 adalah hasil dari 23 - 8, masih harus dibagi 3!" },
+                { text: "$x = 3$", correct: false, feedback: "❌ Salah hitung. Coba lakukan operasi kebalikan dengan tenang." }
+            ]);
+
+            // SLIDE 4 options: 4y - 7 = 21 -> 4y = 28 -> y = 7
+            buildQuiz(4, [
+                { text: "$y = 7$", correct: true, feedback: "🎯 Benar! $-7$ dipindah ke kanan menjadi $+7 \\implies 4y = 28 \\implies y = 7$!" },
+                { text: "$y = 14$", correct: false, feedback: "❌ Kurang tepat! $21 + 7$ adalah 28, lalu bagi dengan 4." },
+                { text: "$y = 3.5$", correct: false, feedback: "❌ Kamu mengurangi 7, padahal kebalikannya harusnya ditambah 7!" },
+                { text: "$y = 5$", correct: false, feedback: "❌ Salah hitung. Pahami perpindahan ruas tanda minus." }
+            ]);
+
+            // SLIDE 5 options: a/2 + 5 = 11 -> a/2 = 6 -> a = 12
+            buildQuiz(5, [
+                { text: "$a = 12$", correct: true, feedback: "🎯 Hebat! $\\frac{a}{2} = 11 - 5 \\implies \\frac{a}{2} = 6 \\implies a = 6 \\times 2 = 12$!" },
+                { text: "$a = 3$", correct: false, feedback: "❌ Salah operasi! Pembagi 2 harus dipindah menjadi pengali." },
+                { text: "$a = 6$", correct: false, feedback: "❌ Nilai 6 baru hasil pengurangan, kalikan dengan pembagi 2!" },
+                { text: "$a = 8$", correct: false, feedback: "❌ Kurang akurat. Selesaikan langkah demi langkah." }
+            ]);
+
+            // SLIDE 6 options: w/3 - 4 = 2 -> w/3 = 6 -> w = 18
+            buildQuiz(6, [
+                { text: "$w = 18$", correct: true, feedback: "🎯 Sempurna! $\\frac{w}{3} = 2 + 4 \\implies \\frac{w}{3} = 6 \\implies w = 6 \\times 3 = 18$!" },
+                { text: "$w = 6$", correct: false, feedback: "❌ Nilai 6 baru hasil dari 2 + 4, kalikan dengan 3!" },
+                { text: "$w = 2$", correct: false, feedback: "❌ Salah operasi. Periksa kembali langkah perkaliannya." },
+                { text: "$w = 12$", correct: false, feedback: "❌ Salah hitung. Pahami urutan pembagian kebalikan." }
+            ]);
+
+            // SLIDE 7 options: 2(x + 3) = 16 -> x + 3 = 8 -> x = 5
+            buildQuiz(7, [
+                { text: "$x = 5$", correct: true, feedback: "🎯 Cerdas! Bagi dulu dengan 2: $x + 3 = 16 \\div 2 \\implies x + 3 = 8 \\implies x = 5$!" },
+                { text: "$x = 8$", correct: false, feedback: "❌ Nilai 8 baru hasil pembagian awal, masih harus dikurang 3!" },
+                { text: "$x = 11$", correct: false, feedback: "❌ Salah operasi. Ingat tanda kurung diselesaikan terstruktur!" },
+                { text: "$x = 3$", correct: false, feedback: "❌ Salah hitung. Ulangi penyisihan suku di dalam kurung." }
+            ]);
+
+            // SLIDE 8 options: 3d + 4 = 19 -> 3d = 15 -> d = 5
+            buildQuiz(8, [
+                { text: "$3d + 4 = 19 \\implies d = 5$", correct: true, feedback: "🎯 Jawaban Terbaik! Model aljabarnya akurat dan isi per kantong adalah 5 donat!" },
+                { text: "$3d - 4 = 19 \\implies d = 7$", correct: false, feedback: "❌ Salah model! Donat tambahan adalah bonus penambah, bukan pengurang." },
+                { text: "$3(d + 4) = 19 \\implies d = 2.3$", correct: false, feedback: "❌ Model tanda kurung tidak tepat karena bonus 4 donat berada di luar kantong." }
+            ], true);
+
+            // SLIDE 9 options: e/2 - 3 = 5 -> e/2 = 8 -> e = 16
+            buildQuiz(9, [
+                { text: "$\\frac{e}{2} - 3 = 5 \\implies e = 16$", correct: true, feedback: "🎯 Jawaban Terbaik! Model aljabarnya sangat tepat dan isi awal lemari adalah 16 es krim!" },
+                { text: "$\\frac{e}{2} + 3 = 5 \\implies e = 4$", correct: false, feedback: "❌ Salah model! Es krim dimakan berarti operasi pengurang (-3)." },
+                { text: "$2e - 3 = 5 \\implies e = 4$", correct: false, feedback: "❌ Pembagian es krim merata ke 2 asisten dilambangkan dengan pecahan e/2." }
+            ], true);
+
+            // SLIDE 10 options: 3(k + 2) = 12 -> k + 2 = 4 -> k = 2
+            buildQuiz(10, [
+                { text: "$3(k + 2) = 12 \\implies k = 2$", correct: true, feedback: "🎯 Fantastis! Karena 2 buku masuk ke tiap 3 bingkisan, modelnya adalah $3(k+2) = 12$, krayon k = 2!" },
+                { text: "$3k + 2 = 12 \\implies k = 3.3$", correct: false, feedback: "❌ Kurang tepat! Buku tulis juga ada di dalam ketiga bingkisan tersebut." },
+                { text: "$3(k - 2) = 12 \\implies k = 6$", correct: false, feedback: "❌ Salah tanda! Krayon ditambah buku tulis di dalam bingkisan hiasan." }
+            ], true);
+
+            // SLIDE 11 options: A: 2x - 5 = 11 -> 2x = 16 -> x = 8 | B: y/3 + 4 = 9 -> y/3 = 5 -> y = 15 | x+y = 23
+            buildQuiz(11, [
+                { text: "$x + y = 23$", correct: true, feedback: "🎯 LUAR BIASA! Kode Akses Brankas Terbuka! Nilai $x = 8$ dan $y = 15$, hasil gabungan 23!" },
+                { text: "$x + y = 15$", correct: false, feedback: "❌ Kurang tepat! Pastikan kamu mengalikan y dengan 3, bukan membaginya." },
+                { text: "$x + y = 19$", correct: false, feedback: "❌ Salah sandi! Periksa kembali hasil nilai dari Sektor B." },
+                { text: "$x + y = 30$", correct: false, feedback: "❌ Kombinasi ditolak! Selesaikan masing-masing secara teliti." }
+            ]);
+        }
+
+        function buildQuiz(slideNum, opts, isFullWidth = false) {
+            const container = document.getElementById(`options-${slideNum}`);
+            if (!container) return;
+            container.innerHTML = "";
+
+            // Shuffle options
+            const shuffled = [...opts];
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+
+            shuffled.forEach(opt => {
+                const btn = document.createElement('button');
+                btn.className = `${isFullWidth ? 'w-full' : 'w-full'} p-3.5 bg-white hover:bg-blue-100 text-slate-800 font-extrabold text-sm border-2 border-slate-900 rounded-xl comic-shadow-sm comic-btn-active transition-all text-left`;
+                btn.innerHTML = opt.text;
+                btn.onclick = () => {
+                    const feedback = document.getElementById(`feedback-${slideNum}`);
+                    if (opt.correct) {
+                        SoundFX.playSuccess();
+                        feedback.innerHTML = opt.feedback;
+                        feedback.className = "text-center font-black text-sm text-emerald-600 animate-bounce";
+                        
+                        GameState.completedSlides.add(slideNum);
+                        addScore(150);
+                        initMapDrawer();
+
+                        // Lock options
+                        Array.from(container.children).forEach(b => {
+                            b.disabled = true;
+                            if (b.innerHTML === opt.text) {
+                                b.className = "w-full p-3.5 bg-emerald-300 border-2 border-slate-900 rounded-xl text-left";
+                            } else {
+                                b.className = "w-full p-3.5 bg-slate-100 border-2 border-slate-200 rounded-xl opacity-50 text-left cursor-not-allowed";
+                            }
+                        });
+                    } else {
+                        SoundFX.playWrong();
+                        feedback.innerHTML = opt.feedback;
+                        feedback.className = "text-center font-black text-sm text-rose-500 animate-pulse";
+                        btn.className = "w-full p-3.5 bg-rose-100 border-2 border-slate-300 rounded-xl opacity-50 cursor-not-allowed text-left";
+                        btn.disabled = true;
+                    }
+                    renderMath(feedback);
+                };
+                container.appendChild(btn);
+                renderMath(btn);
+            });
+        }
+
+        function selectFeel(feel, emoji) {
+            SoundFX.playSuccess();
+            const msg = document.getElementById('feel-msg');
+            document.querySelectorAll('.feel-btn').forEach(b => b.classList.remove('bg-blue-300'));
+            event.currentTarget.classList.add('bg-blue-300');
+            
+            if (feel === 'hebat') {
+                msg.textContent = "🚀 Luar biasa! Sekarang kamu siap bersaing di level olimpiade matematika sekolah!";
+            } else if (feel === 'paham') {
+                msg.textContent = "🙂 Bagus sekali! Pemahaman aljabar 2 langkahmu kini sangat kokoh.";
+            } else {
+                msg.textContent = "🤨 Tenang, gunakan navigasi di sebelah kiri untuk mengulangi latihan kapan pun!";
+            }
+        }
+
+        function selectRank(rank, emoji) {
+            SoundFX.playSuccess();
+            document.querySelectorAll('.rank-card').forEach(c => c.classList.remove('bg-blue-200', 'border-slate-900'));
+            event.currentTarget.classList.add('bg-blue-200', 'border-slate-900');
+            
+            document.getElementById('rank-msg').textContent = `🎖️ Selamat! Kamu resmi menyandang pangkat ${rank}!`;
+            document.getElementById('cert-rank').textContent = rank;
+        }
+
+        function addScore(pts) {
+            GameState.score += pts;
+            document.getElementById('hud-score').textContent = `${GameState.score} XP`;
+        }
+
+        // Navigation engine
+        function goToSlide(num) {
+            if (num < 1 || num > GameState.totalSlides) return;
+
+            // Save name
+            if (GameState.currentSlide === 1) {
+                const nameInp = document.getElementById('player-name-input').value.trim();
+                if (nameInp) {
+                    GameState.playerName = nameInp;
+                    document.getElementById('hud-name').textContent = nameInp;
+                    document.getElementById('cert-name').textContent = nameInp;
+                }
+            }
+
+            // Progression locks for major checkpoints
+            if (num > GameState.currentSlide) {
+                if (GameState.currentSlide === 2 && !GameState.completedSlides.has(2)) {
+                    document.getElementById('scale-feedback').textContent = "⚠️ Selesaikan simulasi timbangan terlebih dulu!";
+                    SoundFX.playWrong();
+                    return;
+                }
+                if (GameState.currentSlide === 11 && !GameState.completedSlides.has(11)) {
+                    document.getElementById('feedback-11').textContent = "⚠️ Kamu harus menguraikan kombinasi Mr. Cyber terlebih dahulu!";
+                    SoundFX.playWrong();
+                    return;
+                }
+            }
+
+            // Hide old slide
+            const prevEl = document.getElementById(`slide-${GameState.currentSlide}`);
+            if (prevEl) prevEl.classList.add('hidden');
+
+            GameState.currentSlide = num;
+
+            // Show new slide
+            const nextEl = document.getElementById(`slide-${GameState.currentSlide}`);
+            if (nextEl) {
+                nextEl.classList.remove('hidden');
+                setTimeout(() => {
+                    renderMath(nextEl);
+                }, 40);
+            }
+
+            // Update HUD progress and slider indicators
+            document.getElementById('hud-slide-num').textContent = GameState.currentSlide;
+            const pct = (GameState.currentSlide / GameState.totalSlides) * 100;
+            document.getElementById('main-progress-bar').style.width = `${pct}%`;
+
+            // Adjust back button visibility
+            document.getElementById('btn-prev').style.opacity = GameState.currentSlide === 1 ? '0.3' : '1';
+            
+            if (GameState.currentSlide === GameState.totalSlides) {
+                document.getElementById('btn-next').innerHTML = `Keluar <i class="fa-solid fa-flag-checkered"></i>`;
+                SoundFX.playSuccess();
+            } else {
+                document.getElementById('btn-next').innerHTML = `Misi Lanjut <i class="fa-solid fa-arrow-right"></i>`;
+            }
+
+            if (GameState.currentSlide === 2) {
+                renderScaleVisualizer();
+            }
+
+            // Refresh the navigation markers
+            initMapDrawer();
+            buildSlidePills();
+            SoundFX.playClick();
+        }
+
+        function navigateSlide(dir) {
+            goToSlide(GameState.currentSlide + dir);
+        }
+
+        function buildSlidePills() {
+            const container = document.getElementById('slide-pills');
+            container.innerHTML = "";
+            const startIdx = Math.max(1, GameState.currentSlide - 2);
+            const endIdx = Math.min(GameState.totalSlides, startIdx + 4);
+
+            for (let i = startIdx; i <= endIdx; i++) {
+                const pill = document.createElement('span');
+                pill.className = `w-4 h-4 rounded-full border border-slate-900 transition-colors duration-200 ${
+                    GameState.currentSlide === i ? 'bg-blue-500' : 'bg-slate-200'
+                }`;
+                container.appendChild(pill);
+            }
+        }
+
+        window.onload = function() {
+            initMapDrawer();
+            generateSlideOptions();
+            buildSlidePills();
+            renderMath();
+            SoundFX.init();
+        }
+    </script>
+</body>
+</html>
